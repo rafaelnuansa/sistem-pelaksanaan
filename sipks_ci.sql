@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 12, 2023 at 02:56 AM
+-- Generation Time: Jul 12, 2023 at 03:14 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.4.19
 
@@ -85,7 +85,9 @@ CREATE TABLE `dosen_pembimbing` (
 --
 
 INSERT INTO `dosen_pembimbing` (`id_dospem`, `dosen_id`, `mahasiswa_id`, `jenis_pembimbing`) VALUES
-(1, 2, 5, 'PKL');
+(1, 2, 5, 'PKL'),
+(4, 1, 1, 'PKL'),
+(5, 1, 1, 'PKL');
 
 -- --------------------------------------------------------
 
@@ -321,6 +323,13 @@ CREATE TABLE `pkl` (
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `pkl`
+--
+
+INSERT INTO `pkl` (`id`, `nama_kelompok`, `tgl_mulai`, `tgl_selesai`, `tahun_akademik`, `dosen_id`, `prodi_id`, `instansi_id`, `created_at`, `updated_at`) VALUES
+(2, 'Ipsa voluptatem ut ', '2002-03-25', '2014-08-26', 'Voluptates voluptate', 3, 2, 1, '2023-07-11 22:09:43', '2023-07-11 22:10:22');
+
 -- --------------------------------------------------------
 
 --
@@ -335,6 +344,14 @@ CREATE TABLE `pkl_anggota` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `pkl_anggota`
+--
+
+INSERT INTO `pkl_anggota` (`id`, `mahasiswa_id`, `pkl_id`, `is_ketua`, `created_at`, `updated_at`) VALUES
+(4, 1, 2, 1, NULL, NULL),
+(5, 4, 2, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -690,7 +707,7 @@ ALTER TABLE `dosen`
 -- AUTO_INCREMENT for table `dosen_pembimbing`
 --
 ALTER TABLE `dosen_pembimbing`
-  MODIFY `id_dospem` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_dospem` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `fakultas`
@@ -756,13 +773,13 @@ ALTER TABLE `pembimbing`
 -- AUTO_INCREMENT for table `pkl`
 --
 ALTER TABLE `pkl`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `pkl_anggota`
 --
 ALTER TABLE `pkl_anggota`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pkl_jadwal_sidang`
