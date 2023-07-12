@@ -62,19 +62,19 @@
         <form method="POST" action="">
           <div class="form-group">
             <label for="">Nama Perusahaan</label>
-            <input type="text" readonly class="form-control" name="nama_perusahaan" value="<?= count($instansi) > 0 ? $instansi['nama_perusahaan'] : '' ?>">
+            <input type="text" readonly class="form-control" name="nama_perusahaan" value="<?= $instansi['nama_perusahaan'] ?? '' ?>">
           </div>
           <div class="form-group">
             <label for="">Alamat</label>
-            <input type="text" class="form-control" name="alamat" value="<?= count($instansi) > 0 ? $instansi['alamat'] : '' ?>">
+            <input type="text" class="form-control" name="alamat" value="<?= $instansi['alamat'] ?? '' ?>">
           </div>
           <div class="form-group">
             <label for="">Pembimbing Lapangan</label>
-            <input type="text" class="form-control" name="pembimbing_lapangan" value="<?= count($instansi) > 0 ? $instansi['pembimbing_lapangan'] : '' ?>">
+            <input type="text" class="form-control" name="pembimbing_lapangan" value="<?= $instansi['pembimbing_lapangan'] ?? '' ?>">
           </div>
           <div class="form-group">
             <label for="">No. Pembimbing Lapangan</label>
-            <input type="text" class="form-control" name="no_hp_pl" value="<?= count($instansi) > 0 ? $instansi['no_pembimbing_lapangan'] : '' ?>">
+            <input type="text" class="form-control" name="no_hp_pl" value="<?= $instansi['no_pembimbing_lapangan'] ?? '' ?>">
           </div>
       </div>
       <div class="modal-footer">

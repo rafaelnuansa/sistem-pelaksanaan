@@ -83,7 +83,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     // Rute untuk assign anggota PKL
     $routes->get('pkl/anggota/(:num)', 'PKLController::assignAnggota/$1', ['as' => 'admin.pkl.assign_anggota']);
     $routes->get('pkl/anggota/tambah', 'PKLController::storeAnggota');
-    $routes->delete('pkl/anggota/delete', 'PKLController::deleteAnggota');
+    $routes->post('pkl/anggota/delete', 'PKLController::deleteAnggota');
     $routes->get('pkl/anggota/status', 'PKLController::statusAnggota');
 
     // Admin PKL Jurnal Pelaksanaan
