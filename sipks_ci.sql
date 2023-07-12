@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 12, 2023 at 02:15 AM
+-- Generation Time: Jul 12, 2023 at 02:56 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.4.19
 
@@ -65,8 +65,7 @@ INSERT INTO `dosen` (`id`, `nama`, `nidn`, `email`, `password`, `no_telpon`, `al
 (3, 'Achmad Syauqi, M.Kom', '7678899', NULL, '$2y$10$GCkk/wU7Mn3ZTxOSsrlu7.kuGduUQ0u30VLN/c9sMTy.Xfx4.iDa.', 2147483647, 'Adisana', 1, '2023-07-09 01:39:46', '2023-07-09 01:39:46'),
 (4, 'Fuaida Nabyla, M.Kom', '56786547', NULL, '$2y$10$toQWrWhIhixaWKXQOL09EuaIjDeZ8X3Xihv7serIYUR7XyaXjAQYe', 2147483647, 'Tonjong', 1, '2023-07-09 01:39:46', '2023-07-09 01:39:46'),
 (5, 'Eko Sudrajat, M.Kom', '56567654', NULL, '$2y$10$qP4jQ/D.KmlR.KoAIqcmk.wUyJEHtJROS.VZdQSBQv8g9WgcVeeC6', 2147483647, 'Banyumas', 1, '2023-07-09 01:39:46', '2023-07-09 01:39:46'),
-(6, 'Danar, M.Kom', '65438888', NULL, '$2y$10$UatkATIyfVIhz3A2GeajN.pqRjisdRagxtM/jp4v8XSv9CGBBGnia', 2147483647, 'Cilacap', 1, '2023-07-09 01:39:47', '2023-07-09 01:39:47'),
-(7, 'Rafael Nuansa, S.Kom', '123456', 'rafaelnuansa@gmail.com', '$2y$10$5gycrnC/6N5SuwMpR61vk.AmxEi7v1f1ktYmoHEkQXsdnRZVcXpZS', 2147483647, 'Test', 1, '2023-07-10 04:37:14', '2023-07-11 07:36:59');
+(6, 'Danar, M.Kom', '65438888', NULL, '$2y$10$UatkATIyfVIhz3A2GeajN.pqRjisdRagxtM/jp4v8XSv9CGBBGnia', 2147483647, 'Cilacap', 1, '2023-07-09 01:39:47', '2023-07-09 01:39:47');
 
 -- --------------------------------------------------------
 
@@ -86,9 +85,7 @@ CREATE TABLE `dosen_pembimbing` (
 --
 
 INSERT INTO `dosen_pembimbing` (`id_dospem`, `dosen_id`, `mahasiswa_id`, `jenis_pembimbing`) VALUES
-(1, 2, 5, 'PKL'),
-(2, 7, 2, 'PKL'),
-(3, 7, 1, 'PKL');
+(1, 2, 5, 'PKL');
 
 -- --------------------------------------------------------
 
@@ -324,13 +321,6 @@ CREATE TABLE `pkl` (
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `pkl`
---
-
-INSERT INTO `pkl` (`id`, `nama_kelompok`, `tgl_mulai`, `tgl_selesai`, `tahun_akademik`, `dosen_id`, `prodi_id`, `instansi_id`, `created_at`, `updated_at`) VALUES
-(1, 'Kelompok 1', '2023-07-09', '2023-08-01', '2023/2024', 7, 2, 1, '2023-07-09 03:03:33', '2023-07-09 03:03:33');
-
 -- --------------------------------------------------------
 
 --
@@ -345,14 +335,6 @@ CREATE TABLE `pkl_anggota` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `pkl_anggota`
---
-
-INSERT INTO `pkl_anggota` (`id`, `mahasiswa_id`, `pkl_id`, `is_ketua`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 1, NULL, NULL),
-(2, 3, 1, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -412,13 +394,6 @@ CREATE TABLE `pkl_jurnal_bimbingan` (
   `status` varchar(10) NOT NULL DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `pkl_jurnal_bimbingan`
---
-
-INSERT INTO `pkl_jurnal_bimbingan` (`id_jurnal_bimbingan`, `mahasiswa_id`, `jam`, `tanggal`, `catatan`, `pkl_id`, `status`) VALUES
-(1, 1, '09:10', '2019-12-01', 'Sapiente sunt magna ', 1, 'Pending');
-
 -- --------------------------------------------------------
 
 --
@@ -434,15 +409,6 @@ CREATE TABLE `pkl_jurnal_pelaksanaan` (
   `pkl_id` bigint(20) UNSIGNED NOT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `pkl_jurnal_pelaksanaan`
---
-
-INSERT INTO `pkl_jurnal_pelaksanaan` (`id_jurnal_pelaksanaan`, `mahasiswa_id`, `jam`, `hari`, `keterangan`, `pkl_id`, `status`) VALUES
-(7, 1, '17:06', '2023-07-09', 'Testssss', 1, 'Approved'),
-(8, 1, '15:17', '1990-06-02', 'Amet omnis et qui e', 1, 'Approved'),
-(9, 1, '23:39', '1993-05-06', 'Rerum quia consectet', 1, 'Pending');
 
 -- --------------------------------------------------------
 
@@ -515,23 +481,6 @@ INSERT INTO `tempat_sidang` (`id_tempat`, `nama_tempat`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ujian_pkl`
---
-
-CREATE TABLE `ujian_pkl` (
-  `id_ujian_pkl` bigint(20) UNSIGNED NOT NULL,
-  `nama` varchar(120) NOT NULL,
-  `lampiran_pembayaran` varchar(120) NOT NULL,
-  `lampiran_krs` varchar(120) NOT NULL,
-  `lampiran_laporan` varchar(120) NOT NULL,
-  `lampiran_keterangan` varchar(120) NOT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'Pending',
-  `user_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -571,7 +520,6 @@ ALTER TABLE `berkas`
 ALTER TABLE `dosen`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `nidn` (`nidn`),
-  ADD UNIQUE KEY `alamat` (`alamat`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
@@ -717,12 +665,6 @@ ALTER TABLE `tempat_sidang`
   ADD PRIMARY KEY (`id_tempat`);
 
 --
--- Indexes for table `ujian_pkl`
---
-ALTER TABLE `ujian_pkl`
-  ADD PRIMARY KEY (`id_ujian_pkl`);
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -742,7 +684,7 @@ ALTER TABLE `berkas`
 -- AUTO_INCREMENT for table `dosen`
 --
 ALTER TABLE `dosen`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `dosen_pembimbing`
@@ -865,12 +807,6 @@ ALTER TABLE `tempat_sidang`
   MODIFY `id_tempat` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `ujian_pkl`
---
-ALTER TABLE `ujian_pkl`
-  MODIFY `id_ujian_pkl` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -884,8 +820,8 @@ ALTER TABLE `users`
 -- Constraints for table `dosen_pembimbing`
 --
 ALTER TABLE `dosen_pembimbing`
-  ADD CONSTRAINT `dosen_pembimbing_dosen_id_foreign` FOREIGN KEY (`dosen_id`) REFERENCES `dosen` (`id`),
-  ADD CONSTRAINT `dosen_pembimbing_mahasiswa_id_foreign` FOREIGN KEY (`mahasiswa_id`) REFERENCES `mahasiswa` (`id`);
+  ADD CONSTRAINT `dosen_pembimbing_dosen_id_foreign` FOREIGN KEY (`dosen_id`) REFERENCES `dosen` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `dosen_pembimbing_mahasiswa_id_foreign` FOREIGN KEY (`mahasiswa_id`) REFERENCES `mahasiswa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `mahasiswa`
