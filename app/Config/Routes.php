@@ -55,7 +55,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->post('dosen', 'DosenController::store', ['as' => 'admin.dosen.store']);
     $routes->get('dosen/edit/(:num)', 'DosenController::edit/$1', ['as' => 'admin.dosen.edit']);
     $routes->put('dosen/update/(:num)', 'DosenController::update/$1', ['as' => 'admin.dosen.update']);
-    $routes->post('dosen/delete/(:num)', 'DosenController::delete/$1', ['as' => 'admin.dosen.delete']);
+    $routes->delete('dosen/delete/(:num)', 'DosenController::delete/$1', ['as' => 'admin.dosen.delete']);
 
     // Route untuk Dosen
     $routes->get('pembimbing', 'PembimbingController::index', ['as' => 'admin.pembimbing.index']);

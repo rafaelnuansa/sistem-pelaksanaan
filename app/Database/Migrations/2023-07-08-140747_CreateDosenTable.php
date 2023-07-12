@@ -48,7 +48,6 @@ class CreateDosenTable extends Migration
             'alamat' => [
                 'type' => 'VARCHAR',
                 'constraint' => 20,
-                'unique' => true,
             ],
 
             'status_akun' => [
