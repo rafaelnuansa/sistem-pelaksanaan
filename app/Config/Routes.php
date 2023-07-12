@@ -39,7 +39,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->post('prodi', 'ProdiController::store', ['as' => 'admin.prodi.store']);
     $routes->get('prodi/edit/(:num)', 'ProdiController::edit/$1', ['as' => 'admin.prodi.edit']);
     $routes->post('prodi/update/(:num)', 'ProdiController::update/$1', ['as' => 'admin.prodi.update']);
-    $routes->post('prodi/delete/(:num)', 'ProdiController::delete/$1', ['as' => 'admin.prodi.delete']);
+    $routes->delete('prodi/delete/(:num)', 'ProdiController::delete/$1', ['as' => 'admin.prodi.delete']);
 
     // Route Admin/Mahasiswa 
     $routes->get('mahasiswa', 'MahasiswaController::index', ['as' => 'admin.mahasiswa.index']);
@@ -47,7 +47,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->post('mahasiswa', 'MahasiswaController::store', ['as' => 'admin.mahasiswa.store']);
     $routes->get('mahasiswa/edit/(:num)', 'MahasiswaController::edit/$1', ['as' => 'admin.mahasiswa.edit']);
     $routes->put('mahasiswa/update/(:num)', 'MahasiswaController::update/$1', ['as' => 'admin.mahasiswa.update']);
-    $routes->post('mahasiswa/delete/(:num)', 'MahasiswaController::delete/$1', ['as' => 'admin.mahasiswa.delete']);
+    $routes->delete('mahasiswa/delete/(:num)', 'MahasiswaController::delete/$1', ['as' => 'admin.mahasiswa.delete']);
 
     // Route untuk Dosen
     $routes->get('dosen', 'DosenController::index', ['as' => 'admin.dosen.index']);
@@ -71,7 +71,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->post('instansi/store', 'InstansiController::store');
     $routes->get('instansi/edit/(:num)', 'InstansiController::edit/$1');
     $routes->post('instansi/update/(:num)', 'InstansiController::update/$1');
-    $routes->get('instansi/delete/(:num)', 'InstansiController::delete/$1');
+    $routes->delete('instansi/delete/(:num)', 'InstansiController::delete/$1');
 
     // Admin PKL 
     $routes->get('pkl', 'PklController::index', ['as' => 'admin.pkl.index']);
@@ -83,7 +83,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     // Rute untuk assign anggota PKL
     $routes->get('pkl/anggota/(:num)', 'PKLController::assignAnggota/$1', ['as' => 'admin.pkl.assign_anggota']);
     $routes->get('pkl/anggota/tambah', 'PKLController::storeAnggota');
-    $routes->post('pkl/anggota/delete', 'PKLController::deleteAnggota');
+    $routes->delete('pkl/anggota/delete', 'PKLController::deleteAnggota');
     $routes->get('pkl/anggota/status', 'PKLController::statusAnggota');
 
     // Admin PKL Jurnal Pelaksanaan
