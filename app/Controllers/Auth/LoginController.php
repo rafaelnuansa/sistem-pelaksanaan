@@ -31,7 +31,8 @@ class LoginController extends BaseController
                     'user_id' => $user['id'],
                     'username' => $user['username'],
                     'nama' => $user['nama'],
-                    'level' => 'Admin' // Ganti dengan level pengguna yang sesuai
+                    'level' => 'Admin',
+                    'logged_in' => true,
                 ]);
 
                 // Redirect ke halaman dashboard
@@ -51,7 +52,8 @@ class LoginController extends BaseController
                     'mahasiswa_id' => $mahasiswa['id'],
                     'nim' => $mahasiswa['nim'],
                     'nama' => $mahasiswa['nama'],
-                    'level' => 'Mahasiswa'
+                    'level' => 'Mahasiswa',
+                    'logged_in' => true,
                 ]);
 
                 // Redirect ke halaman dashboard mahasiswa
@@ -71,7 +73,8 @@ class LoginController extends BaseController
                     'dosen_id' => $dosen['id'],
                     'nidn' => $dosen['nidn'],
                     'nama' => $dosen['nama'],
-                    'level' => 'Dosen'
+                    'level' => 'Dosen',
+                    'logged_in' => true,
                 ]);
 
                 // Redirect ke halaman dashboard dosen

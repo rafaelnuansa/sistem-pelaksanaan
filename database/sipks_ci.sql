@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 12, 2023 at 03:14 AM
+-- Generation Time: Jul 13, 2023 at 09:05 AM
 -- Server version: 5.7.24
 -- PHP Version: 7.4.19
 
@@ -65,7 +65,7 @@ INSERT INTO `dosen` (`id`, `nama`, `nidn`, `email`, `password`, `no_telpon`, `al
 (3, 'Achmad Syauqi, M.Kom', '7678899', NULL, '$2y$10$GCkk/wU7Mn3ZTxOSsrlu7.kuGduUQ0u30VLN/c9sMTy.Xfx4.iDa.', 2147483647, 'Adisana', 1, '2023-07-09 01:39:46', '2023-07-09 01:39:46'),
 (4, 'Fuaida Nabyla, M.Kom', '56786547', NULL, '$2y$10$toQWrWhIhixaWKXQOL09EuaIjDeZ8X3Xihv7serIYUR7XyaXjAQYe', 2147483647, 'Tonjong', 1, '2023-07-09 01:39:46', '2023-07-09 01:39:46'),
 (5, 'Eko Sudrajat, M.Kom', '56567654', NULL, '$2y$10$qP4jQ/D.KmlR.KoAIqcmk.wUyJEHtJROS.VZdQSBQv8g9WgcVeeC6', 2147483647, 'Banyumas', 1, '2023-07-09 01:39:46', '2023-07-09 01:39:46'),
-(6, 'Danar, M.Kom', '65438888', NULL, '$2y$10$UatkATIyfVIhz3A2GeajN.pqRjisdRagxtM/jp4v8XSv9CGBBGnia', 2147483647, 'Cilacap', 1, '2023-07-09 01:39:47', '2023-07-09 01:39:47');
+(6, 'Danar, M.Kom', '65438888', 'test@gmail.com', '$2y$10$dSs28mxlXYmumOpQf6i8Hu9yeX92c6jLdI4jykmVgvrRpXHrIwjx2', 2147483647, 'Cilacap', 1, '2023-07-09 01:39:47', '2023-07-12 00:06:45');
 
 -- --------------------------------------------------------
 
@@ -85,9 +85,9 @@ CREATE TABLE `dosen_pembimbing` (
 --
 
 INSERT INTO `dosen_pembimbing` (`id_dospem`, `dosen_id`, `mahasiswa_id`, `jenis_pembimbing`) VALUES
-(1, 2, 5, 'PKL'),
-(4, 1, 1, 'PKL'),
-(5, 1, 1, 'PKL');
+(6, 2, 3, 'PKL'),
+(7, 2, 1, 'PKL'),
+(8, 1, 4, 'PKL');
 
 -- --------------------------------------------------------
 
@@ -134,76 +134,50 @@ CREATE TABLE `instansi` (
 --
 
 INSERT INTO `instansi` (`id`, `nama_perusahaan`, `alamat`, `pembimbing_lapangan`, `no_pembimbing_lapangan`, `created_at`, `updated_at`) VALUES
-(1, 'Instansi Nama', 'Alamat Instansi\r\n', 'Pembimbing Nama', '1234567890', '2023-07-09 03:03:02', '2023-07-09 06:19:09');
+(1, 'Instansi Nama', 'Alamat Instansi\r\n', 'Pembimbing Nama', '1234567890', '2023-07-09 03:03:02', '2023-07-09 06:19:09'),
+(2, 'Instansi Nama 2', 'Alamat Instansiss', 'Pembimbing Nama', '123123123', '2023-07-12 17:19:44', '2023-07-12 17:27:57'),
+(3, 'Instansi Nama 3', 'Alamat Instansi', 'Pembimbing Nama', '12312312', '2023-07-12 17:20:05', '2023-07-12 17:20:05');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jadwal_sidang_pkl`
+-- Table structure for table `kkn`
 --
 
-CREATE TABLE `jadwal_sidang_pkl` (
-  `id_jadwal_sidang` bigint(20) UNSIGNED NOT NULL,
-  `tanggal` varchar(50) NOT NULL,
-  `mahasiswa_id` bigint(20) NOT NULL,
-  `keterangan` text NOT NULL,
-  `dospem_id` varchar(120) NOT NULL,
-  `dospeng_id` bigint(20) NOT NULL,
-  `tempat_id` bigint(20) NOT NULL
+CREATE TABLE `kkn` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `nama_kelompok` varchar(45) NOT NULL,
+  `tgl_mulai` varchar(40) NOT NULL,
+  `tgl_selesai` varchar(40) NOT NULL,
+  `tahun_akademik` varchar(20) NOT NULL,
+  `dosen_id` bigint(20) UNSIGNED NOT NULL,
+  `prodi_id` bigint(20) UNSIGNED NOT NULL,
+  `instansi_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `judul_laporan_pkl`
+-- Dumping data for table `kkn`
 --
 
-CREATE TABLE `judul_laporan_pkl` (
-  `id_laporan` bigint(20) UNSIGNED NOT NULL,
-  `judul` varchar(120) NOT NULL,
-  `user_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `kkn` (`id`, `nama_kelompok`, `tgl_mulai`, `tgl_selesai`, `tahun_akademik`, `dosen_id`, `prodi_id`, `instansi_id`, `created_at`, `updated_at`) VALUES
+(2, 'Nama Kelompok', '2002-03-25', '2014-08-26', '2023/2024', 3, 2, 2, '2023-07-11 22:09:43', '2023-07-12 17:24:35'),
+(3, 'Kelompok 2', '2023-07-13', '2023-07-31', '2024/2024', 5, 1, 3, '2023-07-13 00:51:16', '2023-07-13 00:51:16');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jurnal_bimbingan_pkl`
+-- Table structure for table `kkn_anggota`
 --
 
-CREATE TABLE `jurnal_bimbingan_pkl` (
-  `id_jurnal` bigint(20) UNSIGNED NOT NULL,
-  `jam` varchar(10) NOT NULL,
-  `tanggal` varchar(50) NOT NULL,
-  `nama_mhs` varchar(120) NOT NULL,
-  `kelompok` varchar(20) NOT NULL,
-  `catatan` text NOT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'Pending'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `jurnal_monitoring`
---
-
-CREATE TABLE `jurnal_monitoring` (
-  `id_jurnal` bigint(20) UNSIGNED NOT NULL,
-  `hari` varchar(50) NOT NULL,
-  `nama_mhs` varchar(20) NOT NULL,
-  `keterangan` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `jurnal_pelaksanaan_kkn`
---
-
-CREATE TABLE `jurnal_pelaksanaan_kkn` (
-  `id_jurnal` bigint(20) UNSIGNED NOT NULL,
-  `hari` varchar(50) NOT NULL,
-  `nama_mhs` varchar(20) NOT NULL,
-  `keterangan` text NOT NULL
+CREATE TABLE `kkn_anggota` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `mahasiswa_id` bigint(20) UNSIGNED NOT NULL,
+  `pkl_id` bigint(20) UNSIGNED NOT NULL,
+  `is_ketua` tinyint(1) NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -236,10 +210,9 @@ CREATE TABLE `mahasiswa` (
 
 INSERT INTO `mahasiswa` (`id`, `nim`, `nama`, `email`, `password`, `jenis_kelamin`, `no_telpon`, `tgl_lahir`, `alamat`, `angkatan`, `status_akun`, `status_pkl`, `prodi_id`, `created_at`, `updated_at`) VALUES
 (1, '42139005', 'Asih Tri Indriyani', '42139005@peradaban.ac.id', '$2y$10$xIcyQKSgfGI0WfxRD..JwuS2VfkUtsSZKyqnPiI2rJrKdE7Y7xxpi', 'P', '085436788098', '2000-10-01', 'Bumiayu', 2019, 1, 'layak', 2, NULL, '2023-07-09 03:03:52'),
-(2, '42319001', 'kharisma desti p', NULL, '$2y$10$cfIKUuh9ttNaPYbEGjMbDOX64tu1YZ8iC1lb3F0KQKC9xt9UJ1IuC', 'P', '085436788098', '2000-10-01', 'Bumiayu', 2019, 1, 'layak', 1, NULL, NULL),
-(3, '42319002', 'Azis maulana', NULL, '$2y$10$vSMXAf.kXBnz1UeZR8mSPenxNhEM/pUNCl3FzA1Uc6r79SPXl4.Bq', 'P', '085436788098', '2002-07-05', 'Bumiayu', 2019, 1, 'layak', 2, NULL, NULL),
+(2, '123456', 'Mahasiswa 1', 'mahasiswa1@gmail.com', '$2y$10$q3UNawsRGwLRGnsdDi4PnO4vMYfj/Bj3i8FNMSNjSy3JSmcEL/Apm', 'P', '085436788098', '2000-10-01', 'Bumiayu', 2019, 1, 'layak', 1, NULL, '2023-07-12 06:19:59'),
+(3, '123457', 'Mahasiswa 2', 'mahasiswa2@gmail.com', '$2y$10$Bxyjd0eucFCZv4nGe3/SwOkslJFwVK3t39uPZhmJnEPisoKBZdnVu', 'P', '085436788098', '2002-07-05', 'Bumiayu', 2019, 1, 'layak', 2, NULL, '2023-07-12 15:47:10'),
 (4, '42319003', 'Nina Melani', NULL, '$2y$10$cZHIbJztglChnvpmYbs/yugtkaxA9MBoFUHE6onrrZ2iPgs6e98Qu', 'P', '085436788098', '2002-09-10', 'Bumiayu', 2019, 1, 'layak', 2, NULL, NULL),
-(5, '4239004', 'Rifta Rismayasari', NULL, '$2y$10$R3wIivGYdh7GGQrkdFWrq.NUxrAZYuWqBdqsW6XS7KNOYao.gP9ni', 'P', '085436788098', '2000-10-01', 'Bumiayu', 2019, 1, 'layak', 2, NULL, NULL),
 (6, '42319006', 'Shodik Abdul ghofar', NULL, '$2y$10$CT.zqj.n55YHpLmoHseau.84kRGOqS2gNTF9V1sjedt1/8Vy8851S', 'P', '085436788098', '2000-10-01', 'Bumiayu', 2019, 1, 'layak', 3, NULL, NULL),
 (7, '42319008', 'M. Wildan ihsani', NULL, '$2y$10$WJh9dm0m3AfvZt89KmBRkuzY0P0FyBm.t4VHA.mjac.0dvvE8gYZq', 'P', '085436788098', '2000-10-01', 'Bumiayu', 2019, 1, 'layak', 1, NULL, NULL),
 (8, '42319010', 'Deskal Dwi Rayananda', NULL, '$2y$10$YjZ6jwOy0ssjbXr.u6y/xeEiJv5/5sAGlbr4hzTzuSlSI2Y5f2qWG', 'P', '085436788098', '2000-10-01', 'Bumiayu', 2019, 1, 'layak', 1, NULL, NULL);
@@ -292,21 +265,6 @@ INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pembimbing`
---
-
-CREATE TABLE `pembimbing` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `dosen_id` bigint(20) UNSIGNED NOT NULL,
-  `mahasiswa_id` bigint(20) UNSIGNED NOT NULL,
-  `tipe_bimbingan` enum('PKL','KKN','SKRIPSI') NOT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `pkl`
 --
 
@@ -328,7 +286,8 @@ CREATE TABLE `pkl` (
 --
 
 INSERT INTO `pkl` (`id`, `nama_kelompok`, `tgl_mulai`, `tgl_selesai`, `tahun_akademik`, `dosen_id`, `prodi_id`, `instansi_id`, `created_at`, `updated_at`) VALUES
-(2, 'Ipsa voluptatem ut ', '2002-03-25', '2014-08-26', 'Voluptates voluptate', 3, 2, 1, '2023-07-11 22:09:43', '2023-07-11 22:10:22');
+(2, 'Nama Kelompok', '2002-03-25', '2014-08-26', '2023/2024', 3, 2, 2, '2023-07-11 22:09:43', '2023-07-12 17:24:35'),
+(3, 'Kelompok 2', '2023-07-13', '2023-07-31', '2024/2024', 5, 1, 3, '2023-07-13 00:51:16', '2023-07-13 00:51:16');
 
 -- --------------------------------------------------------
 
@@ -341,8 +300,8 @@ CREATE TABLE `pkl_anggota` (
   `mahasiswa_id` bigint(20) UNSIGNED NOT NULL,
   `pkl_id` bigint(20) UNSIGNED NOT NULL,
   `is_ketua` tinyint(1) NOT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -350,8 +309,9 @@ CREATE TABLE `pkl_anggota` (
 --
 
 INSERT INTO `pkl_anggota` (`id`, `mahasiswa_id`, `pkl_id`, `is_ketua`, `created_at`, `updated_at`) VALUES
-(4, 1, 2, 1, NULL, NULL),
-(5, 4, 2, 0, NULL, NULL);
+(4, 1, 2, 1, '2023-07-13 15:17:19', NULL),
+(5, 4, 2, 0, NULL, NULL),
+(6, 3, 2, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -411,6 +371,13 @@ CREATE TABLE `pkl_jurnal_bimbingan` (
   `status` varchar(10) NOT NULL DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `pkl_jurnal_bimbingan`
+--
+
+INSERT INTO `pkl_jurnal_bimbingan` (`id_jurnal_bimbingan`, `mahasiswa_id`, `jam`, `tanggal`, `catatan`, `pkl_id`, `status`) VALUES
+(5, 1, '13:32', '2023-07-13', 'wwwww', 2, 'Pending');
+
 -- --------------------------------------------------------
 
 --
@@ -426,6 +393,13 @@ CREATE TABLE `pkl_jurnal_pelaksanaan` (
   `pkl_id` bigint(20) UNSIGNED NOT NULL,
   `status` varchar(10) NOT NULL DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `pkl_jurnal_pelaksanaan`
+--
+
+INSERT INTO `pkl_jurnal_pelaksanaan` (`id_jurnal_pelaksanaan`, `mahasiswa_id`, `jam`, `hari`, `keterangan`, `pkl_id`, `status`) VALUES
+(22, 1, '12:39', '2023-07-13', 'test', 2, 'Pending');
 
 -- --------------------------------------------------------
 
@@ -493,7 +467,7 @@ CREATE TABLE `tempat_sidang` (
 --
 
 INSERT INTO `tempat_sidang` (`id_tempat`, `nama_tempat`) VALUES
-(1, 'Ruang Sidang A');
+(1, 'Ruang Sidang');
 
 -- --------------------------------------------------------
 
@@ -560,34 +534,21 @@ ALTER TABLE `instansi`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `jadwal_sidang_pkl`
+-- Indexes for table `kkn`
 --
-ALTER TABLE `jadwal_sidang_pkl`
-  ADD PRIMARY KEY (`id_jadwal_sidang`);
+ALTER TABLE `kkn`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pkl_instansi_id_foreign` (`instansi_id`),
+  ADD KEY `pkl_dosen_id_foreign` (`dosen_id`),
+  ADD KEY `pkl_prodi_id_foreign` (`prodi_id`);
 
 --
--- Indexes for table `judul_laporan_pkl`
+-- Indexes for table `kkn_anggota`
 --
-ALTER TABLE `judul_laporan_pkl`
-  ADD PRIMARY KEY (`id_laporan`);
-
---
--- Indexes for table `jurnal_bimbingan_pkl`
---
-ALTER TABLE `jurnal_bimbingan_pkl`
-  ADD PRIMARY KEY (`id_jurnal`);
-
---
--- Indexes for table `jurnal_monitoring`
---
-ALTER TABLE `jurnal_monitoring`
-  ADD PRIMARY KEY (`id_jurnal`);
-
---
--- Indexes for table `jurnal_pelaksanaan_kkn`
---
-ALTER TABLE `jurnal_pelaksanaan_kkn`
-  ADD PRIMARY KEY (`id_jurnal`);
+ALTER TABLE `kkn_anggota`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pkl_anggota_mahasiswa_id_foreign` (`mahasiswa_id`),
+  ADD KEY `pkl_anggota_pkl_id_foreign` (`pkl_id`);
 
 --
 -- Indexes for table `mahasiswa`
@@ -603,14 +564,6 @@ ALTER TABLE `mahasiswa`
 --
 ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `pembimbing`
---
-ALTER TABLE `pembimbing`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pembimbing_dosen_id_foreign` (`dosen_id`),
-  ADD KEY `pembimbing_mahasiswa_id_foreign` (`mahasiswa_id`);
 
 --
 -- Indexes for table `pkl`
@@ -707,7 +660,7 @@ ALTER TABLE `dosen`
 -- AUTO_INCREMENT for table `dosen_pembimbing`
 --
 ALTER TABLE `dosen_pembimbing`
-  MODIFY `id_dospem` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_dospem` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `fakultas`
@@ -719,43 +672,25 @@ ALTER TABLE `fakultas`
 -- AUTO_INCREMENT for table `instansi`
 --
 ALTER TABLE `instansi`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `jadwal_sidang_pkl`
+-- AUTO_INCREMENT for table `kkn`
 --
-ALTER TABLE `jadwal_sidang_pkl`
-  MODIFY `id_jadwal_sidang` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `kkn`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `judul_laporan_pkl`
+-- AUTO_INCREMENT for table `kkn_anggota`
 --
-ALTER TABLE `judul_laporan_pkl`
-  MODIFY `id_laporan` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `jurnal_bimbingan_pkl`
---
-ALTER TABLE `jurnal_bimbingan_pkl`
-  MODIFY `id_jurnal` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `jurnal_monitoring`
---
-ALTER TABLE `jurnal_monitoring`
-  MODIFY `id_jurnal` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `jurnal_pelaksanaan_kkn`
---
-ALTER TABLE `jurnal_pelaksanaan_kkn`
-  MODIFY `id_jurnal` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `kkn_anggota`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `mahasiswa`
 --
 ALTER TABLE `mahasiswa`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -764,22 +699,16 @@ ALTER TABLE `migrations`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
--- AUTO_INCREMENT for table `pembimbing`
---
-ALTER TABLE `pembimbing`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `pkl`
 --
 ALTER TABLE `pkl`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `pkl_anggota`
 --
 ALTER TABLE `pkl_anggota`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `pkl_jadwal_sidang`
@@ -797,13 +726,13 @@ ALTER TABLE `pkl_judul_laporan`
 -- AUTO_INCREMENT for table `pkl_jurnal_bimbingan`
 --
 ALTER TABLE `pkl_jurnal_bimbingan`
-  MODIFY `id_jurnal_bimbingan` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_jurnal_bimbingan` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `pkl_jurnal_pelaksanaan`
 --
 ALTER TABLE `pkl_jurnal_pelaksanaan`
-  MODIFY `id_jurnal_pelaksanaan` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_jurnal_pelaksanaan` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `pkl_ujian`
@@ -841,17 +770,17 @@ ALTER TABLE `dosen_pembimbing`
   ADD CONSTRAINT `dosen_pembimbing_mahasiswa_id_foreign` FOREIGN KEY (`mahasiswa_id`) REFERENCES `mahasiswa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `kkn`
+--
+ALTER TABLE `kkn`
+  ADD CONSTRAINT `kkn_ibfk_1` FOREIGN KEY (`dosen_id`) REFERENCES `dosen` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `kkn_ibfk_2` FOREIGN KEY (`prodi_id`) REFERENCES `prodi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `mahasiswa`
 --
 ALTER TABLE `mahasiswa`
   ADD CONSTRAINT `mahasiswa_prodi_id_foreign` FOREIGN KEY (`prodi_id`) REFERENCES `prodi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `pembimbing`
---
-ALTER TABLE `pembimbing`
-  ADD CONSTRAINT `pembimbing_dosen_id_foreign` FOREIGN KEY (`dosen_id`) REFERENCES `dosen` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pembimbing_mahasiswa_id_foreign` FOREIGN KEY (`mahasiswa_id`) REFERENCES `mahasiswa` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pkl`

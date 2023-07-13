@@ -5,6 +5,7 @@ namespace Config;
 use App\Filters\Auth;
 use App\Filters\AuthMhs;
 use App\Filters\AuthDosen;
+use App\Filters\RedirectIfAuthenticated;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -27,8 +28,9 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'auth'          => Auth::class,
-        'auth2'         => AuthMhs::class,
-        'auth3'         => AuthDosen::class,
+        'authMahasiswa'         => AuthMhs::class,
+        'authDosen'         => AuthDosen::class,
+        'redirectIfAuthenticated' => RedirectIfAuthenticated::class, 
     ];
 
     /**

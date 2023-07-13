@@ -22,13 +22,12 @@
       <a href="<?= base_url('downloads/surat-tugas.pdf') ?>" class="btn btn-primary" target="_blank"><i class="fa fa-print" style="margin-right: 4px;"></i> Cetak Surat Tugas</a>
     </div> -->
     <div class="table-responsive">
-      <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+      <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
         <thead>
           <tr>
             <th>No</th>
             <th>NIM</th>
             <th>Nama mahasiswa</th>
-            <!-- <th>Dosen pembimbing</th> -->
             <th>Dosen penguji</th>
             <th>Tempat</th>
             <th>Hari/Tanggal</th>
@@ -41,21 +40,15 @@
               <td><?= ++$i ?></td>
               <td><?= $row['nim'] ?></td>
               <td><?= $row['nama_mahasiswa'] ?></td>
-              <!-- <td><?= $row['nama'] ?></td> -->
               <td><?= $row['dospeng'] ?></td>
               <td><?= $row['tempat_nama'] ?></td>
               <td><?= $row['tanggal'] ?></td>
-              <td>
               <td>
                 <?php if (!$row['status']) : ?>
                   <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 1) ?>" class="badge bg-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a>
                 <?php else : ?>
                   <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 0) ?>" class="badge bg-success" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Belum Melaksanakan?')">Sudah Melaksanakan</a>
                 <?php endif; ?>
-
-
-              </td>
-              </td>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -80,12 +73,12 @@
       </div>
     </div>
     <div class="box-body">
-      <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+      <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
         <thead>
           <tr>
             <th>No</th>
             <th>Nama mahasiswa</th>
-            <th></th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
@@ -253,5 +246,7 @@
 
     $('#modal-detail').modal('show');
   });
+
+  
 </script>
 <?= $this->endSection(); ?>

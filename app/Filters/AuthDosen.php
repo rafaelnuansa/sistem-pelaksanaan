@@ -30,7 +30,7 @@ class AuthDosen implements FilterInterface
             return redirect()->to('/'); 
         }
 
-        if(session()->get('level') != 'Dosen' && session()->get('level') != 'Dosen2') {
+        if(session()->get('level') != 'Dosen') {
             $response = Services::response();
             $response->setStatusCode(403, 'Unauthorized access')
                 ->setBody('<h1>Unauthorized access</h1><hr>');

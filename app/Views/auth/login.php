@@ -24,7 +24,9 @@
 
 <body class="hold-transition login-page">
     <div class="login-box">
-        <div class="login-logo">
+        <div class="login-logo text-center">
+        <img src="<?= base_url('assets/img/logo.png') ?>" width="200" alt="Logo" class="logo-img"><br>
+
             <a href="#" class="h3"><b>Aplikasi Pelaksanaan PKL, KKN dan Skripsi</b></a>
         </div>
         <!-- /.login-logo -->
@@ -36,7 +38,7 @@
             <div style="padding-bottom: 20px; text-align: center;">
                 Silahkan login terlebih dahulu
             </div>
-
+        
             <form action="<?= base_url('auth/login') ?>" method="post">
                 <div class="form-group">
                     <input type="text" class="form-control" name="username" placeholder="Username/NIM/NIDN" required>

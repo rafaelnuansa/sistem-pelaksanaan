@@ -24,8 +24,8 @@
                 <?php endif; ?>
 
                 <a href="<?= route_to('admin.tempat.create'); ?>" class="btn btn-primary mb-2">Tambah Tempat</a>
-                <div class="table-responsive">
-                    <table class="table table-striped">
+                <div class="table-responsive" style="margin-top: 20px;">
+                    <table class="table table-striped datatable">
                         <thead>
                             <tr>
                                 <th>No</th>

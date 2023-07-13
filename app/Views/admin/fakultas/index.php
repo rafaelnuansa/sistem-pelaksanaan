@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="box-body">
-                    <table class="table table-striped">
+                    <table class="table table-striped datatable">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>

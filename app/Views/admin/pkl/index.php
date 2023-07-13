@@ -20,8 +20,8 @@
                         </div>
                     <?php endif; ?>
 
-                    <table class="table table-bordered">
-                        <thead>
+                    <table class="table table-bordered datatable ">
+                        <thead class="bg-primary">
                             <tr>
                                 <th>No</th>
                                 <th>Nama Kelompok</th>
@@ -46,7 +46,7 @@
                                     <td><?= $pkl['nama_dosen']; ?></td>
                                     <td><?= $pkl['nama_prodi']; ?></td>
                                     <td><?= $pkl['nama_perusahaan']; ?></td>
-                                    <td> <span class="badge badge-warning">  <?= $pkl['ketua_kelompok'] ?></span>
+                                    <td> <span class="label label-primary">  <?= $pkl['ketua_kelompok'] ?></span>
                             
                                     </td>
                                     <td>

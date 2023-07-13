@@ -34,7 +34,6 @@ class Auth implements FilterInterface
             $response = Services::response();
             $response->setStatusCode(403, 'Unauthorized access')
                 ->setBody('<h1>Unauthorized access</h1><hr>');
-
             return $response;
         }
     }

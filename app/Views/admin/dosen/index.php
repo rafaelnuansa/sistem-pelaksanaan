@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="box-body">
-                    <table class="table table-hover">
+                    <table class="table table-hover datatable">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>

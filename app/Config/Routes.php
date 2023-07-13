@@ -16,12 +16,15 @@ $routes->setDefaultController('Auth\LoginController');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
-$routes->setAutoRoute(true);
+$routes->setAutoRoute(false);
 
-$routes->get('/', 'Auth\LoginController::index');
+$routes->get('/', 'Auth\LoginController::index', ['filter' => 'redirectIfAuthenticated']);
+$routes->get('login', 'Auth\LoginController::index', ['filter' => 'redirectIfAuthenticated']);
+$routes->post('login', 'Auth\LoginController::login', ['filter' => 'redirectIfAuthenticated']);
+$routes->post('auth/login', 'Auth\LoginController::login', ['filter' => 'redirectIfAuthenticated']);
 $routes->get('logout', 'Auth\LoginController::logout');
 
-$routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($routes) {
+$routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'auth'], function ($routes) {
     // Dashboard Admin 
     $routes->get('dashboard', 'DashboardController::index');
 
@@ -141,7 +144,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
 });
 
 
-$routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa'], function ($routes) {
+$routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter' => 'authMahasiswa'], function ($routes) {
     // Dashboard Mahasiswa 
     $routes->get('', 'DashboardController::index', ['as' => 'mahasiswa.dashboard']);
     $routes->get('dashboard', 'DashboardController::index', ['as' => 'mahasiswa.dashboard.index']);
@@ -182,7 +185,7 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa'], functi
 
 
 
-$routes->group('dosen', ['namespace' => 'App\Controllers\Dosen'], function ($routes) {
+$routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'authDosen'], function ($routes) {
     $routes->get('dashboard', 'DashboardController::index');
     $routes->get('pkl', 'PKLController::index');
     $routes->get('pkl/approve', 'PKLController::approve_bimbingan');
@@ -197,12 +200,6 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen'], function ($rou
     $routes->get('pkl/penilaian/2', 'PKLController::penilaian2');
 });
 
-
-$routes->group('auth', ['namespace' => 'App\Controllers\Auth'], function ($routes) {
-    $routes->get('login', 'LoginController::index');
-    $routes->post('login', 'LoginController::login');
-    $routes->get('logout', 'LoginController::logout');
-});
 
 
 if (is_file(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {

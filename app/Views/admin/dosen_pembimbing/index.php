@@ -18,7 +18,7 @@
                 <div class="alert alert-success"><?= session()->getFlashdata('success'); ?></div>
             <?php endif; ?>
 
-            <table class="table table-bordered">
+            <table class="table table-bordered datatable">
                 <thead>
                     <tr>
                         <th>No.</th>

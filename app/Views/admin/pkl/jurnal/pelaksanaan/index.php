@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/default'); ?>
 
 <?= $this->section('content'); ?>
-
+<div class="container-fluid">
 <!-- Default box -->
 <div class="box">
     <div class="box-header with-border">
@@ -20,7 +20,7 @@
 
         <div class="table-responsive">
             
-        <table class="table table-bordered" id="mahasiswa">
+        <table class="table table-bordered datatable" id="mahasiswa">
             <thead>
                 <tr>
                     <th>No</th>
@@ -53,6 +53,7 @@
     </div>
 </div>
 <!-- /.box -->
+</div>
 
 <?= $this->endSection(); ?>
 
@@ -60,10 +61,5 @@
 <?= $this->section('script'); ?>
 <script src="<?= base_url('bower_components/datatables.net/js/jquery.dataTables.min.js') ?>"></script>
 <script src="<?= base_url('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') ?>"></script>
-<script>
-  $('#mahasiswa').DataTable({
-    "pageLength": 10
-  });
 
-</script>
 <?= $this->endSection(); ?>
