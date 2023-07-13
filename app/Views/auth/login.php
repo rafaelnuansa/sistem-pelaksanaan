@@ -39,7 +39,7 @@
 
             <form action="<?= base_url('auth/login') ?>" method="post">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="username" placeholder="Username" required>
+                    <input type="text" class="form-control" name="username" placeholder="Username/NIM/NIDN" required>
                 </div>
                 <div class="form-group">
                     <input type="password" class="form-control" name="password" placeholder="Password" required>

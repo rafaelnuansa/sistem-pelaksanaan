@@ -13,7 +13,6 @@
         <div class="box-body">
             <form action="<?= route_to('admin.dosen_pembimbing.update', $dosenPembimbing['id_dospem']); ?>" method="POST">
                 <?= csrf_field(); ?>
-                <?= method_field('PUT'); ?>
 
                 <div class="form-group">
                     <label for="dosen_id">Dosen</label>

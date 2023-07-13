@@ -19,37 +19,36 @@
     </div>
   </div>
   <div class="box-body">
-    <div class="py-2">
-      <button class="btn btn-primary daftar">Daftar Ujian PKL</button>
-    </div>
-    <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
-      <thead>
-        <tr>
-          <th>Hari/Tanggal</th>
-          <th>NIM</th>
-          <th>Nama mahasiswa</th>
-          <th>Keterangan</th>
-          <th>Dospem</th>
-          <th>Dospeng</th>
-          <th>Tempat</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php foreach($data as $row): ?>
+    <?php if (!empty($data)) : ?>
+      <div class="py-2">
+        <button class="btn btn-primary daftar">Daftar Ujian PKL</button>
+      </div>
+      <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+        <thead>
           <tr>
-            <td><?= $row['tanggal'] ?></td>
-            <td><?= $row['nim'] ?></td>
-            <td><?= $row['nama'] ?></td>
-            <td><?= $row['keterangan'] ?></td>
-            <td><?= $row['dospem'] ?></td>
-            <td><?= $row['dospeng'] ?></td>
-            <td><?= $row['tempat'] ?></td>
+            <th>Hari/Tanggal</th>
+            <th>NIM</th>
+            <th>Nama Mahasiswa</th>
+            <th>Tempat</th>
           </tr>
-        <?php endforeach; ?>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <?php foreach ($data as $row) : ?>
+            <tr>
+              <td><?= $row['tanggal'] ?></td>
+              <td><?= $row['nim'] ?></td>
+              <td><?= $row['nama_mahasiswa'] ?></td>
+              <td><?= $row['tempat_nama'] ?></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    <?php else : ?>
+      <div class="alert alert-info">Belum Tersedia.</div>
+    <?php endif; ?>
   </div>
 </div>
+
 <!-- /.box -->
 
 <div class="modal fade" id="modal-tambah">

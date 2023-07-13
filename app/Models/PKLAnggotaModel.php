@@ -13,13 +13,14 @@ class PKLAnggotaModel extends Model
         'pkl_id',
         'is_ketua'
     ];
-    
-   
+
+
     public function getKelompokIdBySessionIdMhs()
     {
         $mahasiswaId = session()->get('mahasiswa_id');
-        $query = $this->select('pkl_anggota.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim')
+        $query = $this->select('pkl_anggota.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim, pkl.*')
             ->join('mahasiswa', 'mahasiswa.id = pkl_anggota.mahasiswa_id')
+            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
             ->where('pkl_anggota.mahasiswa_id', $mahasiswaId)
             ->get();
         return $query->getRow();

@@ -32,4 +32,10 @@ class PKLModel extends Model
         return $query->getResultArray();
     }
 
+    public function updateInstansiId($instansiId, $kelompokId)
+    {
+        $this->where('id', $kelompokId)
+             ->set('instansi_id', $instansiId)
+             ->update();
+    }
 }

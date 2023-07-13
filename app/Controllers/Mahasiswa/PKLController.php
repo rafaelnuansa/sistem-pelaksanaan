@@ -27,47 +27,66 @@ class PKLController extends BaseController
         $this->MahasiswaModel = new MahasiswaModel();
         $this->AnggotaModel = new PKLAnggotaModel();
         $this->mahasiswaId = session()->get('mahasiswa_id');
+        $this->getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
+        $this->kelompokId = $this->getKelompok->id;
         $this->db = \Config\Database::connect();
     }
 
     public function index()
     {
-        
         $getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
-        $kelompokId = $getKelompok->id;
 
-        $akun = $this->AnggotaModel
-            ->where('mahasiswa_id', $this->mahasiswaId)
-            ->where('pkl_id', $kelompokId)
-            ->first();
-        
-        $rows = $this->AnggotaModel
-            ->where('pkl_id', $kelompokId)
-            ->join('pkl', 'pkl_anggota.pkl_id = pkl.id')
-            ->join('mahasiswa', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
-            ->get()
-            ->getResultArray();
+        // Memeriksa apakah $getKelompok mengembalikan nilai atau tidak
+        if ($getKelompok !== null) {
+            $kelompokId = $getKelompok->id;
 
-        $instansi = $this->InstansiModel->find($kelompokId);
-        // return d($instansi);
+            // Lanjutkan dengan kode Anda yang sudah ada
+            $akun = $this->AnggotaModel
+                ->where('mahasiswa_id', $this->mahasiswaId)
+                ->first();
 
-        $data = [
-            'title' => 'Kelompok PKL',
-            'data' => $rows,
-            'instansi' => $instansi,
-            'akun' => $akun,
-        ];
+            $anggota = $this->AnggotaModel
+                ->where('pkl_id', $kelompokId)
+                ->join('pkl', 'pkl_anggota.pkl_id = pkl.id')
+                ->join('mahasiswa', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
+                ->get()
+                ->getResultArray();
+
+            $idInstansi = $getKelompok->instansi_id;
+            $instansiList = $this->InstansiModel->findAll();
+            $instansi = $this->InstansiModel->find($idInstansi);
+            // dd($getKelompok);
+            $data = [
+                'title' => 'Kelompok PKL ',
+                'anggota' => $anggota,
+                'nama_kelompok' =>  $getKelompok->nama_kelompok,
+                'instansi' => $instansi,
+                'instansi_list' => $instansiList,
+                'akun' => $akun,
+            ];
+        } else {
+            // Tindakan yang diambil jika kelompokId tidak ada atau belum punya kelompok
+            $data = [
+                'title' => 'Kelompok PKL',
+                'anggota' => [],
+                'instansi' => null,
+                'akun' => null,
+            ];
+        }
 
         return view('mahasiswa/pkl/index', $data);
     }
 
     public function pelaksanaan()
     {
+
+        // dd($this->kelompokId);
         $data = [
             'title' => 'Jurnal Pelaksanaan',
-            'data' => $this->PKLJurnalPelaksanaanModel->where('mahasiswa_id', $this->mahasiswa_id)->findAll()
+            'data' => $this->PKLJurnalPelaksanaanModel->where('mahasiswa_id', $this->mahasiswa_id)->findAll(),
+            'kelompokId' => $this->kelompokId,
         ];
-
+        
         return view('mahasiswa/pkl/jurnal/pelaksanaan', $data);
     }
 
@@ -95,6 +114,57 @@ class PKLController extends BaseController
 
         return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan');
     }
+
+    public function simpan_instansi()
+    {
+        $instansiModel = new InstansiModel();
+        $instansiId = $this->request->getPost('instansi_id');
+
+        if ($instansiId) {
+            // Jika mengisi form yang select
+            $this->PKLModel->updateInstansiId($instansiId, $this->kelompokId);
+        } else {
+            // Jika mengisi form yang freetext
+            $data = [
+                'nama_perusahaan' => $this->request->getPost('nama_perusahaan'),
+                'alamat' => $this->request->getPost('alamat'),
+                'pembimbing_lapangan' => $this->request->getPost('pembimbing_lapangan'),
+                'no_pembimbing_lapangan' => $this->request->getPost('no_pembimbing_lapangan'),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+            $instansiModel->insert($data);
+
+            $instansiId = $instansiModel->getInsertID();
+
+            $this->PKLModel->updateInstansiId($instansiId, $this->kelompokId);
+        }
+        return redirect()->to('/mahasiswa/pkl');
+        // Lakukan tindakan sesuai kebutuhan aplikasi Anda setelah memilih atau menyimpan instansi
+        // Redirect atau tampilkan pesan sukses, dll.
+    }
+
+    public function edit_instansi()
+    {
+        $instansiModel = new InstansiModel();
+        $instansiId = $this->request->getVar('instansi_id');
+
+        // Jika mengisi form yang freetext
+        $data = [
+            'nama_perusahaan' => $this->request->getPost('nama_perusahaan'),
+            'alamat' => $this->request->getPost('alamat'),
+            'pembimbing_lapangan' => $this->request->getPost('pembimbing_lapangan'),
+            'no_pembimbing_lapangan' => $this->request->getPost('no_pembimbing_lapangan'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        $instansiModel->update($instansiId, $data);
+        return redirect()->to('/mahasiswa/pkl');
+        // Lakukan tindakan sesuai kebutuhan aplikasi Anda setelah mengedit instansi
+        // Redirect atau tampilkan pesan sukses, dll.
+    }
+
+
 
     public function approve($id)
     {

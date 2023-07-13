@@ -12,7 +12,7 @@ use Dompdf\Dompdf;
 
 class PKLJurnalController extends BaseController
 {
-    
+
     public function __construct()
     {
         $this->pdf = new Dompdf();
@@ -21,36 +21,79 @@ class PKLJurnalController extends BaseController
         $this->ProdiModel = new ProdiModel();
         $this->JudulLaporan = new PKLJudulLaporanModel();
         $this->AnggotaModel = new PKLAnggotaModel();
+        $this->getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
+        $this->kelompokId = $this->getKelompok->id;
         $this->mahasiswaId = session()->get('mahasiswa_id');
-        $getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
-        $this->kelompokId = $getKelompok->id;
         $this->db = \Config\Database::connect();
     }
 
-    public function index()
-    {
-        //
-    }
-
-    
     public function pelaksanaan()
     {
-         
-        $data = [
-            'title' => 'Jurnal Pelaksanaan',
-            'data' => $this->PKLJurnalPelaksanaanModel->where('mahasiswa_id', $this->mahasiswaId)->findAll()
-        ];
+        $getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
 
-        return view('mahasiswa/pkl/jurnal/pelaksanaan', $data);
+        // Memeriksa apakah $getKelompok mengembalikan nilai atau tidak
+        if ($getKelompok) {
+            $this->kelompokId = $getKelompok->id;
+            // Lanjutkan dengan kode Anda yang sudah ada
+            $data = [
+                'title' => 'Jurnal Pelaksanaan',
+                'data' => $this->PKLJurnalPelaksanaanModel->getJurnalPelaksanaanByIdMahasiswa($this->mahasiswaId),
+                'kelompokId' => $this->kelompokId ?? '',
+            ];
+
+            return view('mahasiswa/pkl/jurnal/pelaksanaan', $data);
+        } else {
+            // Tindakan yang diambil jika belum ada kelompok
+            $data = [
+                'title' => 'Jurnal Pelaksanaan',
+                'data' => []
+            ];
+
+            return view('mahasiswa/pkl/jurnal/pelaksanaan', $data);
+        }
+    }
+
+    public function edit_pelaksanaan($id)
+    {
+        // Validasi data yang diinputkan jika diperlukan
+
+        $data = [
+            'jam' => $this->request->getPost('jam'),
+            'hari' => $this->request->getPost('hari'),
+            'keterangan' => $this->request->getPost('keterangan'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+        $jurnalPelaksanaan = $this->PKLJurnalPelaksanaanModel->find($id);
+        if (!$jurnalPelaksanaan) {
+            return redirect()->to('/mahasiswa/pkl/jurnal/pelaksanaan')->with('error', 'Jurnal Pelaksanaan not found.');
+        }
+
+
+        $this->PKLJurnalPelaksanaanModel->update($id, $data);
+        return redirect()->to('/mahasiswa/pkl/jurnal/pelaksanaan')->with('success', 'Jurnal Pelaksanaan berhasil diperbarui.');
+    }
+
+    public function delete_pelaksanaan($id)
+    {
+        $jurnalPelaksanaan = $this->PKLJurnalPelaksanaanModel->find($id);
+
+        if (!$jurnalPelaksanaan) {
+            return redirect()->to('/mahasiswa/pkl/jurnal/pelaksanaan')->with('error', 'Jurnal Pelaksanaan not found.');
+        }
+
+        // Lakukan tindakan untuk menghapus jurnal pelaksanaan
+        $this->PKLJurnalPelaksanaanModel->delete($id);
+
+        return redirect()->to('/mahasiswa/pkl/jurnal/pelaksanaan')->with('success', 'Jurnal Pelaksanaan successfully deleted.');
     }
 
     public function storePelaksanaan()
     {
         $data = [
-            'mahasiswa_id' => $this->mahasiswaId, 
-            'jam' => $this->request->getVar('jam'), 
-            'hari' => $this->request->getVar('hari'), 
-            'pkl_id' => $this->kelompokId, 
+            'mahasiswa_id' => $this->mahasiswaId,
+            'jam' => $this->request->getVar('jam'),
+            'hari' => $this->request->getVar('hari'),
+            'pkl_id' => $this->kelompokId,
             'keterangan' => $this->request->getVar('keterangan'),
         ];
 
@@ -97,15 +140,48 @@ class PKLJurnalController extends BaseController
         // dd($data['data']);
         return view('mahasiswa/pkl/jurnal/bimbingan', $data);
     }
+    public function edit_bimbingan($id)
+    {
+        // Validasi data yang diinputkan jika diperlukan
+
+        $data = [
+            'jam' => $this->request->getPost('jam'),
+            'tanggal' => $this->request->getPost('tanggal'),
+            'catatan' => $this->request->getPost('catatan'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        $jurnalBimbingan = $this->PKLJurnalBimbinganModel->find($id);
+        if (!$jurnalBimbingan) {
+            return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan')->with('error', 'Jurnal Bimbingan not found.');
+        }
+
+
+        $this->PKLJurnalBimbinganModel->update($id, $data);
+        return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan')->with('success', 'Jurnal Bimbingan berhasil diperbarui.');
+    }
+
+    public function delete_bimbingan($id)
+    {
+        $jurnalBimbingan = $this->PKLJurnalBimbinganModel->find($id);
+
+        if (!$jurnalBimbingan) {
+            return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan')->with('error', 'Jurnal Bimbingan not found.');
+        }
+        // Lakukan tindakan untuk menghapus jurnal bimbingan
+        $this->PKLJurnalBimbinganModel->delete($id);
+
+        return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan')->with('success', 'Jurnal Bimbingan successfully deleted.');
+    }
 
     public function simpanJudulLaporan()
     {
         $judulLaporan = $this->request->getVar('judul_laporan');
         $mahasiswaId = $this->mahasiswaId;
-    
+
         // Cek apakah data judul laporan sudah ada
         $existingData = $this->JudulLaporan->where('mahasiswa_id', $mahasiswaId)->first();
-    
+
         if ($existingData) {
             // Jika data sudah ada, lakukan update
             $this->JudulLaporan->update($existingData['id_judul_laporan'], [
@@ -121,21 +197,19 @@ class PKLJurnalController extends BaseController
             ]);
             session()->setFlashdata('success', 'Judul berhasil disimpan!');
         }
-    
+
         return redirect()->back();
     }
-    
-
 
     public function storeBimbingan()
     {
 
         $data = [
-            
-            'mahasiswa_id' => $this->mahasiswaId, 
+
+            'mahasiswa_id' => $this->mahasiswaId,
             'jam' => $this->request->getVar('jam'),
             'tanggal' => $this->request->getVar('tanggal'),
-            'pkl_id' => $this->kelompokId, 
+            'pkl_id' => $this->kelompokId,
             'catatan' => $this->request->getVar('keterangan'),
         ];
         // insert data
@@ -146,8 +220,6 @@ class PKLJurnalController extends BaseController
         return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan');
     }
 
-
-
     public function validasiBimbingan($id)
     {
         $data = $this->PKLJurnalBimbinganModel->find($id);
@@ -156,7 +228,7 @@ class PKLJurnalController extends BaseController
         session()->setFlashdata('success', 'Jurnal berhasil di validasi!');
         return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan');
     }
-    
+
     public function unvalidasiBimbingan($id)
     {
         $data = $this->PKLJurnalBimbinganModel->find($id);
@@ -165,6 +237,4 @@ class PKLJurnalController extends BaseController
         session()->setFlashdata('success', 'Jurnal berhasil di validasi!');
         return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan');
     }
-
-
 }

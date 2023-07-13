@@ -110,6 +110,14 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->get('pkl/jadwal/detail', 'PKLJadwalSidangController::show');
     $routes->get('pkl/jadwal/update_status/(:num)/(:num)', 'PKLJadwalSidangController::update_status/$1/$2', ['as' => 'admin.pkl.jadwal.update_status']);
 
+    // Cetak laporan
+    $routes->get('pkl/laporan', 'PKLLaporanController::index');
+    $routes->get('pkl/laporan/cetak', 'PKLLaporanController::cetak_pkl');
+    $routes->get('pkl/laporan/jurnal/pelaksanaan', 'PKLLaporanController::cetak_jurnal1');
+    $routes->get('pkl/laporan/jurnal/bimbingan', 'PKLLaporanController::cetak_jurnal2');
+    $routes->get('pkl/laporan/jadwal', 'PKLLaporanController::cetak_jadwal_pkl');
+    $routes->get('pkl/laporan/dospem', 'PKLLaporanController::cetak_dospem');
+
     // Admin Tempat
     $routes->get('tempat', 'TempatController::index', ['as' => 'admin.tempat.index']);
     $routes->get('tempat/create', 'TempatController::create', ['as' => 'admin.tempat.create']);
@@ -136,35 +144,40 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa'], functi
 
     // Menu PKL Mahasiswa 
     $routes->get('pkl', 'PKLController::index');
+    $routes->get('', 'PKLController::index');
     $routes->post('pkl', 'PKLController::update_instansi');
     // Jurnal Pelaksanaan 
-    $routes->get('pkl/jurnal', 'PKLJurnalController::index'); 
+    $routes->get('pkl/jurnal', 'PKLJurnalController::index');
     // Jurnal Pelaksanaan 
     $routes->get('pkl/jurnal/pelaksanaan', 'PKLJurnalController::pelaksanaan', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan']);
     $routes->post('pkl/jurnal/pelaksanaan', 'PKLJurnalController::storePelaksanaan', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.store']);
     $routes->get('pkl/jurnal/pelaksanaan/validasi/(:segment)', 'PKLJurnalController::validasiPelaksanaan/$1', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.validasi']);
     $routes->get('pkl/jurnal/pelaksanaan/unvalidasi/(:segment)', 'PKLJurnalController::unvalidasiPelaksanaan/$1', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.unvalidasi']);
-    
+    $routes->post('pkl/simpan_instansi', 'PKLController::simpan_instansi', ['as' => 'mahasiswa.pkl.simpan_instansi']);
+    $routes->post('pkl/edit_instansi', 'PKLController::edit_instansi', ['as' => 'mahasiswa.pkl.edit_instansi']);
+    $routes->post('pkl/jurnal/pelaksanaan/edit/(:num)', 'PKLJurnalController::edit_pelaksanaan/$1', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.edit']);
+    $routes->get('pkl/jurnal/pelaksanaan/delete/(:num)', 'PKLJurnalController::delete_pelaksanaan/$1', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.delete']);
+
     // Jurnal Bimbingan 
     $routes->get('pkl/jurnal/bimbingan', 'PKLJurnalController::bimbingan',  ['as' => 'mahasiswa.pkl.jurnal.bimbingan']);
     $routes->post('pkl/jurnal/bimbingan', 'PKLJurnalController::storeBimbingan',  ['as' => 'mahasiswa.pkl.jurnal.bimbingan.store']);
     $routes->post('pkl/jurnal/bimbingan/simpan_judul', 'PKLJurnalController::simpanJudulLaporan',  ['as' => 'mahasiswa.pkl.jurnal.bimbingan.simpanJudul']);
-    
+
     $routes->get('pkl/jurnal/bimbingan/validasi/(:segment)', 'PKLJurnalController::validasiBimbingan/$1', ['as' => 'mahasiswa.pkl.jurnal.bimbingan.validasi']);
     $routes->get('pkl/jurnal/bimbingan/unvalidasi/(:segment)', 'PKLJurnalController::unvalidasiBimbingan/$1', ['as' => 'mahasiswa.pkl.jurnal.bimbingan.unvalidasi']);
+    $routes->post('pkl/jurnal/bimbingan/edit/(:num)', 'PKLJurnalController::edit_bimbingan/$1', ['as' => 'mahasiswa.pkl.jurnal.bimbingan.edit']);
+    $routes->get('pkl/jurnal/bimbingan/delete/(:num)', 'PKLJurnalController::delete_bimbingan/$1', ['as' => 'mahasiswa.pkl.jurnal.bimbingan.delete']);
 
-    
+
     // Formulir penilaian
     $routes->get('pkl/formulir', 'PKLFormulirController::index');
     $routes->get('pkl/formulir/log-harian', 'PKLFormulirController::log_harian');
-    
     $routes->get('pkl/jadwal', 'PKLJadwalController::index', ['as' => 'mahasiswa.pkl.jadwal.index']);
-   
     $routes->post('pkl/jadwal/daftar', 'PKLJadwalController::daftar', ['as' => 'mahasiswa.pkl.jadwal.daftar']);
 });
 
 
- 
+
 $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen'], function ($routes) {
     $routes->get('dashboard', 'DashboardController::index');
     $routes->get('pkl', 'PKLController::index');

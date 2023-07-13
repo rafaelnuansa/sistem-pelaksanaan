@@ -22,7 +22,7 @@
                         </div>
                     <?php endif ?>
 
-                    <form action="<?= site_url('/admin/mahasiswa/store'); ?>" method="post">
+                    <form action="<?= route_to('admin.mahasiswa.store'); ?>" method="post">
                         <?= csrf_field(); ?>
 
                         <div class="form-group">

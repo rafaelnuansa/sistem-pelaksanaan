@@ -34,11 +34,6 @@
               <i class="fa fa-briefcase"></i> <span>Jurnal Bimbingan</span>
             </a>
           </li>
-          <li class="<?= (uri_string() == 'mahasiswa/pkl/formulir') ? 'active' : '' ?>">
-            <a href="<?= base_url('mahasiswa/pkl/formulir') ?>">
-              <i class="fa fa-briefcase"></i> <span>Formulir Penilaian</span>
-            </a>
-          </li>
           <li class="<?= (uri_string() == 'mahasiswa/pkl/jadwal') ? 'active' : '' ?>">
             <a href="<?= base_url('mahasiswa/pkl/jadwal') ?>">
               <i class="fa fa-calendar"></i> <span>Persyaratan Sidang</span>
@@ -46,7 +41,6 @@
           </li>
         </ul>
       </li>
-
 
       <li class="treeview">
         <a href="#">
