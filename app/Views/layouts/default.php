@@ -100,6 +100,14 @@
     $('.sidebar-menu').tree()
   })
 </script>
+<script src="<?= base_url('bower_components/datatables.net/js/jquery.dataTables.min.js') ?>"></script>
+<script src="<?= base_url('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') ?>"></script>
+<script>
+  $('.datatable').DataTable({
+    "pageLength": 10
+  });
+
+</script>
 <?= $this->renderSection('script'); ?>
 </body>
 </html>

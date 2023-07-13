@@ -11,13 +11,14 @@
         </a>
       </li>
 
-      <li class="treeview <?= (uri_string() == 'admin/mahasiswa'
-                            || uri_string() == 'admin/dosen'
-                            || uri_string() == 'admin/dosen_pembimbing'
-                            || uri_string() == 'admin/users'
-                            || uri_string() == 'admin/fakutas'
-                            || uri_string() == 'admin/prodi'
-                          ) ? 'active' : '' ?>">
+      <li class="treeview <?= (strpos(uri_string(), 'admin/mahasiswa') === 0
+                                    || strpos(uri_string(), 'admin/dosen') === 0
+                                    || strpos(uri_string(), 'admin/dosen_pembimbing') === 0
+                                    || strpos(uri_string(), 'admin/users') === 0
+                                    || strpos(uri_string(), 'admin/fakultas') === 0
+                                    || strpos(uri_string(), 'admin/instansi') === 0
+                                    || strpos(uri_string(), 'admin/tempat') === 0
+                                    || strpos(uri_string(), 'admin/prodi') === 0) ? 'active' : '' ?>">
         <a href="#">
           <i class="fa fa-book"></i>
           <span>Data Master</span>
@@ -71,10 +72,7 @@
         </ul>
       </li>
 
-      <li class="treeview <?= (uri_string() == 'pkl'
-                            || uri_string() == 'pkl/jurnal/pelaksanaan'
-                            || uri_string() == 'pkl/jurnal/bimbingan'
-                            || uri_string() == 'pkl/jadwal'
+      <li class="treeview <?= (uri_string() == 'pkl/*'
                           ) ? 'active' : '' ?>">
         <a href="#">
           <i class="fa fa-book"></i>
@@ -104,6 +102,12 @@
               <i class="fa fa-calendar"></i> <span>Jadwal Sidang</span>
             </a>
           </li>
+          
+      <li class="<?= (uri_string() == 'admin/pkl/laporan') ? 'active' : '' ?>">
+        <a href="<?= base_url('admin/pkl/laporan') ?>">
+          <i class="fa fa-file-pdf-o"></i> <span>Cetak Laporan</span>
+        </a>
+      </li>
         </ul>
       </li>
 
@@ -165,11 +169,6 @@
             </a>
           </li>
         </ul>
-      </li>
-      <li class="<?= (uri_string() == 'cetak-laporan') ? 'active' : '' ?>">
-        <a href="<?= base_url('cetak-laporan') ?>">
-          <i class="fa fa-file-pdf-o"></i> <span>Cetak Laporan</span>
-        </a>
       </li>
     </ul>
   </section>

@@ -46,16 +46,41 @@ class DosenPembimbingController extends BaseController
 
     public function store()
     {
-        $data = [
-            'dosen_id' => $this->request->getPost('dosen_id'),
-            'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
-            'jenis_pembimbing' => $this->request->getPost('jenis_pembimbing'),
+        $validationRules = [
+            'dosen_id' => 'required',
+            'mahasiswa_id' => 'required',
+            'jenis_pembimbing' => 'required|in_list[PKL,KKN,SKRIPSI]',
         ];
-
+    
+        if (!$this->validate($validationRules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+    
+        $dosenId = $this->request->getPost('dosen_id');
+        $mahasiswaId = $this->request->getPost('mahasiswa_id');
+        $jenisPembimbing = $this->request->getPost('jenis_pembimbing');
+    
+        // Check if the mahasiswa already has a pembimbing for the given jenis pembimbing
+        $existingPembimbing = $this->dosenPembimbingModel
+            ->where('mahasiswa_id', $mahasiswaId)
+            ->where('jenis_pembimbing', $jenisPembimbing)
+            ->first();
+    
+        if ($existingPembimbing) {
+            return redirect()->back()->withInput()->with('error', 'Mahasiswa sudah memiliki dosen pembimbing untuk jenis pembimbing ' . $jenisPembimbing);
+        }
+    
+        $data = [
+            'dosen_id' => $dosenId,
+            'mahasiswa_id' => $mahasiswaId,
+            'jenis_pembimbing' => $jenisPembimbing,
+        ];
+    
         $this->dosenPembimbingModel->insert($data);
-
+    
         return redirect()->route('admin.dosen_pembimbing.index')->with('success', 'Data dosen pembimbing berhasil ditambahkan');
     }
+    
 
     public function edit($id_dospem)
     {
@@ -71,19 +96,45 @@ class DosenPembimbingController extends BaseController
 
         return view('admin/dosen_pembimbing/edit', $data);
     }
-
+    
     public function update($id_dospem)
     {
-        $data = [
-            'dosen_id' => $this->request->getPost('dosen_id'),
-            'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
-            'jenis_pembimbing' => $this->request->getPost('jenis_pembimbing'),
+        $validationRules = [
+            'dosen_id' => 'required',
+            'mahasiswa_id' => 'required',
+            'jenis_pembimbing' => 'required|in_list[PKL,KKN,SKRIPSI]',
         ];
-
+    
+        if (!$this->validate($validationRules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+    
+        $dosenId = $this->request->getPost('dosen_id');
+        $mahasiswaId = $this->request->getPost('mahasiswa_id');
+        $jenisPembimbing = $this->request->getPost('jenis_pembimbing');
+    
+        // Check if the mahasiswa already has a pembimbing for the given jenis pembimbing
+        $existingPembimbing = $this->dosenPembimbingModel
+            ->where('mahasiswa_id', $mahasiswaId)
+            ->where('jenis_pembimbing', $jenisPembimbing)
+            ->where('id_dospem', '!=', $id_dospem)
+            ->first();
+    
+        if ($existingPembimbing) {
+            return redirect()->back()->withInput()->with('error', 'Mahasiswa sudah memiliki dosen pembimbing untuk jenis pembimbing ' . $jenisPembimbing);
+        }
+    
+        $data = [
+            'dosen_id' => $dosenId,
+            'mahasiswa_id' => $mahasiswaId,
+            'jenis_pembimbing' => $jenisPembimbing,
+        ];
+    
         $this->dosenPembimbingModel->update($id_dospem, $data);
-
-        return redirect()->route('admin.dosen_pembimbing.index')->with('success', 'Data dosen pembimbing berhasil diupdate');
+    
+        return redirect()->route('admin.dosen_pembimbing.index')->with('success', 'Data dosen pembimbing berhasil diperbarui');
     }
+    
 
     public function delete($id_dospem)
     {

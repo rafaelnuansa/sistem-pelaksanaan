@@ -109,14 +109,18 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin'], function ($rou
     $routes->post('pkl/jadwal/simpan', 'PKLJadwalSidangController::simpan', ['as' => 'admin.pkl.jadwal.simpan']);
     $routes->get('pkl/jadwal/detail', 'PKLJadwalSidangController::show');
     $routes->get('pkl/jadwal/update_status/(:num)/(:num)', 'PKLJadwalSidangController::update_status/$1/$2', ['as' => 'admin.pkl.jadwal.update_status']);
-
-    // Cetak laporan
-    $routes->get('pkl/laporan', 'PKLLaporanController::index');
-    $routes->get('pkl/laporan/cetak', 'PKLLaporanController::cetak_pkl');
-    $routes->get('pkl/laporan/jurnal/pelaksanaan', 'PKLLaporanController::cetak_jurnal1');
-    $routes->get('pkl/laporan/jurnal/bimbingan', 'PKLLaporanController::cetak_jurnal2');
-    $routes->get('pkl/laporan/jadwal', 'PKLLaporanController::cetak_jadwal_pkl');
-    $routes->get('pkl/laporan/dospem', 'PKLLaporanController::cetak_dospem');
+  
+    // PKL laporan
+    $routes->get('pkl/laporan', 'PKLLaporanController::index', ['as' => 'admin.pkl.laporan.index']);
+    $routes->get('pkl/laporan/cetak', 'PKLLaporanController::cetak', ['as' => 'admin.pkl.laporan.cetak']);
+    $routes->get('pkl/laporan/jurnal/pelaksanaan', 'PKLLaporanController::pelaksanaan', ['as' => 'admin.pkl.laporan.jurnal.pelaksanaan']);
+    $routes->get('pkl/laporan/jurnal/pelaksanaan/cetak', 'PKLLaporanController::pelaksanaan_cetak', ['as' => 'admin.pkl.laporan.jurnal.pelaksanaan_cetak']);
+    $routes->get('pkl/laporan/jurnal/bimbingan', 'PKLLaporanController::bimbingan', ['as' => 'admin.pkl.laporan.jurnal.bimbingan']);
+    $routes->get('pkl/laporan/jurnal/bimbingan/cetak', 'PKLLaporanController::bimbingan_cetak', ['as' => 'admin.pkl.laporan.jurnal.bimbingan.cetak']);
+    $routes->get('pkl/laporan/jadwal', 'PKLLaporanController::jadwal', ['as' => 'admin.pkl.laporan.jadwal']);
+    $routes->get('pkl/laporan/jadwal/cetak', 'PKLLaporanController::jadwal_cetak', ['as' => 'admin.pkl.laporan.jadwal.cetak']);
+    $routes->get('pkl/laporan/dospem', 'PKLLaporanController::dospem', ['as' => 'admin.pkl.laporan.dospem']);
+    $routes->get('pkl/laporan/dospem/cetak', 'PKLLaporanController::dospem_cetak', ['as' => 'admin.pkl.laporan.dospem.cetak']);
 
     // Admin Tempat
     $routes->get('tempat', 'TempatController::index', ['as' => 'admin.tempat.index']);

@@ -11,13 +11,24 @@
             <h3 class="box-title">Edit Dosen Pembimbing</h3>
         </div>
         <div class="box-body">
+            <?php if (session()->getFlashdata('error') !== null) : ?>
+                <div class="alert alert-danger">
+                    <?= session()->getFlashdata('error'); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (session()->getFlashdata('success') !== null) : ?>
+                <div class="alert alert-success">
+                    <?= session()->getFlashdata('success'); ?>
+                </div>
+            <?php endif; ?>
             <form action="<?= route_to('admin.dosen_pembimbing.update', $dosenPembimbing['id_dospem']); ?>" method="POST">
                 <?= csrf_field(); ?>
 
                 <div class="form-group">
                     <label for="dosen_id">Dosen</label>
                     <select name="dosen_id" class="form-control">
-                        <?php foreach($dosens as $dosen): ?>
+                        <?php foreach ($dosens as $dosen) : ?>
                             <option value="<?= $dosen['id']; ?>" <?= ($dosenPembimbing['dosen_id'] == $dosen['id']) ? 'selected' : ''; ?>><?= $dosen['nama']; ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -26,7 +37,7 @@
                 <div class="form-group">
                     <label for="mahasiswa_id">Mahasiswa</label>
                     <select name="mahasiswa_id" class="form-control">
-                        <?php foreach($mahasiswas as $mahasiswa): ?>
+                        <?php foreach ($mahasiswas as $mahasiswa) : ?>
                             <option value="<?= $mahasiswa['id']; ?>" <?= ($dosenPembimbing['mahasiswa_id'] == $mahasiswa['id']) ? 'selected' : ''; ?>><?= $mahasiswa['nama']; ?></option>
                         <?php endforeach; ?>
                     </select>
