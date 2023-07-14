@@ -19,6 +19,7 @@ class PKLController extends BaseController
         $this->db = \Config\Database::connect();
         $this->PKLJurnalBimbingan = new PKLJurnalBimbinganModel();
         $this->ProdiModel = new ProdiModel();
+        $this->PKLJadwal = new PKLJadwalModel();
         $this->DosenModel = new DosenModel();
         $this->dosenId = session()->get('dosen_id');
         $this->TempatModel = new TempatModel();
@@ -127,16 +128,16 @@ class PKLController extends BaseController
 
         return redirect()->to('/dosen');
     }
-
+ 
     public function cetak()
     {
-        $nilai = $this->request->getVar('nilai[]');
+        $nilai = $this->request->getVar('nilai');
         $total_nilai = 0;
-
-        foreach($nilai as $v)  {
+    
+        foreach ($nilai as $v) {
             $total_nilai += (int)$v;
         }
-
+    
         $data = [
             'nama_mhs' => $this->request->getVar('nama_mhs'),
             'nim' => $this->request->getVar('nim'),
@@ -150,19 +151,22 @@ class PKLController extends BaseController
             'nilai' => $nilai,
             'total_nilai' => $total_nilai,
         ];
-
-        // load HTML content
-        $this->pdf->loadHtml(view('pdf/penilaian_pkl', ['data' => $data]));
-
-        // (optional) setup the paper size and orientation
+    
+        // Load HTML content
+        $html = view('pdf/penilaian_pkl', ['data' => $data]);
+        
+        // Generate PDF
+        $this->pdf->loadHtml($html);
         $this->pdf->setPaper('A4');
-
-        // render html as PDF
         $this->pdf->render();
-
-        // output the generated pdf
-        return $this->pdf->stream('Laporan', array("Attachment" => false));
+        
+        // Output the generated PDF
+        $output = $this->pdf->output();
+        $response = new \CodeIgniter\HTTP\Response($output);
+        $response->setHeader('Content-Type', 'application/pdf');
+        return $response->setHeader('Content-Disposition', 'inline; filename="Laporan.pdf"');
     }
+    
 
     public function cetak_revisi()
     {
@@ -180,5 +184,13 @@ class PKLController extends BaseController
 
         // output the generated pdf
         return $this->pdf->stream('Laporan', array("Attachment" => false));
+    }
+
+    public function update_status_jadwal($id_pkl_jadwal_sidang, $status)
+    {
+        // Contoh menggunakan model
+        $this->PKLJadwal->update($id_pkl_jadwal_sidang, ['status' => $status]);
+        // Redirect ke halaman sebelumnya
+        return redirect()->back();
     }
 }
