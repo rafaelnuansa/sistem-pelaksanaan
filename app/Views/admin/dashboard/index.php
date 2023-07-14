@@ -2,6 +2,65 @@
 <?= $this->section('content'); ?>
 
 <div class="container-fluid">
+  
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="small-box bg-yellow">
+        <div class="inner">
+
+          <h3><?= $fakultasCount ?></h3>
+          <p>Fakultas</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-university"></i>
+        </div>
+        <a href="<?= base_url('admin/fakultas'); ?>" class="small-box-footer p1">Info Lengkap <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="small-box bg-yellow">
+        <div class="inner">
+
+          <h3><?= $prodiCount ?></h3>
+          <p>Prodi</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-graduation-cap"></i>
+        </div>
+        <a href="<?= base_url('admin/prodi'); ?>" class="small-box-footer p1">Info Lengkap <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="small-box bg-yellow">
+        <div class="inner">
+
+          <h3><?= $mahasiswaCount ?></h3>
+          <p>Mahasiswa</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-users"></i>
+        </div>
+        <a href="<?= base_url('admin/mahasiswa'); ?>" class="small-box-footer p1">Info Lengkap <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="small-box bg-yellow">
+        <div class="inner">
+
+          <h3><?= $dosenCount ?></h3>
+          <p>Dosen</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-users"></i>
+        </div>
+        <a href="<?= base_url('admin/dosen'); ?>" class="small-box-footer p1">Info Lengkap <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
       <div class="small-box bg-yellow">

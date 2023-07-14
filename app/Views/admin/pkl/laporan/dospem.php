@@ -15,7 +15,7 @@
             <div class="form-group">
                 <label for="prodi_id">Prodi</label>
                 <select class="form-control" id="prodi_id" name="prodi_id">
-                    <option value="">-- Pilih Prodi --</option>
+                    <option value="">Pilih prodi</option>
                     <?php foreach ($getProdi as $prodi) : ?>
                         <option value="<?= $prodi['id'] ?>" <?= $prodi_id == $prodi['id'] ? 'selected' : '' ?>><?= $prodi['nama_prodi'] ?></option>
                     <?php endforeach; ?>
