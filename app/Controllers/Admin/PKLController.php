@@ -236,18 +236,18 @@ class PKLController extends BaseController
     {
         $id = $this->request->getVar('id');
         $status = $this->request->getVar('status');
-    
+        $pkl_id = $this->request->getVar('pkl_id');
         // Cek apakah status yang dipilih adalah "Ketua"
         if ($status == 'Ketua') {
             // Cari anggota dengan status "Ketua" selain anggota yang sedang diubah
-            $existingKetua = $this->anggota->where('is_ketua', true)->where('id !=', $id)->first();
-    
+            $existingKetua = $this->anggota->where('is_ketua', 1)->where('pkl_id', $pkl_id)->get()->getRow();
+            // dd($pkl_id);
             if ($existingKetua) {
                 // Jika ditemukan anggota lain dengan status "Ketua", kembalikan response dengan error
                 session()->setFlashdata('error', 'Hanya boleh ada satu anggota dengan status Ketua!');
                 return redirect()->back();
             }
-        }
+        } 
     
         $data = $this->anggota->find($id);
         $data['is_ketua'] = ($status == 'Ketua') ? true : false;

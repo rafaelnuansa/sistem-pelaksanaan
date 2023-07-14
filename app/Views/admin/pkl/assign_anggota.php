@@ -22,18 +22,22 @@
                             <?= session()->getFlashdata('error'); ?>
                         </div>
                     <?php endif; ?>
+                    <button class="btn btn-success pull-right add" data-kelompok="<?= $kelompok ?>">Tambahkan Anggota</button>
 
                     <p>Nama Kelompok: <b><?= $kelompok ?></b></p>
                     <p>Tahun Pelaksanaan: <b><?= $tgl_mulai ?> - <?= $tgl_selesai ?></b></p>
                     <p>Program Studi: <b><?= $prodi ?></b></p>
                     <p>Dosen Pembimbing: <b><?= $dospem ?></b></p>
-                    <button class="btn btn-success add" style="float: right; margin-bottom: 13px;" data-kelompok="<?= $kelompok ?>">Tambahkan Anggota</button>
-
-                    <table class="table table-bordered">
+                
+                    <div class="table-resposive">
+                        
+                    <table class="table table-bordered datatable">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama Mahasiswa</th>
+                                <th>Tahun Akademik</th>
+                                <th>Mahasiswa</th>
+                                <th>Prodi</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>
@@ -49,7 +53,7 @@
                                         <td><?= $row['nama'] ?></td>
                                         <td><?= $row['nama_prodi'] ?></td>
                                         <td>
-                                            <select name="status" data-id="<?= $row['id'] ?>" class="form-control roles">
+                                            <select name="status" data-pkl_id="<?= $id_kelompok;?>" data-id="<?= $row['id'] ?>" class="form-control roles">
                                                 <option value="Anggota" <?= ($row['is_ketua'] == false) ? ' selected' : '' ?>>Anggota</option>
                                                 <option value="Ketua" <?= ($row['is_ketua'] == true) ? ' selected' : '' ?>>Ketua</option>
                                             </select>
@@ -67,6 +71,7 @@
                         </tbody>
 
                     </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -141,8 +146,9 @@
 
     $('.roles').change(function() {
         const id = $(this).attr('data-id');
+        const pkl_id = $(this).attr('data-pkl_id');
         const status = $(this).val();
-        window.open("<?= base_url('admin/pkl/anggota/status') ?>?id=" + id + '&status=' + status, '_self');
+        window.open("<?= base_url('admin/pkl/anggota/status') ?>?pkl_id="+pkl_id+'&id=' + id + '&status=' + status, '_self');
     });
 
     $('.add').click(function() {

@@ -12,13 +12,13 @@
       </li>
 
       <li class="treeview <?= (strpos(uri_string(), 'admin/mahasiswa') === 0
-                                    || strpos(uri_string(), 'admin/dosen') === 0
-                                    || strpos(uri_string(), 'admin/dosen_pembimbing') === 0
-                                    || strpos(uri_string(), 'admin/users') === 0
-                                    || strpos(uri_string(), 'admin/fakultas') === 0
-                                    || strpos(uri_string(), 'admin/instansi') === 0
-                                    || strpos(uri_string(), 'admin/tempat') === 0
-                                    || strpos(uri_string(), 'admin/prodi') === 0) ? 'active' : '' ?>">
+                            || strpos(uri_string(), 'admin/dosen') === 0
+                            || strpos(uri_string(), 'admin/dosen_pembimbing') === 0
+                            || strpos(uri_string(), 'admin/users') === 0
+                            || strpos(uri_string(), 'admin/fakultas') === 0
+                            || strpos(uri_string(), 'admin/instansi') === 0
+                            || strpos(uri_string(), 'admin/tempat') === 0
+                            || strpos(uri_string(), 'admin/prodi') === 0) ? 'active' : '' ?>">
         <a href="#">
           <i class="fa fa-book"></i>
           <span>Data Master</span>
@@ -37,19 +37,19 @@
               <i class="fa fa-building-o"></i> <span>Prodi</span>
             </a>
           </li>
-          
+
           <li class="<?= (uri_string() == 'admin/mahasiswa') ? 'active' : '' ?>">
             <a href="<?= base_url('admin/mahasiswa') ?>">
               <i class="fa fa-users"></i> <span>Mahasiswa</span>
             </a>
           </li>
-          
+
           <li class="<?= (uri_string() == 'admin/dosen') ? 'active' : '' ?>">
             <a href="<?= base_url('admin/dosen') ?>">
               <i class="fa fa-users"></i> <span>Dosen</span>
             </a>
           </li>
-          
+
           <li class="<?= (uri_string() == 'admin/dosen_pembimbing') ? 'active' : '' ?>">
             <a href="<?= base_url('admin/dosen_pembimbing') ?>">
               <i class="fa fa-users"></i> <span>Dosen Pembimbing</span>
@@ -70,8 +70,7 @@
         </ul>
       </li>
 
-      <li class="treeview <?= (uri_string() == 'pkl/*'
-                          ) ? 'active' : '' ?>">
+      <li class="treeview <?= (strpos(uri_string(), 'admin/pkl') !== false) ? 'active' : '' ?>">
         <a href="#">
           <i class="fa fa-book"></i>
           <span>PKL</span>
@@ -106,18 +105,18 @@
               <i class="fa fa-file"></i> <span>Berkas</span>
             </a>
           </li>
-                    
+
 
           <li class="<?= (uri_string() == 'admin/pkl/laporan') ? 'active' : '' ?>">
-        <a href="<?= base_url('admin/pkl/laporan') ?>">
-          <i class="fa fa-file-pdf-o"></i> <span>Laporan PKL</span>
-        </a>
-      </li>
+            <a href="<?= base_url('admin/pkl/laporan') ?>">
+              <i class="fa fa-file-pdf-o"></i> <span>Laporan PKL</span>
+            </a>
+          </li>
         </ul>
       </li>
 
 
-      <li class="treeview">
+      <li class="treeview <?= (strpos(uri_string(), 'admin/kkn') !== false) ? 'active' : '' ?>">
         <a href="#">
           <i class="fa fa-book"></i>
           <span>KKN</span>
@@ -149,7 +148,7 @@
         </ul>
       </li>
 
-      <li class="treeview">
+      <li class="treeview <?= (strpos(uri_string(), 'admin/skripsi') !== false) ? 'active' : '' ?>">
         <a href="#">
           <i class="fa fa-book"></i>
           <span>Skripsi</span>

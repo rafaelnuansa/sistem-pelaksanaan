@@ -23,7 +23,7 @@
     <p>Program Studi: <b><?= $prodi ?></b></p>
     <p>Dosen Pembimbing: <b><?= $dospem ?></b></p>
     <button class="btn btn-success add" style="float: right; margin-bottom: 13px;" data-kelompok="<?= $kelompok ?>">Tambahkan Anggota</button>
-    <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+    <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
       <thead>
         <tr>
           <th>No</th>

@@ -12,15 +12,15 @@
     </div>
 
     <div class="box-body">
-      
-    <?php if (!$instansi) :; ?>
-      <?php if ($akun !== null && $akun['is_ketua'] == true) : ?>
-        <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-tambah">
-          Instansi Praktik Kerja Lapangan
-        </button>
+
+      <?php if (!$instansi) :; ?>
+        <?php if ($akun !== null && $akun['is_ketua'] == true) : ?>
+          <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-tambah">
+            Instansi Praktik Kerja Lapangan
+          </button>
+        <?php endif; ?>
       <?php endif; ?>
-      <?php endif;?>
-      <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+      <table class="table table-bordered datatable" style="margin-top: 10px;">
         <thead>
           <tr>
             <th>No</th>
@@ -62,30 +62,49 @@
           <tr>
             <th>Nama Perusahaan</th>
             <td>
-              <input type="text" class="form-control" name="nama_perusahaan" value="<?= $instansi['nama_perusahaan'] ?>">
+              <?php if ($is_ketua) : ?>
+
+                <input type="text" class="form-control" name="nama_perusahaan" value="<?= $instansi['nama_perusahaan'] ?>">
+              <?php else :; ?>
+                <?= $instansi['nama_perusahaan'] ?>
+              <?php endif; ?>
+
             </td>
           </tr>
           <tr>
             <th>Alamat</th>
             <td>
-              <input type="text" class="form-control" name="alamat" value="<?= $instansi['alamat'] ?>">
+              <?php if ($is_ketua) : ?>
+                <input type="text" class="form-control" name="alamat" value="<?= $instansi['alamat'] ?>">
+              <?php else :; ?>
+                <?= $instansi['alamat'] ?>
+              <?php endif; ?>
             </td>
           </tr>
           <tr>
             <th>Pembimbing Lapangan</th>
-            <td>
-              <input type="text" class="form-control" name="pembimbing_lapangan" value="<?= $instansi['pembimbing_lapangan'] ?>">
+            <td> <?php if ($is_ketua) : ?>
+                <input type="text" class="form-control" name="pembimbing_lapangan" value="<?= $instansi['pembimbing_lapangan'] ?>">
+              <?php else :; ?>
+                <?= $instansi['pembimbing_lapangan'] ?>
+              <?php endif; ?>
             </td>
           </tr>
           <tr>
             <th>No. Pembimbing Lapangan</th>
             <td>
+            <?php if ($is_ketua) : ?>
               <input type="text" class="form-control" name="no_pembimbing_lapangan" value="<?= $instansi['no_pembimbing_lapangan'] ?>">
+              <?php else :; ?>
+                <?= $instansi['no_pembimbing_lapangan'] ?>
+              <?php endif; ?>
             </td>
           </tr>
         </tbody>
       </table>
-      <button type="submit" class="btn btn-primary">Simpan</button>
+      <?php if ($is_ketua) : ?>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+      <?php endif; ?>
     </form>
   </div>
 </div>

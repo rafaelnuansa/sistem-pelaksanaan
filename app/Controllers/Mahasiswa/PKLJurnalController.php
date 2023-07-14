@@ -134,9 +134,10 @@ class PKLJurnalController extends BaseController
         $data = [
             'title' => 'Jurnal Bimbingan',
             'data' => $this->PKLJurnalBimbinganModel->where('mahasiswa_id', $this->mahasiswaId)->findAll(),
-            'judul_laporan' => ($judul_laporan != null) ? $judul_laporan['judul_laporan'] : null
+            'judul_laporan' => ($judul_laporan != null) ? $judul_laporan['judul_laporan'] : null,
+            'kelompokId' => $this->kelompokId,
         ];
-
+        
         // dd($data['data']);
         return view('mahasiswa/pkl/jurnal/bimbingan', $data);
     }

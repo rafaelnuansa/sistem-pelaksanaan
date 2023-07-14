@@ -35,7 +35,7 @@ class PKLController extends BaseController
     public function index()
     {
         $getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
-
+        $is_ketua = $getKelompok->is_ketua;
         // Memeriksa apakah $getKelompok mengembalikan nilai atau tidak
         if ($getKelompok !== null) {
             $kelompokId = $getKelompok->id;
@@ -63,6 +63,7 @@ class PKLController extends BaseController
                 'instansi' => $instansi,
                 'instansi_list' => $instansiList,
                 'akun' => $akun,
+                'is_ketua' => $is_ketua,
             ];
         } else {
             // Tindakan yang diambil jika kelompokId tidak ada atau belum punya kelompok

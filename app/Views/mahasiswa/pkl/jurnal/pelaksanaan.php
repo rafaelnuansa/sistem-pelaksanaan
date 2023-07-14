@@ -26,7 +26,7 @@
       <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-formulir">
         Formulir
       </button>
-      <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+      <table class="table table-bordered datatable" style="margin-top: 10px;">
         <thead>
           <tr>
             <th>No</th>

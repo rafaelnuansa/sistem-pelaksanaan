@@ -5,12 +5,7 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">MENU</li>
-      <li class="treeview <?= (uri_string() == 'mahasiswa/pkl'
-                            || uri_string() == 'mahasiswa/pkl/jurnal/pelaksanaan'
-                            || uri_string() == 'mahasiswa/pkl/jurnal/bimbingan'
-                            || uri_string() == 'mahasiswa/pkl/formulir'
-                            || uri_string() == 'mahasiswa/pkl/jadwal'
-                          ) ? 'active' : '' ?>">
+      <li class="treeview <?= (strpos(uri_string(), 'mahasiswa/pkl') !== false) ? 'active' : '' ?>">
         <a href="#">
           <i class="fa fa-book"></i>
           <span>PKL</span>
@@ -42,7 +37,7 @@
         </ul>
       </li>
 
-      <li class="treeview">
+      <li class="treeview <?= (strpos(uri_string(), 'mahasiswa/kkn') !== false) ? 'active' : '' ?>">
         <a href="#">
           <i class="fa fa-book"></i>
           <span>KKN</span>
@@ -69,7 +64,7 @@
         </ul>
       </li>
 
-      <li class="treeview">
+      <li class="treeview <?= (strpos(uri_string(), 'mahasiswa/skripsi') !== false) ? 'active' : '' ?>">
         <a href="#">
           <i class="fa fa-book"></i>
           <span>Skripsi</span>

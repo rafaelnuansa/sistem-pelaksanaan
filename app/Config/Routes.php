@@ -83,6 +83,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->get('pkl/edit/(:num)', 'PklController::edit/$1', ['as' => 'admin.pkl.edit']);
     $routes->post('pkl/update/(:num)', 'PklController::update/$1', ['as' => 'admin.pkl.update']);
     $routes->get('pkl/delete/(:num)', 'PklController::delete/$1', ['as' => 'admin.pkl.delete']);
+    
     // Rute untuk assign anggota PKL
     $routes->get('pkl/anggota/(:num)', 'PKLController::assignAnggota/$1', ['as' => 'admin.pkl.assign_anggota']);
     $routes->get('pkl/anggota/tambah', 'PKLController::storeAnggota');
@@ -158,8 +159,6 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
     // Jurnal Pelaksanaan 
     $routes->get('pkl/jurnal/pelaksanaan', 'PKLJurnalController::pelaksanaan', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan']);
     $routes->post('pkl/jurnal/pelaksanaan', 'PKLJurnalController::storePelaksanaan', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.store']);
-    $routes->get('pkl/jurnal/pelaksanaan/validasi/(:segment)', 'PKLJurnalController::validasiPelaksanaan/$1', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.validasi']);
-    $routes->get('pkl/jurnal/pelaksanaan/unvalidasi/(:segment)', 'PKLJurnalController::unvalidasiPelaksanaan/$1', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.unvalidasi']);
     $routes->post('pkl/simpan_instansi', 'PKLController::simpan_instansi', ['as' => 'mahasiswa.pkl.simpan_instansi']);
     $routes->post('pkl/edit_instansi', 'PKLController::edit_instansi', ['as' => 'mahasiswa.pkl.edit_instansi']);
     $routes->post('pkl/jurnal/pelaksanaan/edit/(:num)', 'PKLJurnalController::edit_pelaksanaan/$1', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.edit']);
@@ -194,6 +193,8 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'au
     $routes->get('pkl/jadwal', 'PKLController::jadwal_pkl');
     $routes->get('pkl/validasi-penguji', 'PKLController::validasi_penguji');
     $routes->get('pkl/jadwal/bimbingan', 'PKLController::jadwal_pkl_bimbingan');
+    $routes->get('pkl/jurnal/pelaksanaan/validasi/(:segment)', 'PKLJurnalController::validasiPelaksanaan/$1', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.validasi']);
+    $routes->get('pkl/jurnal/pelaksanaan/unvalidasi/(:segment)', 'PKLJurnalController::unvalidasiPelaksanaan/$1', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.unvalidasi']);
     $routes->get('pkl/penilaian/1', 'PKLController::penilaian');
     $routes->post('pkl/penilaian/cetak', 'PKLController::cetak');
     $routes->post('pkl/revisi/cetak', 'PKLController::cetak_revisi');

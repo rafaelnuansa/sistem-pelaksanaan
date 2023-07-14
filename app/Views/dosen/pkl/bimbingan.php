@@ -26,6 +26,7 @@
           <th>Nama Kelompok</th>
           <th>Nama mahasiswa</th>
           <th>Status</th>
+          <th>Keterangan</th>
           <th></th>
         </tr>
       </thead>
@@ -39,6 +40,14 @@
             <td><?= $row['status'] ?></td>
             <td class="text-center">
               <a href="<?= base_url('dosen/pkl/jurnal/detail/' . $row['mahasiswa_id']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
+            </td>
+
+            <td>
+              <?php if (!$row['status']) : ?>
+                <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 1) ?>" class="btn btn-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a>
+              <?php else : ?>
+                <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 0) ?>" class="btn btn-success" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Belum Melaksanakan?')">Sudah Melaksanakan</a>
+              <?php endif; ?>
             </td>
           </tr>
         <?php endforeach; ?>

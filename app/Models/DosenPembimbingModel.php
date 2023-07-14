@@ -11,7 +11,7 @@ class DosenPembimbingModel extends Model
     protected $allowedFields    = [
         'dosen_id',
         'mahasiswa_id',
-        'tipe_bimbingan',
+        'jenis_pembimbing',
     ];
 
     public function getDospemWithDosenMahasiswaNama()

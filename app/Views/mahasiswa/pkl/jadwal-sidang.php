@@ -3,30 +3,34 @@
 <?= $this->section('content'); ?>
 
 <!-- Default box -->
-<?php if(session()->getFlashData('success') !== null): ?>
-<div class="alert alert-success"><?= session()->getFlashData('success') ?></div>
+<?php if (session()->getFlashData('success') !== null) : ?>
+  <div class="alert alert-success"><?= session()->getFlashData('success') ?></div>
+<?php endif; ?>
+
+<?php if (session()->getFlashData('error') !== null) : ?>
+  <div class="alert alert-danger"><?= session()->getFlashData('error') ?></div>
 <?php endif; ?>
 <div class="box">
   <div class="box-header with-border">
     <h3 class="box-title">Jadwal Sidang</h3>
 
-    <div class="box-tools pull-right">
-      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
-              title="Collapse">
-        <i class="fa fa-minus"></i></button>
-      <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-        <i class="fa fa-times"></i></button>
-    </div>
   </div>
   <div class="box-body">
-    <?php if (!empty($data)) : ?>
-      <div class="py-2">
-        <button class="btn btn-primary daftar">Daftar Ujian PKL</button>
-      </div>
-      <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+      <?php if ($persyaratan) :; ?>
+        <div class="py-2">
+          <button class="btn btn-primary daftar" style="margin-bottom:20px;">Edit/Lengkapi Persyaratan</button>
+        </div>
+      <?php else : ?>
+
+        <div class="py-2">
+          <button class="btn btn-primary daftar" style="margin-bottom:20px;">Daftar Ujian PKL</button>
+        </div>
+      <?php endif; ?>
+
+      <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
         <thead>
           <tr>
-            <th>Hari/Tanggal</th>
+            <th>Tanggal</th>
             <th>NIM</th>
             <th>Nama Mahasiswa</th>
             <th>Tempat</th>
@@ -43,8 +47,68 @@
           <?php endforeach; ?>
         </tbody>
       </table>
+  </div>
+</div>
+
+
+<div class="box">
+  <div class="box-header with-border">
+    <h3 class="box-title">Berkas Persyaratan</h3>
+  </div>
+  <div class="box-body">
+    <?php if ($persyaratan) : ?>
+      <div class="table-responsive">
+
+        <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+          <thead>
+            <tr>
+              <th>Kwitansi Pembayaran PKL</th>
+              <th>KRS PKL</th>
+              <th>Laporan PKL</th>
+              <th>SK Pelaksanaan PKL Instansi</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php $no = 1;
+            foreach ($persyaratan as $row) : ?>
+              <tr>
+                <td>
+                  <?php if ($row['lampiran_pembayaran']) : ?>
+                    <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['lampiran_pembayaran']) ?>" class="btn btn-primary">Unduh Pembayaran</a>
+                  <?php else : ?>
+                    -
+                  <?php endif; ?>
+                </td>
+                <td>
+                  <?php if ($row['lampiran_krs']) : ?>
+                    <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['lampiran_krs']) ?>" class="btn btn-primary">Unduh KRS</a>
+                  <?php else : ?>
+                    -
+                  <?php endif; ?>
+                </td>
+                <td>
+                  <?php if ($row['lampiran_laporan']) : ?>
+                    <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['lampiran_laporan']) ?>" class="btn btn-primary">Unduh Laporan</a>
+                  <?php else : ?>
+                    -
+                  <?php endif; ?>
+                </td>
+                <td>
+                  <?php if ($row['lampiran_keterangan']) : ?>
+                    <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['lampiran_keterangan']) ?>" class="btn btn-primary">Unduh Keterangan</a>
+                  <?php else : ?>
+                    -
+                  <?php endif; ?>
+                </td>
+                <td><span class="label label-primary"><?= $row['status'] ?></span></td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
     <?php else : ?>
-      <div class="alert alert-info">Belum Tersedia.</div>
+      <div class="alert alert-info">Belum Tersedia silahkan klik daftar dan upload berkas.</div>
     <?php endif; ?>
   </div>
 </div>

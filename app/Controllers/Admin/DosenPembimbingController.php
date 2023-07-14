@@ -43,13 +43,13 @@ class DosenPembimbingController extends BaseController
 
         return view('admin/dosen_pembimbing/create', $data);
     }
-
+ 
     public function store()
     {
         $validationRules = [
             'dosen_id' => 'required',
             'mahasiswa_id' => 'required',
-            'jenis_pembimbing' => 'required|in_list[PKL,KKN,SKRIPSI]',
+            'jenis_pembimbing' => 'required',
         ];
     
         if (!$this->validate($validationRules)) {
@@ -59,6 +59,7 @@ class DosenPembimbingController extends BaseController
         $dosenId = $this->request->getPost('dosen_id');
         $mahasiswaId = $this->request->getPost('mahasiswa_id');
         $jenisPembimbing = $this->request->getPost('jenis_pembimbing');
+
     
         // Check if the mahasiswa already has a pembimbing for the given jenis pembimbing
         $existingPembimbing = $this->dosenPembimbingModel
@@ -75,6 +76,8 @@ class DosenPembimbingController extends BaseController
             'mahasiswa_id' => $mahasiswaId,
             'jenis_pembimbing' => $jenisPembimbing,
         ];
+
+        // dd($data['jenis_pembimbing']);
     
         $this->dosenPembimbingModel->insert($data);
     
@@ -104,11 +107,9 @@ class DosenPembimbingController extends BaseController
             'mahasiswa_id' => 'required',
             'jenis_pembimbing' => 'required|in_list[PKL,KKN,SKRIPSI]',
         ];
-    
         if (!$this->validate($validationRules)) {
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
-    
         $dosenId = $this->request->getPost('dosen_id');
         $mahasiswaId = $this->request->getPost('mahasiswa_id');
         $jenisPembimbing = $this->request->getPost('jenis_pembimbing');
