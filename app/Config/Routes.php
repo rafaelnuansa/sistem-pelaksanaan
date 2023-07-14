@@ -193,12 +193,15 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'au
     $routes->get('pkl/jadwal', 'PKLController::jadwal_pkl');
     $routes->get('pkl/validasi-penguji', 'PKLController::validasi_penguji');
     $routes->get('pkl/jadwal/bimbingan', 'PKLController::jadwal_pkl_bimbingan');
-    $routes->get('pkl/jurnal/pelaksanaan/validasi/(:segment)', 'PKLJurnalController::validasiPelaksanaan/$1', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.validasi']);
-    $routes->get('pkl/jurnal/pelaksanaan/unvalidasi/(:segment)', 'PKLJurnalController::unvalidasiPelaksanaan/$1', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.unvalidasi']);
+    $routes->get('pkl/jurnal/pelaksanaan/validasi/(:segment)', 'PKLJurnalController::validasiPelaksanaan/$1', ['as' => 'dosen.pkl.jurnal.pelaksanaan.validasi']);
+    $routes->get('pkl/jurnal/pelaksanaan/unvalidasi/(:segment)', 'PKLJurnalController::unvalidasiPelaksanaan/$1', ['as' => 'dosen.pkl.jurnal.pelaksanaan.unvalidasi']);
     $routes->get('pkl/penilaian/1', 'PKLController::penilaian');
     $routes->post('pkl/penilaian/cetak', 'PKLController::cetak');
     $routes->post('pkl/revisi/cetak', 'PKLController::cetak_revisi');
     $routes->get('pkl/penilaian/2', 'PKLController::penilaian2');
+    
+    $routes->get('pkl/jadwal/update_status/(:num)/(:num)', 'PKLController::update_status_jadwal/$1/$2', ['as' => 'dosen.pkl.jadwal.update_status']);
+  
 });
 
 

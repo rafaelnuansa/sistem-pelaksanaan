@@ -44,9 +44,9 @@
 
             <td>
               <?php if (!$row['status']) : ?>
-                <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 1) ?>" class="btn btn-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a>
+                <a href="<?= route_to('dosen.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 1) ?>" class="btn btn-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a>
               <?php else : ?>
-                <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 0) ?>" class="btn btn-success" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Belum Melaksanakan?')">Sudah Melaksanakan</a>
+                <a href="<?= route_to('dosen.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 0) ?>" class="btn btn-success" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Belum Melaksanakan?')">Sudah Melaksanakan</a>
               <?php endif; ?>
             </td>
           </tr>
