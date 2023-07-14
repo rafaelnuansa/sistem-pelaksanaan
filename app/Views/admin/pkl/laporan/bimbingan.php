@@ -73,9 +73,10 @@
                             'tahun_akademik' => $tahun_akademik,
                             'prodi_id' => $prodi_id,
                             'mahasiswa_id' => $mahasiswa_id,
-                        ]); ?>" class="btn btn-primary" method="get">
+                        ]) . '?' . http_build_query($_GET) ?>" class="btn btn-primary">
                 <i class="fa fa-print"></i> Export to PDF
             </a>
+
 
         </div>
     </div>

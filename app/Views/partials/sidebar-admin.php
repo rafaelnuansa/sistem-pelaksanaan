@@ -100,12 +100,11 @@
             </a>
           </li>
 
-          <li class="<?= (uri_string() == 'admin/pkl/berkas') ? 'active' : '' ?>">
+          <!-- <li class="<?= (uri_string() == 'admin/pkl/berkas') ? 'active' : '' ?>">
             <a href="<?= base_url('admin/pkl/berkas') ?>">
               <i class="fa fa-file"></i> <span>Berkas</span>
             </a>
-          </li>
-
+          </li> -->
 
           <li class="<?= (uri_string() == 'admin/pkl/laporan') ? 'active' : '' ?>">
             <a href="<?= base_url('admin/pkl/laporan') ?>">
