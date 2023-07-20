@@ -39,9 +39,9 @@
                         </thead>
                         <tbody>
                             <?php if ($prodi) : ?>
-                                <?php foreach ($prodi as $index => $row) : ?>
+                                <?php $no = 1; foreach ($prodi as $row) : ?>
                                     <tr>
-                                        <th scope="row"><?= $index + 1; ?></th>
+                                        <th scope="row"><?= $no++; ?></th>
                                         <td><?= $row['nama_prodi']; ?></td>
                                         <td><?= $row['fakultas']['nama']; ?></td>
                                         <td>

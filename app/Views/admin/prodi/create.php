@@ -17,6 +17,10 @@
                         <div class="form-group">
                             <label for="nama_prodi">Nama Program Studi</label>
                             <input type="text" name="nama_prodi" id="nama_prodi" class="form-control" required>
+                            <!-- Display validation errors for 'nama_prodi' field -->
+                            <?php if (isset($errors['nama_prodi'])) : ?>
+                                <span class="text-danger"><?= $errors['nama_prodi']; ?></span>
+                            <?php endif; ?>
                         </div>
 
                         <div class="form-group">
@@ -27,6 +31,10 @@
                                     <option value="<?= $row['id']; ?>"><?= $row['nama']; ?></option>
                                 <?php endforeach; ?>
                             </select>
+                            <!-- Display validation errors for 'fakultas_id' field -->
+                            <?php if (isset($errors['fakultas_id'])) : ?>
+                                <span class="text-danger"><?= $errors['fakultas_id']; ?></span>
+                            <?php endif; ?>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Simpan</button>

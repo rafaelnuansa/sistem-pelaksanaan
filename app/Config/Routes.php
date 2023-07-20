@@ -33,7 +33,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->get('fakultas/create', 'FakultasController::create', ['as' => 'admin.fakultas.create']);
     $routes->post('fakultas', 'FakultasController::store', ['as' => 'admin.fakultas.store']);
     $routes->get('fakultas/edit/(:num)', 'FakultasController::edit/$1', ['as' => 'admin.fakultas.edit']);
-    $routes->put('fakultas/(:num)', 'FakultasController::update/$1', ['as' => 'admin.fakultas.update']);
+    $routes->post('fakultas/update/(:num)', 'FakultasController::update/$1', ['as' => 'admin.fakultas.update']);
     $routes->delete('fakultas/(:num)', 'FakultasController::delete/$1', ['as' => 'admin.fakultas.delete']);
 
     // Route Admin/Prodi 
@@ -187,7 +187,7 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
 $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'authDosen'], function ($routes) {
     $routes->get('dashboard', 'DashboardController::index');
     $routes->get('pkl', 'PKLController::index');
-    $routes->get('pkl/approve', 'PKLController::approve_bimbingan');
+    $routes->get('pkl/approve', 'PKLController::approve_bimbingan', ['as' => 'dosen.pkl.validasi.bimbingan']);
     $routes->get('pkl/jurnal/detail/(:segment)', 'PKLController::bimbingan_detail/$1');
     $routes->get('pkl/detail', 'PKLController::detail');
     $routes->get('pkl/jadwal', 'PKLController::jadwal_pkl');
@@ -199,7 +199,6 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'au
     $routes->post('pkl/penilaian/cetak', 'PKLController::cetak');
     $routes->post('pkl/revisi/cetak', 'PKLController::cetak_revisi');
     $routes->get('pkl/penilaian/2', 'PKLController::penilaian2');
-    
     $routes->get('pkl/jadwal/update_status/(:num)/(:num)', 'PKLController::update_status_jadwal/$1/$2', ['as' => 'dosen.pkl.jadwal.update_status']);
   
 });

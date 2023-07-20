@@ -22,7 +22,7 @@
       <a href="<?= base_url('downloads/surat-tugas.pdf') ?>" class="btn btn-primary" target="_blank"><i class="fa fa-print" style="margin-right: 4px;"></i> Cetak Surat Tugas</a>
     </div> -->
     <div class="table-responsive">
-      <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+      <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
         <thead>
           <tr>
             <th>No</th>
@@ -31,9 +31,6 @@
             <th>Dosen penguji</th>
             <th>Tempat</th>
             <th>Hari/Tanggal</th>
-            <th>Nilai</th>
-            <th>Status</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -45,20 +42,7 @@
               <td><?= $row['dospeng'] ?></td>
               <td><?= $row['tempat_nama'] ?></td>
               <td><?= $row['tanggal'] ?></td>
-            <td>Nilai</td>
-              <td><?= $row['status'] == 1 ? 'Siap Sidang' : 'Belum Siap Sidang' ?></td>
-              <td>
-              <td>
-                <?php if (!$row['status']) : ?>
-                  <a href="<?= route_to('dosen.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 1) ?>" class="badge bg-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a>
-                <?php else : ?>
-                  <a href="<?= route_to('dosen.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 0) ?>" class="badge bg-success" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Belum Melaksanakan?')">Sudah Melaksanakan</a>
-                <?php endif; ?>
-
-
-              </td>
-              </td>
-              </td>
+              
             </tr>
           <?php endforeach; ?>
         </tbody>
@@ -96,12 +80,7 @@
               <td><?= ++$i ?></td>
               <td><?= $row['nama'] ?></td>
               <td class="text-center">
-                <button class="btn btn-success approve btn-sm" data-id="<?= $row['id_pkl_ujian'] ?>"
-                 data-mahasiswa-id="<?= $row['mahasiswa_id'] ?>"
-                 data-mahasiswa-nama="<?= $row['nama']?>"
-                 data-nama-kelompok="<?= $row['nama_kelompok']?>"
-                 data-nama-dospem="<?= $row['dospem_nama']?>"
-                 ><i class="fa fa-check"></i></button>
+                <button class="btn btn-success approve btn-sm" data-id="<?= $row['id_pkl_ujian'] ?>" data-mahasiswa-id="<?= $row['mahasiswa_id'] ?>" data-mahasiswa-nama="<?= $row['nama'] ?>" data-nama-kelompok="<?= $row['nama_kelompok'] ?>" data-nama-dospem="<?= $row['dospem_nama'] ?>"><i class="fa fa-check"></i></button>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -123,31 +102,31 @@
           <form method="POST" action="<?= route_to('dosen.pkl.jadwal.simpan') ?>">
             <input type="hidden" name="id_daftar">
             <input type="hidden" name="mahasiswa_id">
-            
+
             <div class="row mb-2">
               <div class="col-md-12">
                 <div class="form-group">
                   <label for="">Mahasiswa</label>
-                  <input type="hidden" readonly  class="form-control" name="mahasiswa_id">
-                  <input type="text" readonly  class="form-control" name="mahasiswa_nama">
+                  <input type="hidden" readonly class="form-control" name="mahasiswa_id">
+                  <input type="text" readonly class="form-control" name="mahasiswa_nama">
                 </div>
               </div>
             </div>
-            
+
             <div class="row mb-2">
               <div class="col-md-12">
                 <div class="form-group">
                   <label for="">Nama Kelompok PKL</label>
-                  <input type="text" readonly  class="form-control" name="nama_kelompok">
+                  <input type="text" readonly class="form-control" name="nama_kelompok">
                 </div>
               </div>
             </div>
-            
+
             <div class="row mb-2">
               <div class="col-md-12">
                 <div class="form-group">
                   <label for="">Nama Kelompok PKL</label>
-                  <input type="text" readonly  class="form-control" name="nama_dospem">
+                  <input type="text" readonly class="form-control" name="nama_dospem">
                 </div>
               </div>
             </div>

@@ -18,15 +18,14 @@
     </div>
   </div>
   <div class="box-body">
-    <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+    <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
       <thead>
         <tr>
           <th>No</th>
+          <th>NIM</th>
+          <th>Nama mahasiswa</th>
           <th>Tahun Ajaran</th>
           <th>Nama Kelompok</th>
-          <th>Nama mahasiswa</th>
-          <th>Status</th>
-          <th>Keterangan</th>
           <th></th>
         </tr>
       </thead>
@@ -34,20 +33,13 @@
         <?php foreach ($data as $index => $row) : ?>
           <tr>
             <td><?= ++$index ?></td>
+            <td><?= $row['nim'] ?></td>
+            <td><?= $row['nama_mahasiswa'] ?></td>
             <td><?= $row['nama_kelompok'] ?></td>
             <td><?= $row['tahun_akademik'] ?></td>
-            <td><?= $row['nama_mahasiswa'] ?></td>
-            <td><?= $row['status'] ?></td>
-            <td class="text-center">
-              <a href="<?= base_url('dosen/pkl/jurnal/detail/' . $row['mahasiswa_id']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
-            </td>
-
             <td>
-              <?php if (!$row['status']) : ?>
-                <a href="<?= route_to('dosen.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 1) ?>" class="btn btn-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a>
-              <?php else : ?>
-                <a href="<?= route_to('dosen.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 0) ?>" class="btn btn-success" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Belum Melaksanakan?')">Sudah Melaksanakan</a>
-              <?php endif; ?>
+            <a href="<?= base_url('dosen/pkl/jurnal/detail/' . $row['mahasiswa_id']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
+         
             </td>
           </tr>
         <?php endforeach; ?>

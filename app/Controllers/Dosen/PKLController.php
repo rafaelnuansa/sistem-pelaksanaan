@@ -4,6 +4,7 @@ namespace App\Controllers\Dosen;
 
 use App\Controllers\BaseController;
 use App\Models\DosenModel;
+use App\Models\DosenPembimbingModel;
 use App\Models\PKLJadwalModel;
 use App\Models\PKLJurnalBimbinganModel;
 use App\Models\ProdiModel;
@@ -23,14 +24,21 @@ class PKLController extends BaseController
         $this->DosenModel = new DosenModel();
         $this->dosenId = session()->get('dosen_id');
         $this->TempatModel = new TempatModel();
+        $this->DosenPembimbingModel = new DosenPembimbingModel();
     }
 
     public function index()
     {
+
+        // dd($this->dosenId);
+        $mahasiswaBimbingan = $this->PKLJurnalBimbingan->getMahasiswaBimbingan($this->dosenId);
         $data = [
             'title' => 'Validasi Bimbingan',
-            'data' => $this->PKLJurnalBimbingan->dosenGetJurnalBimbinganByDosenId($this->dosenId),
+            'data' => $mahasiswaBimbingan
         ];
+
+        // dd($mahasiswaBimbingan);
+
         return view('dosen/pkl/bimbingan', $data); 
     } 
 
@@ -54,7 +62,7 @@ class PKLController extends BaseController
             'data' => $dataList
         ];
 
-        return view('admin/pkl/jurnal/bimbingan-detail', $data);
+        return view('dosen/pkl/bimbingan-detail', $data);
     }
 
     public function penilaian()
@@ -99,13 +107,16 @@ class PKLController extends BaseController
     
     public function jadwal_pkl_bimbingan()
     { 
-        $jadwal_sidang = $this->db->table('pkl_jadwal_sidang')
+        $jadwal_sidang = $this->db->table('pkl_jadwal_sidang') 
         ->select('pkl_jadwal_sidang.*, mahasiswa.nim as nim, dosen.nama as nama, mahasiswa.nama as nama_mahasiswa, dosen.nama as dospeng, tempat_sidang.nama_tempat as tempat_nama')
         ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
+        ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
+        ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
         ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
         ->join('dosen_pembimbing', 'dosen_pembimbing.mahasiswa_id = mahasiswa.id', 'left')
-        ->join('dosen', 'dosen.id = pkl_jadwal_sidang.dospeng_id', 'left')
+        ->join('dosen', 'dosen.id = dosen_pembimbing.dosen_id', 'left')
         ->where('dosen_pembimbing.dosen_id', $this->dosenId)
+        ->where('pkl.dosen_id', $this->dosenId)
         ->get()
         ->getResultArray();
          $data = [
@@ -115,29 +126,34 @@ class PKLController extends BaseController
     
         return view('dosen/pkl/jadwal-sidang-bim', $data);
     }
-
+ 
     public function approve_bimbingan()
     {
-        $data = $this->PKLJurnalBimbingan->where('id_jurnal', $_GET['id'])->first();
-
-        $data['status'] = 'Approved';
-
-        $this->PKLJurnalBimbingan->save($data);
-
-        session()->setFlashdata('success', 'Berhasil di approve');
-
-        return redirect()->to('/dosen');
-    }
- 
-    public function cetak()
-    {
-        $nilai = $this->request->getVar('nilai');
-        $total_nilai = 0;
+        $id_jurnal_bimbingan = $this->request->getVar('id');
     
-        foreach ($nilai as $v) {
-            $total_nilai += (int)$v;
+        $data = $this->PKLJurnalBimbingan->where('id_jurnal_bimbingan', $id_jurnal_bimbingan)->first();
+        if (!$data) {
+            // Data dengan ID yang diberikan tidak ditemukan
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
     
+        $data['status'] = 'Approved';
+        $this->PKLJurnalBimbingan->save($data);
+    
+        session()->setFlashdata('success', 'Berhasil di approve');
+        return redirect()->back();
+    }
+    
+
+    public function cetak()
+    {
+        $nilai = $this->request->getVar('nilai[]');
+        $total_nilai = 0;
+
+        foreach($nilai as $v)  {
+            $total_nilai += (int)$v;
+        }
+
         $data = [
             'nama_mhs' => $this->request->getVar('nama_mhs'),
             'nim' => $this->request->getVar('nim'),
@@ -150,23 +166,20 @@ class PKLController extends BaseController
             'tempat_tanggal' => $this->request->getVar('tempat_tanggal'),
             'nilai' => $nilai,
             'total_nilai' => $total_nilai,
-        ];
-    
-        // Load HTML content
-        $html = view('pdf/penilaian_pkl', ['data' => $data]);
-        
-        // Generate PDF
-        $this->pdf->loadHtml($html);
+        ]; 
+        // dd($data);
+        // load HTML content
+        $this->pdf->loadHtml(view('pdf/penilaian_pkl', ['data' => $data]));
+
+        // (optional) setup the paper size and orientation
         $this->pdf->setPaper('A4');
+
+        // render html as PDF
         $this->pdf->render();
-        
-        // Output the generated PDF
-        $output = $this->pdf->output();
-        $response = new \CodeIgniter\HTTP\Response($output);
-        $response->setHeader('Content-Type', 'application/pdf');
-        return $response->setHeader('Content-Disposition', 'inline; filename="Laporan.pdf"');
+
+        // output the generated pdf
+        return $this->pdf->stream('Laporan', array("Attachment" => false));
     }
-    
 
     public function cetak_revisi()
     {

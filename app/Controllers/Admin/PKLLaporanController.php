@@ -374,13 +374,6 @@ class PKLLaporanController extends BaseController
         $dompdf = new Dompdf();
         $dompdf->loadHtml($html);
 
-        // (Optional) Set Dompdf options
-        $options = new Options();
-        $options->set('defaultFont', 'Arial');
-        $options->set('isRemoteEnabled', true);
-
-        // Render the PDF
-        $dompdf->setOptions($options);
         $dompdf->render();
 
         // Output the generated PDF to the browser

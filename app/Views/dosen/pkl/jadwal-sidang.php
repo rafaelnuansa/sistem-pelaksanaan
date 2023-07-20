@@ -33,6 +33,7 @@
             <th>Hari/Tanggal</th>
             <th>Nilai</th>
             <th>Status</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -45,7 +46,14 @@
               <td><?= $row['tempat_nama'] ?></td>
               <td><?= $row['tanggal'] ?></td>
               <td>Nilai</td> 
-              <td><?= $row['status'] == 1 ? 'Siap Sidang' : 'Belum Siap Sidang' ?></td>
+              <td><?= $row['status'] == 1 ? 'Selesai' : 'Belum Selesai' ?></td>
+              <td>
+                <?php if (!$row['status']) : ?>
+                  <a href="<?= route_to('dosen.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 1) ?>" class="badge bg-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a>
+                <?php else : ?>
+                  <a href="<?= route_to('dosen.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 0) ?>" class="badge bg-success" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Belum Melaksanakan?')">Sudah Melaksanakan</a>
+                <?php endif; ?>
+              </td>
             </tr>
           <?php endforeach; ?>
         </tbody>

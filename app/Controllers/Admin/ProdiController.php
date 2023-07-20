@@ -22,15 +22,7 @@ class ProdiController extends BaseController
         $prodiModel = new ProdiModel();
         $prodi = $prodiModel->findAll();
     
-        $mahasiswaModel = new MahasiswaModel();
-    
-        // Hitung jumlah mahasiswa untuk setiap program studi
-        foreach ($prodi as &$row) {
-            $jumlahMahasiswa = $mahasiswaModel->where('prodi_id', $row['id'])->countAllResults();
-            $row['jumlah_mahasiswa'] = $jumlahMahasiswa;
-        }
-    
-        // Menggabungkan data fakultas dengan data program studi
+        // Merge the data of fakultas into the program study data
         $prodiWithFakultas = [];
         foreach ($prodi as $row) {
             $fakultas = $this->fakultasModel->find($row['fakultas_id']);
@@ -45,28 +37,48 @@ class ProdiController extends BaseController
     
         return view('admin/prodi/index', $data);
     }
+    
 
     public function create()
     {
         $fakultas = $this->fakultasModel->findAll();
 
+        // Pass the validation errors to the view
         $data = [
             'title' => 'Tambah Program Studi',
-            'fakultas' => $fakultas
-        ];
+            'fakultas' => $fakultas,
+            'errors' => session('errors') // This assumes you are using CodeIgniter's session helper to store validation errors.
+    ];
 
         return view('admin/prodi/create', $data);
     }
 
     public function store()
     {
-        $this->validate([
-            'nama' => 'required',
+        // Validation rules
+        $validationRules = [
+            'nama_prodi' => [
+                'rules' => 'required|is_unique[prodi.nama_prodi]',
+                'errors' => [
+                    'required' => 'Nama program studi harus diisi.',
+                    'is_unique' => 'Nama program studi sudah ada dalam database.'
+                ]
+            ],
             'fakultas_id' => 'required'
-        ]);
+        ];
+
+        if (!$this->validate($validationRules)) {
+            $fakultas = $this->fakultasModel->findAll();
+            $data = [
+                'title' => 'Tambah Program Studi',
+                'fakultas' => $fakultas,
+                'errors' => $this->validator->getErrors()
+            ];
+            return view('admin/prodi/create', $data);
+        }
 
         $data = [
-            'nama' => $this->request->getPost('nama'),
+            'nama_prodi' => $this->request->getPost('nama_prodi'),
             'fakultas_id' => $this->request->getPost('fakultas_id')
         ];
 
@@ -91,13 +103,31 @@ class ProdiController extends BaseController
 
     public function update($id)
     {
-        $this->validate([
-            'nama' => 'required',
+        $validationRules = [
+            'nama_prodi' => [
+                'rules' => 'required|is_unique[prodi.nama_prodi,id,' . $id . ']',
+                'errors' => [
+                    'required' => 'Nama program studi harus diisi.',
+                    'is_unique' => 'Nama program studi sudah ada dalam database.'
+                ]
+            ],
             'fakultas_id' => 'required'
-        ]);
+        ];
+
+        if (!$this->validate($validationRules)) {
+            $prodi = $this->prodiModel->find($id);
+            $fakultas = $this->fakultasModel->findAll();
+            $data = [
+                'title' => 'Edit Program Studi',
+                'prodi' => $prodi,
+                'fakultas' => $fakultas,
+                'errors' => $this->validator->getErrors()
+            ];
+            return view('admin/prodi/edit', $data);
+        }
 
         $data = [
-            'nama' => $this->request->getPost('nama'),
+            'nama_prodi' => $this->request->getPost('nama_prodi'),
             'fakultas_id' => $this->request->getPost('fakultas_id')
         ];
 
