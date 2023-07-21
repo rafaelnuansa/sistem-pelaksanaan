@@ -37,13 +37,11 @@ class MahasiswaModel extends Model
 
     public function getMahasiswaHasPKL()
     {
-        $query = $this->select('mahasiswa.*, prodi.nama_prodi, pkl.nama_kelompok, instansi.nama_perusahaan')
+        $query = $this->select('mahasiswa.*, prodi.nama_prodi, pkl.*')
             ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
             ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
             ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
-            ->join('instansi', 'instansi.id = pkl.instansi_id')
             ->get();
-
         return $query->getResultArray();
     }
 

@@ -15,7 +15,11 @@ class PKLModel extends Model
         'tahun_akademik',
         'dosen_id',
         'prodi_id',
-        'instansi_id',
+        'nama_perusahaan',
+        'alamat_perusahaan',
+        'bimbingan_perusahaan',
+        'jabatan_bimbingan_perusahaan',
+        'no_perusahaan',
         'created_at',
         'updated_at',
     ];
@@ -32,10 +36,4 @@ class PKLModel extends Model
         return $query->getResultArray();
     }
 
-    public function updateInstansiId($instansiId, $kelompokId)
-    {
-        $this->where('id', $kelompokId)
-             ->set('instansi_id', $instansiId)
-             ->update();
-    }
 }

@@ -36,11 +36,10 @@ class PKLLaporanController extends BaseController
         $tahun_akademik = $this->request->getVar('tahun_akademik');
         $prodi_id = $this->request->getVar('prodi_id');
 
-        $query = $this->PKL->select('pkl.*, prodi.nama_prodi,  dosen.nama as nama_dosen, instansi.nama_perusahaan, pkl.prodi_id')
+        $query = $this->PKL->select('pkl.*, prodi.nama_prodi,  dosen.nama as nama_dosen, pkl.prodi_id')
             ->join('prodi', 'prodi.id = pkl.prodi_id', 'left')
             ->join('dosen', 'dosen.id = pkl.dosen_id', 'left')
             ->join('pkl_anggota', 'pkl_anggota.pkl_id = pkl.id', 'left')
-            ->join('instansi', 'instansi.id = pkl.instansi_id', 'left')
             ->groupBy('pkl.id');
 
 
@@ -71,10 +70,10 @@ class PKLLaporanController extends BaseController
         $tahun_akademik = $this->request->getVar('tahun_akademik');
         $prodi_id = $this->request->getVar('prodi_id');
 
-        $query = $this->PKL->select('pkl.*, prodi.nama_prodi, dosen.nama as nama_dosen, instansi.nama_perusahaan')
+        $query = $this->PKL->select('pkl.*, prodi.nama_prodi, dosen.nama as nama_dosen')
             ->join('prodi', 'prodi.id = pkl.prodi_id', 'left')
             ->join('dosen', 'dosen.id = pkl.dosen_id', 'left')
-            ->join('instansi', 'instansi.id = pkl.instansi_id', 'left');
+            ;
 
         if (!empty($tahun_akademik)) {
             $query->where('tahun_akademik', $tahun_akademik);
@@ -128,11 +127,11 @@ class PKLLaporanController extends BaseController
         $prodi_id = $this->request->getVar('prodi_id');
         $status = $this->request->getVar('status');
 
-        $query = $this->Pelaksanaan->select('pkl_jurnal_pelaksanaan.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi, instansi.nama_perusahaan, pkl.tahun_akademik as tahun_akademik, pkl.*')
+        $query = $this->Pelaksanaan->select('pkl_jurnal_pelaksanaan.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi,  pkl.tahun_akademik as tahun_akademik, pkl.*')
             ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_pelaksanaan.mahasiswa_id', 'left')
             ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
             ->join('pkl', 'pkl.id = pkl_jurnal_pelaksanaan.pkl_id', 'left')
-            ->join('instansi', 'instansi.id = pkl.instansi_id', 'left');
+            ;
 
         if (!empty($tahun_akademik)) {
             $query->where('tahun_akademik', $tahun_akademik);
@@ -164,11 +163,11 @@ class PKLLaporanController extends BaseController
         $prodi_id = $this->request->getVar('prodi_id');
         $status = $this->request->getVar('status');
 
-        $query = $this->Pelaksanaan->select('pkl_jurnal_pelaksanaan.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi, instansi.nama_perusahaan, pkl.tahun_akademik as tahun_akademik, pkl.*')
+        $query = $this->Pelaksanaan->select('pkl_jurnal_pelaksanaan.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi,  pkl.tahun_akademik as tahun_akademik, pkl.*')
             ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_pelaksanaan.mahasiswa_id', 'left')
             ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
             ->join('pkl', 'pkl.id = pkl_jurnal_pelaksanaan.pkl_id', 'left')
-            ->join('instansi', 'instansi.id = pkl.instansi_id', 'left');
+            ;
 
         if (!empty($tahun_akademik)) {
             $query->where('tahun_akademik', $tahun_akademik);
@@ -219,13 +218,13 @@ class PKLLaporanController extends BaseController
         $prodi_id = $this->request->getVar('prodi_id');
         $mahasiswa_id = $this->request->getVar('mahasiswa_id');
 
-        $query = $this->Bimbingan->select('pkl_jurnal_bimbingan.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi, instansi.nama_perusahaan, pkl.tahun_akademik as tahun_akademik, pkl.*, dosen.nama as nama_dosen')
+        $query = $this->Bimbingan->select('pkl_jurnal_bimbingan.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi,  pkl.tahun_akademik as tahun_akademik, pkl.*, dosen.nama as nama_dosen')
             ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_bimbingan.mahasiswa_id', 'left')
             ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
             ->join('pkl', 'pkl.id = pkl_jurnal_bimbingan.pkl_id', 'left')
             ->join('dosen_pembimbing', 'dosen_pembimbing.mahasiswa_id = mahasiswa.id', 'left')
             ->join('dosen', 'dosen.id = dosen_pembimbing.dosen_id', 'left')
-            ->join('instansi', 'instansi.id = pkl.instansi_id', 'left');
+            ;
 
         if (!empty($tahun_akademik)) {
             $query->where('pkl.tahun_akademik', $tahun_akademik);
@@ -261,13 +260,13 @@ class PKLLaporanController extends BaseController
         $prodi_id = $this->request->getVar('prodi_id');
         $mahasiswa_id = $this->request->getVar('mahasiswa_id');
 
-        $query = $this->Bimbingan->select('pkl_jurnal_bimbingan.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi, instansi.nama_perusahaan, pkl.tahun_akademik as tahun_akademik, pkl.*, dosen.nama as nama_dosen')
+        $query = $this->Bimbingan->select('pkl_jurnal_bimbingan.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi,  pkl.tahun_akademik as tahun_akademik, pkl.*, dosen.nama as nama_dosen')
             ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_bimbingan.mahasiswa_id', 'left')
             ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
             ->join('pkl', 'pkl.id = pkl_jurnal_bimbingan.pkl_id', 'left')
             ->join('dosen_pembimbing', 'dosen_pembimbing.mahasiswa_id = mahasiswa.id', 'left')
             ->join('dosen', 'dosen.id = dosen_pembimbing.dosen_id', 'left')
-            ->join('instansi', 'instansi.id = pkl.instansi_id', 'left');
+            ;
 
         if (!empty($tahun_akademik)) {
             $query->where('pkl.tahun_akademik', $tahun_akademik);

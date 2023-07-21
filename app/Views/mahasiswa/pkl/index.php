@@ -13,13 +13,6 @@
 
     <div class="box-body">
 
-      <?php if (!$instansi) :; ?>
-        <?php if ($akun !== null && $akun['is_ketua'] == true) : ?>
-          <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-tambah">
-            Instansi Praktik Kerja Lapangan
-          </button>
-        <?php endif; ?>
-      <?php endif; ?>
       <table class="table table-bordered datatable" style="margin-top: 10px;">
         <thead>
           <tr>
@@ -58,45 +51,55 @@
     <form method="POST" action="<?= route_to('mahasiswa.pkl.edit_instansi') ?>">
       <table class="table table-bordered">
         <tbody>
-          <input type="hidden" name="instansi_id" value="<?= $instansi['id'] ?>">
+          <input type="hidden" name="kelompok_id" value="<?= $kelompok->id ?>">
           <tr>
             <th>Nama Perusahaan</th>
             <td>
               <?php if ($is_ketua) : ?>
 
-                <input type="text" class="form-control" name="nama_perusahaan" value="<?= $instansi['nama_perusahaan'] ?>">
+                <input type="text" class="form-control" name="nama_perusahaan" value="<?= $kelompok->nama_perusahaan ?>">
               <?php else :; ?>
-                <?= $instansi['nama_perusahaan'] ?>
+              <?= $kelompok->nama_perusahaan ?>
               <?php endif; ?>
 
             </td>
           </tr>
           <tr>
-            <th>Alamat</th>
+            <th>Alamat Perusahaan</th>
             <td>
               <?php if ($is_ketua) : ?>
-                <input type="text" class="form-control" name="alamat" value="<?= $instansi['alamat'] ?>">
+                <input type="text" class="form-control" name="alamat_perusahaan" value="<?= $kelompok->alamat_perusahaan ?>">
               <?php else :; ?>
-                <?= $instansi['alamat'] ?>
+              <?= $kelompok->alamat_perusahaan ?>
               <?php endif; ?>
             </td>
           </tr>
           <tr>
-            <th>Pembimbing Lapangan</th>
+            <th>Bimbingan Perusahaan</th>
             <td> <?php if ($is_ketua) : ?>
-                <input type="text" class="form-control" name="pembimbing_lapangan" value="<?= $instansi['pembimbing_lapangan'] ?>">
+                <input type="text" class="form-control" name="bimbingan_perusahaan" value="<?= $kelompok->alamat_perusahaan ?>">
               <?php else :; ?>
-                <?= $instansi['pembimbing_lapangan'] ?>
+              <?= $kelompok->bimbingan_perusahaan ?>
               <?php endif; ?>
             </td>
           </tr>
           <tr>
-            <th>No. Pembimbing Lapangan</th>
+            <th>Jabatan Bimbingan Perusahaan</th>
             <td>
             <?php if ($is_ketua) : ?>
-              <input type="text" class="form-control" name="no_pembimbing_lapangan" value="<?= $instansi['no_pembimbing_lapangan'] ?>">
+              <input type="text" class="form-control" name="jabatan_bimbingan_perusahaan" value="<?= $kelompok->jabatan_bimbingan_perusahaan ?>">
               <?php else :; ?>
-                <?= $instansi['no_pembimbing_lapangan'] ?>
+                <?= $kelompok->jabatan_bimbingan_perusahaan ?>
+              <?php endif; ?>
+            </td>
+          </tr>
+          <tr>
+            <th>Nomor Perusahaan</th>
+            <td>
+            <?php if ($is_ketua) : ?>
+              <input type="number" class="form-control" name="no_perusahaan" value="<?= $kelompok->no_perusahaan ?>">
+              <?php else :; ?>
+                <?= $kelompok->no_perusahaan ?>
               <?php endif; ?>
             </td>
           </tr>
@@ -111,7 +114,6 @@
 
 
 
-<?php if (!$instansi) :; ?>
   <div class="modal fade" id="modal-tambah">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -123,41 +125,32 @@
 
         <form method="POST" action="<?= route_to('mahasiswa.pkl.simpan_instansi') ?>">
           <div class="modal-body">
-            <div class="form-group">
-              <label for="">Pilih Perusahaan Tersedia</label>
-              <select class="form-control" name="instansi_id">
-                <?php foreach ($instansi_list as $ins) : ?>
-                  <option value="<?= $ins['id'] ?>"><?= $ins['nama_perusahaan'] ?></option>
-                <?php endforeach; ?>
-              </select>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Pilih Instansi</button>
-          </div>
-        </form>
-        <form method="POST" action="<?= route_to('mahasiswa.pkl.simpan_instansi') ?>">
-          <div class="modal-body">
-            <h4>Input Baru</h4>
+            <h4>Data Perusahaan</h4>
             <div class="form-group">
               <label for="">Nama Perusahaan</label>
-              <input type="text" class="form-control" name="nama_perusahaan" value="<?= $instansi['nama_perusahaan'] ?? '' ?>">
+              <input type="text" class="form-control" name="nama_perusahaan" value="<?= $kelompok->nama_perusahaan ?? '' ?>">
             </div>
 
             <div class="form-group">
               <label for="">Alamat</label>
-              <input type="text" class="form-control" name="alamat" value="<?= $instansi['alamat'] ?? '' ?>">
+              <input type="text" class="form-control" name="alamat_perusahaan" value="<?= $kelompok->alamat_perusahaan ?? '' ?>">
             </div>
 
             <div class="form-group">
-              <label for="">Pembimbing Lapangan</label>
-              <input type="text" class="form-control" name="pembimbing_lapangan" value="<?= $instansi['pembimbing_lapangan'] ?? '' ?>">
+              <label for="">Bimbingan Perusahaan</label>
+              <input type="text" class="form-control" name="bimbingan_perusahaan" value="<?= $kelompok->bimbingan_perusahaan ?? '' ?>">
+            </div>
+            
+            <div class="form-group">
+              <label for="">Jabatan Bimbingan Perusahaan</label>
+              <input type="text" class="form-control" name="jabatan_bimbingan_perusahaan" value="<?= $kelompok->jabatan_bimbingan_perusahaan ?? '' ?>">
             </div>
 
             <div class="form-group">
-              <label for="">No. Pembimbing Lapangan</label>
-              <input type="text" class="form-control" name="no_pembimbing_lapangan" value="<?= $instansi['no_pembimbing_lapangan'] ?? '' ?>">
+              <label for="">No Perusahaan</label>
+              <input type="text" class="form-control" name="no_perusahaan" value="<?= $kelompok->no_perusahaan ?? '' ?>">
             </div>
+
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
@@ -171,7 +164,5 @@
     </div>
     <!-- /.modal-dialog -->
   </div>
-<?php endif; ?>
-
 
 <?= $this->endSection(); ?>

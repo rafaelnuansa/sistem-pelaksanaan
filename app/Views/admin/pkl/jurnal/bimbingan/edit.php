@@ -19,11 +19,6 @@
     </div>
 
     <div class="form-group">
-        <label for="jam">Jam</label>
-        <input type="text" name="jam" value="<?= $jurnal['jam'] ?>" class="form-control">
-    </div>
-
-    <div class="form-group">
         <label for="hari">Hari</label>
         <input type="text" name="hari" value="<?= $jurnal['hari'] ?>" class="form-control">
     </div>

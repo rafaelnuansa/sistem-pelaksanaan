@@ -1,28 +1,18 @@
-<?= $this->extend('layouts/default'); ?>
+<?php
+$this->extend('layouts/default');
+?>
 
-<?= $this->section('content'); ?>
+<?php $this->section('content'); ?>
 
 <!-- Default box -->
 <?php if (session()->getFlashData('success') !== null) : ?>
   <div class="alert alert-success"><?= session()->getFlashData('success') ?></div>
 <?php endif; ?>
-<div class="box">
-  <div class="box-header with-border">
-    <h3 class="box-title">Jadwal Sidang</h3>
 
-    <div class="box-tools pull-right">
-      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-        <i class="fa fa-minus"></i></button>
-      <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-        <i class="fa fa-times"></i></button>
-    </div>
-  </div>
+<div class="box">
   <div class="box-body">
-    <!-- <div class="py-2">
-      <a href="<?= base_url('downloads/surat-tugas.pdf') ?>" class="btn btn-primary" target="_blank"><i class="fa fa-print" style="margin-right: 4px;"></i> Cetak Surat Tugas</a>
-    </div> -->
     <div class="table-responsive">
-      <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+      <table class="table table-hover datatable">
         <thead>
           <tr>
             <th>No</th>
@@ -32,223 +22,203 @@
             <th>Tempat</th>
             <th>Hari/Tanggal</th>
             <th>Nilai</th>
+            <th>Cetak Nilai</th>
             <th>Status</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($data as $i => $row) : ?>
+          <?php $no = 1; foreach ($data as $row) : ?>
             <tr>
-              <td><?= ++$i ?></td>
+              <td><?= $no++ ?></td>
               <td><?= $row['nim'] ?></td>
               <td><?= $row['nama_mahasiswa'] ?></td>
               <td><?= $row['dospeng'] ?></td>
               <td><?= $row['tempat_nama'] ?></td>
               <td><?= $row['tanggal'] ?></td>
-              <td>Nilai</td> 
-              <td><?= $row['status'] == 1 ? 'Selesai' : 'Belum Selesai' ?></td>
               <td>
-                <?php if (!$row['status']) : ?>
-                  <a href="<?= route_to('dosen.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 1) ?>" class="badge bg-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a>
-                <?php else : ?>
-                  <a href="<?= route_to('dosen.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 0) ?>" class="badge bg-success" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Belum Melaksanakan?')">Sudah Melaksanakan</a>
-                <?php endif; ?>
+                <button type="button" class="btn btn-primary btn-sm btn-open-modal" data-modal-target="#nilaiModal" data-id="<?= $row['id_pkl_jadwal_sidang'] ?>" data-nilai-sikap="<?= $row['nilai_sikap'] ?>" data-nilai-materi="<?= $row['nilai_materi'] ?>" data-nilai-pendahuluan="<?= $row['nilai_pendahuluan'] ?>" data-nilai-tinjauan-pustaka="<?= $row['nilai_tinjauan_pustaka'] ?>" data-nilai-pembahasan="<?= $row['nilai_pembahasan'] ?>" data-nilai-kesimpulan="<?= $row['nilai_kesimpulan'] ?>" data-nilai-daftar-pustaka="<?= $row['nilai_daftar_pustaka'] ?>" data-nilai-argumentasi="<?= $row['nilai_argumentasi'] ?>" data-nilai-penguasaan="<?= $row['nilai_penguasaan'] ?>" data-komentar="<?= $row['komentar'] ?>">
+                  Nilai
+                </button>
+              </td>
+              <td>
+              <a href="<?= base_url('dosen/pkl/penilaian/cetak/' . $row['id_pkl_jadwal_sidang']) ?>" class="btn btn-success btn-sm" target="_blank">
+          Cetak
+        </a>
+              </td>
+              <td>
+                <span class="label <?= $row['status'] ? 'bg-primary' : 'bg-warning' ?>">
+                  <?= $row['status'] ? 'Sudah Melaksanakan' : 'Belum Melaksanakan' ?>
+                </span>
               </td>
             </tr>
           <?php endforeach; ?>
         </tbody>
       </table>
-
     </div>
   </div>
 </div>
 
-
-<?php if (session()->get('level') == 'Admin') : ?>
-  <div class="box">
-    <div class="box-header with-border">
-      <h3 class="box-title">Menunggu Persetujuan</h3>
-
-      <div class="box-tools pull-right">
-        <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-          <i class="fa fa-minus"></i></button>
-        <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-          <i class="fa fa-times"></i></button>
-      </div>
-    </div>
-    <div class="box-body">
-      <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Nama mahasiswa</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($pending as $i => $row) : ?>
-            <tr>
-              <td><?= ++$i ?></td>
-              <td><?= $row['nama'] ?></td>
-              <td class="text-center">
-                <button class="btn btn-success approve btn-sm" data-id="<?= $row['id_pkl_ujian'] ?>"
-                 data-mahasiswa-id="<?= $row['mahasiswa_id'] ?>"
-                 data-mahasiswa-nama="<?= $row['nama']?>"
-                 data-nama-kelompok="<?= $row['nama_kelompok']?>"
-                 data-nama-dospem="<?= $row['dospem_nama']?>"
-                 ><i class="fa fa-check"></i></button>
-              </td>
-            </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <!-- /.box -->
-
-  <div class="modal fade" id="modal-approve">
-    <div class="modal-dialog">
-      <div class="modal-content">
+<!-- Modal for nilai -->
+<div class="modal fade" id="nilaiModal" tabindex="-1" role="dialog" aria-labelledby="nilaiModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+      <form method="POST" action="<?= base_url('dosen/pkl/penilaian/nilai') ?>">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title">Tambahkan Jadwal</h4>
+          <h4 class="modal-title">Formulir penilaian</h4>
         </div>
-        <div class="modal-body">
-          <form method="POST" action="<?= route_to('admin.pkl.jadwal.simpan') ?>">
-            <input type="hidden" name="id_daftar">
-            <input type="hidden" name="mahasiswa_id">
-            
-            <div class="row mb-2">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="">Mahasiswa</label>
-                  <input type="hidden" readonly  class="form-control" name="mahasiswa_id">
-                  <input type="text" readonly  class="form-control" name="mahasiswa_nama">
-                </div>
-              </div>
+        
+        <input type="hidden" name="id_pkl_jadwal_sidang" id="id_pkl_jadwal_sidang">
+        <div class="modal-body" style="height: 200px;">
+          <div class="row mb-2">
+            <div class="col-md-12">
+              <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th><b>Kriteria Penilaian</b></th>
+                    <th>Bobot Maksimal Nilai</th>
+                    <th>Nilai</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td><b>Sikap/Penampilan Penyaji</b></td>
+                    <td>10</td>
+                    <td>
+                      <input type="text" class="form-control" name="nilai_sikap"  id="nilai_sikap">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td><b>Cara Penyajian Materi </b></td>
+                    <td>10</td>
+                    <td>
+                      <input type="text" class="form-control" name="nilai_materi" id="nilai_materi">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td><b>Pengorganisasian Makalah</b></td>
+                    <td></td>
+                    <td>
+
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>Pendahuluan</td>
+                    <td>10</td>
+                    <td>
+                      <input type="text" class="form-control" name="nilai_pendahuluan" id="nilai_pendahuluan">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>Tinjauan Pustaka </td>
+                    <td>10</td>
+                    <td>
+                      <input type="text" class="form-control" name="nilai_tinjauan_pustaka" id="nilai_tinjauan_pustaka">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>Hasil dan Pembahasan </td>
+                    <td>10</td>
+                    <td>
+                      <input type="text" class="form-control" name="nilai_pembahasan" id="nilai_pembahasan">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>Kesimpulan dan Saran </td>
+                    <td>10</td>
+                    <td>
+                      <input type="text" class="form-control" name="nilai_kesimpulan" id="nilai_kesimpulan">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>Daftar Pustaka </td>
+                    <td>10</td>
+                    <td>
+                      <input type="text" class="form-control" name="nilai_daftar_pustaka" id="nilai_daftar_pustaka">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td><b>Argumentasi Penyaji </b></td>
+                    <td>10</td>
+                    <td>
+                      <input type="text" class="form-control" name="nilai_argumentasi" id="nilai_argumentasi">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td><b>Penguasaan Materi/Konsep/Teori/Produk </b></td>
+                    <td>20</td>
+                    <td>
+                      <input type="text" class="form-control" name="nilai_penguasaan" id="nilai_penguasaan">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            
-            <div class="row mb-2">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="">Nama Kelompok PKL</label>
-                  <input type="text" readonly  class="form-control" name="nama_kelompok">
-                </div>
-              </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-12">
+              <label for="">Komentar</label>
+              <textarea name="komentar" rows="4" class="form-control" id="komentar" style="margin-bottom:8px;"></textarea>
             </div>
-            
-            <div class="row mb-2">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="">Nama Kelompok PKL</label>
-                  <input type="text" readonly  class="form-control" name="nama_dospem">
-                </div>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="">Hari / Tanggal</label>
-                  <input type="date" class="form-control" name="tanggal">
-                </div>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="">Dosen Penguji</label>
-                  <select class="form-control" name="dospeng_id">
-                    <option value="">Pilih Dosen</option>
-                    <?php foreach ($dosens as $dosen) : ?>
-                      <option value="<?= $dosen['id'] ?>"><?= $dosen['nama'] ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="">Tempat</label>
-                  <select class="form-control select2" name="tempat_id">
-                    <option value="">Pilih Tempat</option>
-                    <?php foreach ($tempats as $tempat) : ?>
-                      <option value="<?= $tempat['id_tempat'] ?>"><?= $tempat['nama_tempat'] ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for="">Keterangan</label>
-                  <textarea name="keterangan" rows="4" class="form-control"></textarea>
-                </div>
-              </div>
-            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
-          <button type="submit" class="btn btn-primary">Simpan & Setujui</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
         </div>
-        </form>
-      </div>
-      <!-- /.modal-content -->
+      </form>
     </div>
-    <!-- /.modal-dialog -->
   </div>
+</div>
 
-<?php endif; ?>
-
-<?= $this->endSection(); ?>
-
-<?= $this->section('script'); ?>
+<?php $this->endSection(); ?>
+<?php $this->section('script'); ?>
 <script>
-  $('.approve').click(function() {
-    $('#modal-approve [name="id_daftar"]').val($(this).attr('data-id'));
-    $('#modal-approve [name="mahasiswa_id"]').val($(this).attr('data-mahasiswa-id'));
-    $('#modal-approve [name="mahasiswa_nama"]').val($(this).attr('data-mahasiswa-nama'));
-    $('#modal-approve [name="nama_kelompok"]').val($(this).attr('data-nama-kelompok'));
-    $('#modal-approve [name="nama_dospem"]').val($(this).attr('data-nama-dospem'));
-    $('#modal-approve').modal('show');
-  });
+  $(document).ready(function() {
+    // When the "Nilai" button is clicked, populate the modal form fields with the relevant data from the row
+    $('.btn-open-modal').click(function() {
+      var id = $(this).data('id');
+      var nilai_sikap = $(this).data('nilai-sikap');
+      var nilai_materi = $(this).data('nilai-materi');
+      var nilai_pendahuluan = $(this).data('nilai-pendahuluan');
+      var nilai_tinjauan_pustaka = $(this).data('nilai-tinjauan-pustaka');
+      var nilai_pembahasan = $(this).data('nilai-pembahasan');
+      var nilai_kesimpulan = $(this).data('nilai-kesimpulan');
+      var nilai_daftar_pustaka = $(this).data('nilai-daftar-pustaka');
+      var nilai_argumentasi = $(this).data('nilai-argumentasi');
+      var nilai_penguasaan = $(this).data('nilai-penguasaan');
+      var komentar = $(this).data('komentar');
 
-  $('.edit').click(function() {
-    const id = $(this).attr('data-id');
-    $.get('<?= base_url('pkl/kelompok/show?id=') ?>' + id, function(data) {
-      $('#modal-edit [name="id"]').val(id);
-      $('#modal-edit [name="prodi_id"] option').each(function() {
-        if (this.text == data.nama_prodi) {
-          this.setAttribute('selected', '');
-        }
-      });
+      // Set the values in the modal form fields
+      $('#id_pkl_jadwal_sidang').val(id);
+      $('#nilai_sikap').val(nilai_sikap);
+      $('#nilai_materi').val(nilai_materi);
+      $('#nilai_pendahuluan').val(nilai_pendahuluan);
+      $('#nilai_tinjauan_pustaka').val(nilai_tinjauan_pustaka);
+      $('#nilai_pembahasan').val(nilai_pembahasan);
+      $('#nilai_kesimpulan').val(nilai_kesimpulan);
+      $('#nilai_daftar_pustaka').val(nilai_daftar_pustaka);
+      $('#nilai_argumentasi').val(nilai_argumentasi);
+      $('#nilai_penguasaan').val(nilai_penguasaan);
+      $('#komentar').val(komentar);
 
-      $('#modal-edit [name="status"] option').each(function() {
-        if (this.text == data.status) {
-          this.setAttribute('selected', '');
-        }
-      });
-    })
-    $('#modal-edit').modal('show');
-  });
-
-  $('.detail').click(function() {
-    const id = $(this).attr('data-id');
-    $.get('<?= base_url('pkl/jadwal/detail?id=') ?>' + id, function(data) {
-      $('#modal-detail [name="nama"]').val(data.nama);
-      $('#modal-detail [name="nim"]').val(data.nim);
-      $('#modal-detail [name="judul_laporan"]').val(data.judul_laporan);
-
-      $('#modal-detail [name="id_jurusan"] option').each(function() {
-        if (this.text == data.nama_jurusan) {
-          this.setAttribute('selected', '');
-        }
-      });
+      // Show the modal
+      $('#nilaiModal').modal('show');
     });
-
-    $('#modal-detail').modal('show');
   });
 </script>
-<?= $this->endSection(); ?>
+
+<?php $this->endSection(); ?>

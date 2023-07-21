@@ -16,7 +16,6 @@
                     <tr>
                         <th>No</th>
                         <th>Hari</th>
-                        <th>Jam</th>
                         <th>Keterangan</th>
                         <th>Status</th>
                     </tr>
@@ -27,7 +26,6 @@
                     <tr>
                         <td><?= $no++ ?></td>
                         <td><?= $jurnal['hari'] ?></td>
-                        <td><?= $jurnal['jam'] ?></td>
                         <td><?= $jurnal['keterangan'] ?></td>
                         <td><?= $jurnal['status'] ?></td>
                     </tr>

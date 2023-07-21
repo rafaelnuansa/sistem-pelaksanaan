@@ -9,7 +9,7 @@ class PKLJurnalBimbinganModel extends Model
 
     protected $table = 'pkl_jurnal_bimbingan';
     protected $primaryKey = 'id_jurnal_bimbingan';
-    protected $allowedFields = ['mahasiswa_id', 'jam', 'tanggal', 'catatan', 'pkl_id', 'status'];
+    protected $allowedFields = ['mahasiswa_id', 'tanggal', 'catatan', 'pkl_id', 'status'];
 
 
     // Mengambil data jurnal bimbingan beserta data mahasiswa dan pkl terkait

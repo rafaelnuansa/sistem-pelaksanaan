@@ -4,7 +4,6 @@ namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
 use App\Models\DosenModel;
-use App\Models\InstansiModel;
 use App\Models\MahasiswaModel;
 use App\Models\PKLAnggotaModel;
 use App\Models\PKLModel;
@@ -27,10 +26,9 @@ class PKLController extends BaseController
     {
         $pklModel = new PKLModel();
         $pkls = $pklModel
-            ->select('pkl.*, dosen.nama AS nama_dosen, prodi.nama_prodi, instansi.nama_perusahaan')
+            ->select('pkl.*, dosen.nama AS nama_dosen, prodi.nama_prodi')
             ->join('dosen', 'dosen.id = pkl.dosen_id')
             ->join('prodi', 'prodi.id = pkl.prodi_id')
-            ->join('instansi', 'instansi.id = pkl.instansi_id')
             ->findAll();
 
         $mahasiswa = $this->mahasiswa->where('status_pkl', 'layak')->findAll();
@@ -73,14 +71,11 @@ class PKLController extends BaseController
         $prodiModel = new ProdiModel();
         $prodis = $prodiModel->findAll();
 
-        $instansiModel = new InstansiModel();
-        $instansis = $instansiModel->findAll();
 
         $data = [
             'title' => 'Tambah PKL',
             'dosens' => $dosens,
             'prodis' => $prodis,
-            'instansis' => $instansis
         ];
 
         return view('admin/pkl/create', $data);
@@ -97,7 +92,6 @@ class PKLController extends BaseController
             'tahun_akademik' => $this->request->getPost('tahun_akademik'),
             'dosen_id' => $this->request->getPost('dosen_id'),
             'prodi_id' => $this->request->getPost('prodi_id'),
-            'instansi_id' => $this->request->getPost('instansi_id')
         ];
 
         $pklModel->insert($data);
@@ -116,15 +110,11 @@ class PKLController extends BaseController
         $prodiModel = new ProdiModel();
         $prodis = $prodiModel->findAll();
 
-        $instansiModel = new InstansiModel();
-        $instansis = $instansiModel->findAll();
-
         $data = [
             'title' => 'Edit PKL',
             'pkl' => $pkl,
             'dosens' => $dosens,
             'prodis' => $prodis,
-            'instansis' => $instansis
         ];
 
         return view('admin/pkl/edit', $data);
@@ -142,7 +132,6 @@ class PKLController extends BaseController
             'tahun_akademik' => $this->request->getPost('tahun_akademik'),
             'dosen_id' => $this->request->getPost('dosen_id'),
             'prodi_id' => $this->request->getPost('prodi_id'),
-            'instansi_id' => $this->request->getPost('instansi_id')
         ];
 
         $pklModel->update($id, $data);

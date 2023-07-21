@@ -24,17 +24,6 @@
               <i class="fa fa-calendar"></i> <span>Jadwal Pengujian</span>
             </a>
           </li>
-
-          <li class="<?= (uri_string() == 'dosen/pkl/jadwal/bimbingan') ? 'active' : '' ?>">
-            <a href="<?= base_url('dosen/pkl/jadwal/bimbingan') ?>">
-              <i class="fa fa-calendar"></i> <span>Jadwal Uji Mhs Bimbingan</span>
-            </a>
-          </li>
-          <li class="<?= (uri_string() == 'dosen/pkl/penilaian/1') ? 'active' : '' ?>">
-            <a href="<?= base_url('dosen/pkl/penilaian/1') ?>">
-              <i class="fa fa-briefcase"></i> <span>Penilaian Ujian</span>
-            </a>
-          </li>
         </ul>
       </li>
 

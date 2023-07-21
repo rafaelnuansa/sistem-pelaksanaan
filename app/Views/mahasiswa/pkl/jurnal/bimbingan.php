@@ -32,7 +32,6 @@
             <tr>
               <th>No</th>
               <th>Hari/Tanggal</th>
-              <th>Jam</th>
               <th>Catatan Bimbingan</th>
               <th>Status</th>
               <th>Aksi</th>
@@ -43,7 +42,6 @@
               <tr>
                 <td><?= $no++ ?></td>
                 <td><?= $row['tanggal'] ?></td>
-                <td><?= $row['jam'] ?></td>
                 <td><?= $row['catatan'] ?></td>
                 <td><?= $row['status'] ?></td>
                 <td class="text-center">
@@ -74,12 +72,6 @@
           <form method="POST" action="<?= route_to('mahasiswa.pkl.jurnal.bimbingan.edit', $row['id_jurnal_bimbingan']); ?>">
 
             <div class="row mb-2">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="">Jam</label>
-                  <input type="time" class="form-control" name="jam" value="<?= $row['jam'] ?>">
-                </div>
-              </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="">Hari / Tanggal</label>
@@ -121,12 +113,6 @@
       <div class="modal-body">
         <form method="POST" action="<?= route_to('mahasiswa.pkl.jurnal.bimbingan.store') ?>" enctype="multipart/form-data">
           <div class="row mb-2">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="">Jam</label>
-                <input type="time" class="form-control" name="jam">
-              </div>
-            </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="">Hari / Tanggal</label>

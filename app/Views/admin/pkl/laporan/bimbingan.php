@@ -90,8 +90,6 @@
                         <th>Nama Mahasiswa</th>
                         <th>Dosen</th>
                         <th>Tanggal</th>
-                        <th>Jam</th>
-                        <!-- Tambahkan kolom lain yang diperlukan -->
                     </tr>
                 </thead>
                 <tbody>
@@ -103,8 +101,6 @@
                             <td><?= $row['nama_mahasiswa'] ?></td>
                             <td><?= $row['nama_dosen'] ?></td>
                             <td><?= $row['tanggal'] ?></td>
-                            <td><?= $row['jam'] ?></td>
-                            <!-- Tambahkan data lainnya sesuai dengan kolom yang ditambahkan -->
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

@@ -46,7 +46,6 @@ class PKLJurnalBimbinganController extends BaseController
     {
         $data = [
             'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
-            'jam' => $this->request->getPost('jam'),
             'tanggal' => $this->request->getPost('tanggal'),
             'catatan' => $this->request->getPost('catatan'),
             'pkl_id' => $this->request->getPost('pkl_id'),
@@ -72,7 +71,6 @@ class PKLJurnalBimbinganController extends BaseController
     {
         $data = [
             'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
-            'jam' => $this->request->getPost('jam'),
             'tanggal' => $this->request->getPost('tanggal'),
             'catatan' => $this->request->getPost('catatan'),
             'pkl_id' => $this->request->getPost('pkl_id'),

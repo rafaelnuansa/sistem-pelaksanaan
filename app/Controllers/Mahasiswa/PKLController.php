@@ -52,18 +52,14 @@ class PKLController extends BaseController
                 ->get()
                 ->getResultArray();
 
-            $idInstansi = $getKelompok->instansi_id;
-            $instansiList = $this->InstansiModel->findAll();
-            $instansi = $this->InstansiModel->find($idInstansi);
             // dd($getKelompok);
             $data = [
                 'title' => 'Kelompok PKL ',
                 'anggota' => $anggota,
-                'nama_kelompok' =>  $getKelompok->nama_kelompok,
-                'instansi' => $instansi,
-                'instansi_list' => $instansiList,
                 'akun' => $akun,
+                'nama_kelompok' =>  $getKelompok->nama_kelompok,
                 'is_ketua' => $is_ketua,
+                'kelompok' => $getKelompok,
             ];
         } else {
             // Tindakan yang diambil jika kelompokId tidak ada atau belum punya kelompok
@@ -116,50 +112,20 @@ class PKLController extends BaseController
         return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan');
     }
 
-    public function simpan_instansi()
-    {
-        $instansiModel = new InstansiModel();
-        $instansiId = $this->request->getPost('instansi_id');
-
-        if ($instansiId) {
-            // Jika mengisi form yang select
-            $this->PKLModel->updateInstansiId($instansiId, $this->kelompokId);
-        } else {
-            // Jika mengisi form yang freetext
-            $data = [
-                'nama_perusahaan' => $this->request->getPost('nama_perusahaan'),
-                'alamat' => $this->request->getPost('alamat'),
-                'pembimbing_lapangan' => $this->request->getPost('pembimbing_lapangan'),
-                'no_pembimbing_lapangan' => $this->request->getPost('no_pembimbing_lapangan'),
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ];
-            $instansiModel->insert($data);
-
-            $instansiId = $instansiModel->getInsertID();
-
-            $this->PKLModel->updateInstansiId($instansiId, $this->kelompokId);
-        }
-        return redirect()->to('/mahasiswa/pkl');
-        // Lakukan tindakan sesuai kebutuhan aplikasi Anda setelah memilih atau menyimpan instansi
-        // Redirect atau tampilkan pesan sukses, dll.
-    }
-
     public function edit_instansi()
     {
-        $instansiModel = new InstansiModel();
-        $instansiId = $this->request->getVar('instansi_id');
+        $PKLModel = new PKLModel();
+        $kelompokId = $this->request->getVar('kelompok_id');
 
         // Jika mengisi form yang freetext
         $data = [
             'nama_perusahaan' => $this->request->getPost('nama_perusahaan'),
-            'alamat' => $this->request->getPost('alamat'),
-            'pembimbing_lapangan' => $this->request->getPost('pembimbing_lapangan'),
-            'no_pembimbing_lapangan' => $this->request->getPost('no_pembimbing_lapangan'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'alamat_perusahaan' => $this->request->getPost('alamat_perusahaan'),
+            'bimbingan_perusahaan' => $this->request->getPost('bimbingan_perusahaan'),
+            'no_perusahaan' => $this->request->getPost('no_perusahaan'),
+            'jabatan_bimbingan_perusahaan' => $this->request->getPost('jabatan_bimbingan_perusahaan'),
         ];
-
-        $instansiModel->update($instansiId, $data);
+        $PKLModel->update($kelompokId, $data);
         return redirect()->to('/mahasiswa/pkl');
         // Lakukan tindakan sesuai kebutuhan aplikasi Anda setelah mengedit instansi
         // Redirect atau tampilkan pesan sukses, dll.
@@ -224,7 +190,6 @@ class PKLController extends BaseController
     {
 
         $data = [
-            'jam' => $this->request->getVar('jam'),
             'tanggal' => $this->request->getVar('tanggal'),
             'nama_mhs' => session()->get('nama'),
             'catatan' => $this->request->getVar('keterangan'),

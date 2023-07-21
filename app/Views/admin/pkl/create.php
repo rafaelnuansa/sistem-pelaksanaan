@@ -50,16 +50,6 @@
                                 </select>
                             </div>
 
-                            <div class="form-group">
-                                <label for="instansi_id">Instansi</label>
-                                <select name="instansi_id" class="form-control" required>
-                                    <option value="">Pilih Instansi</option>
-                                    <?php foreach ($instansis as $instansi) : ?>
-                                        <option value="<?= $instansi['id']; ?>"><?= $instansi['nama_perusahaan']; ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-
                             <button type="submit" class="btn btn-primary">Simpan</button>
                         </form>
                     </div>

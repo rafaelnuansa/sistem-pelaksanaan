@@ -20,10 +20,9 @@ class KKNController extends BaseController
     {
         $pklModel = new PKLModel();
         $pkls = $pklModel
-            ->select('pkl.*, dosen.nama AS nama_dosen, prodi.nama_prodi, instansi.nama_perusahaan')
+            ->select('pkl.*, dosen.nama AS nama_dosen, prodi.nama_prodi')
             ->join('dosen', 'dosen.id = pkl.dosen_id')
             ->join('prodi', 'prodi.id = pkl.prodi_id')
-            ->join('instansi', 'instansi.id = pkl.instansi_id')
             ->findAll();
 
         $mahasiswa = $this->mahasiswa->where('status_pkl', 'layak')->findAll();
