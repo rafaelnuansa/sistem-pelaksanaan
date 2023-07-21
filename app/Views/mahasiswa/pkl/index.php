@@ -65,7 +65,7 @@
             </td>
           </tr>
           <tr>
-            <th>Alamat Perusahaan</th>
+            <th>Alamat</th>
             <td>
               <?php if ($is_ketua) : ?>
                 <input type="text" class="form-control" name="alamat_perusahaan" value="<?= $kelompok->alamat_perusahaan ?>">
@@ -75,7 +75,7 @@
             </td>
           </tr>
           <tr>
-            <th>Bimbingan Perusahaan</th>
+            <th>Nama Pembimbing</th>
             <td> <?php if ($is_ketua) : ?>
                 <input type="text" class="form-control" name="bimbingan_perusahaan" value="<?= $kelompok->alamat_perusahaan ?>">
               <?php else :; ?>
@@ -84,7 +84,7 @@
             </td>
           </tr>
           <tr>
-            <th>Jabatan Bimbingan Perusahaan</th>
+            <th>Jabatan</th>
             <td>
             <?php if ($is_ketua) : ?>
               <input type="text" class="form-control" name="jabatan_bimbingan_perusahaan" value="<?= $kelompok->jabatan_bimbingan_perusahaan ?>">
@@ -94,7 +94,7 @@
             </td>
           </tr>
           <tr>
-            <th>Nomor Perusahaan</th>
+            <th>Nomor Telpon Pembimbing</th>
             <td>
             <?php if ($is_ketua) : ?>
               <input type="number" class="form-control" name="no_perusahaan" value="<?= $kelompok->no_perusahaan ?>">

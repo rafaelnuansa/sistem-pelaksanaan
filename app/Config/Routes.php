@@ -180,6 +180,8 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
     $routes->get('pkl/formulir/log-harian', 'PKLFormulirController::log_harian');
     $routes->get('pkl/jadwal', 'PKLJadwalController::index', ['as' => 'mahasiswa.pkl.jadwal.index']);
     $routes->post('pkl/jadwal/daftar', 'PKLJadwalController::daftar', ['as' => 'mahasiswa.pkl.jadwal.daftar']);
+    
+    $routes->get('pkl/penilaian/cetak/(:segment)', 'PKLController::cetak/$1');
 });
 
 

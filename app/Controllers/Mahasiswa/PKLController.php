@@ -144,7 +144,7 @@ class PKLController extends BaseController
 
         return redirect()->to('/mahasiswa/pkl/jurnal/pelaksanaan');
     }
-
+ 
     public function unapprove2($id)
     {
         $data = $this->PKLJurnalBimbinganModel->find($id);
@@ -221,5 +221,42 @@ class PKLController extends BaseController
 
         // output the generated pdf
         return $this->pdf->stream('Log Harian', array("Attachment" => false));
+    }
+
+    public function cetak($id)
+    {
+        // Fetch the data from the database based on the $id
+        // $data = $PKLJadwalModel->find($id);
+        $data = $this->db->table('pkl_jadwal_sidang')
+        ->select('pkl_jadwal_sidang.*, pkl_judul_laporan.*, fakultas.nama as fakultas, pkl.tahun_akademik as tahun_akademik, prodi.nama_prodi as prodi, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan , dosen.nidn as nidn, dosen.nama as nama, mahasiswa.nama as nama_mahasiswa, dosen.nama as dospeng, tempat_sidang.nama_tempat as tempat_nama')
+        ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
+        ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
+        ->join('dosen_pembimbing', 'dosen_pembimbing.mahasiswa_id = mahasiswa.id', 'left')
+        ->join('dosen', 'dosen.id = pkl_jadwal_sidang.dospeng_id', 'left')
+        ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
+        ->join('fakultas', 'fakultas.id = prodi.fakultas_id', 'left')
+        ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id', 'left')
+        ->join('pkl', 'pkl_anggota.pkl_id = pkl.id', 'left')
+        ->join('pkl_judul_laporan', 'pkl_judul_laporan.mahasiswa_id = mahasiswa.id', 'left')
+        ->where('pkl_jadwal_sidang.id_pkl_jadwal_sidang', $id)
+        ->get()
+        ->getRow();
+        // dd($data);
+        // If the data is not found, you can handle the error or redirect to an error page
+        if (!$data) {
+            return redirect()->to('/error_page');
+        }
+
+        // load HTML content
+        $this->pdf->loadHtml(view('pdf/penilaian_pkl', ['data' => $data]));
+    
+        // (optional) setup the paper size and orientation
+        $this->pdf->setPaper('A4');
+    
+        // render html as PDF
+        $this->pdf->render();
+    
+        // output the generated pdf
+        return $this->pdf->stream('Laporan', array("Attachment" => false));
     }
 }

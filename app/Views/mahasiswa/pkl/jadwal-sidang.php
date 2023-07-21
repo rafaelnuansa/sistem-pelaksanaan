@@ -16,37 +16,53 @@
 
   </div>
   <div class="box-body">
-      <?php if ($persyaratan) :; ?>
-        <div class="py-2">
-          <button class="btn btn-primary daftar" style="margin-bottom:20px;">Edit/Lengkapi Persyaratan</button>
-        </div>
-      <?php else : ?>
+    <?php if ($persyaratan) :; ?>
+      <div class="py-2">
+        <button class="btn btn-primary daftar" style="margin-bottom:20px;">Edit/Lengkapi Persyaratan</button>
+      </div>
+    <?php else : ?>
 
-        <div class="py-2">
-          <button class="btn btn-primary daftar" style="margin-bottom:20px;">Daftar Ujian PKL</button>
-        </div>
-      <?php endif; ?>
+      <div class="py-2">
+        <button class="btn btn-primary daftar" style="margin-bottom:20px;">Daftar Ujian PKL</button>
+      </div>
+    <?php endif; ?>
 
-      <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
-        <thead>
+    <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>NIM</th>
+          <th>Nama Mahasiswa</th>
+          <th>Tempat</th>
+          <th>Nilai</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($data as $row) : ?>
           <tr>
-            <th>Tanggal</th>
-            <th>NIM</th>
-            <th>Nama Mahasiswa</th>
-            <th>Tempat</th>
+            <td><?= $row['tanggal'] ?></td>
+            <td><?= $row['nim'] ?></td>
+            <td><?= $row['nama_mahasiswa'] ?></td>
+            <td><?= $row['tempat_nama'] ?></td>
+            <td> 
+              <?php if($row['total_nilai']):;?>
+              <a href="<?= base_url('mahasiswa/pkl/penilaian/cetak/' . $row['id_pkl_jadwal_sidang']) ?>" class="btn btn-success btn-sm" target="_blank">
+                Cetak
+              </a>
+              <?php else:?>
+                Belum Ada Nilai
+              <?php endif;?>
+            </td>
+            <td>
+              <span class="label <?= $row['status'] ? 'bg-primary' : 'bg-dark' ?>">
+                <?= $row['status'] ? 'Sudah Melaksanakan' : 'Belum Melaksanakan' ?>
+              </span>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          <?php foreach ($data as $row) : ?>
-            <tr>
-              <td><?= $row['tanggal'] ?></td>
-              <td><?= $row['nim'] ?></td>
-              <td><?= $row['nama_mahasiswa'] ?></td>
-              <td><?= $row['tempat_nama'] ?></td>
-            </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
   </div>
 </div>
 

@@ -46,7 +46,7 @@ $this->extend('layouts/default');
         </a>
               </td>
               <td>
-                <span class="label <?= $row['status'] ? 'bg-primary' : 'bg-warning' ?>">
+                <span class="label <?= $row['status'] ? 'bg-primary' : 'bg-dark' ?>">
                   <?= $row['status'] ? 'Sudah Melaksanakan' : 'Belum Melaksanakan' ?>
                 </span>
               </td>
