@@ -85,10 +85,11 @@ class PKLJurnalBimbinganModel extends Model
     
     public function getMahasiswaBimbingan($dosen_id)
     {
-        $query = $this->select('pkl_jurnal_bimbingan.*, mahasiswa.*, pkl.*, mahasiswa.nama as nama_mahasiswa')
+        $query = $this->select('pkl_jurnal_bimbingan.*, prodi.nama_prodi as nama_prodi, mahasiswa.*, pkl.*, mahasiswa.nama as nama_mahasiswa')
             ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_bimbingan.mahasiswa_id')
             ->join('pkl', 'pkl.id = pkl_jurnal_bimbingan.pkl_id')
             ->join('dosen_pembimbing', 'dosen_pembimbing.dosen_id = pkl.dosen_id')
+            ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
             ->where('dosen_pembimbing.dosen_id', $dosen_id)
             ->groupBy('mahasiswa.id')
             ->get();
