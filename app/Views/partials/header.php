@@ -16,18 +16,85 @@
     <div class="navbar-custom-menu">
       <ul class="nav navbar-nav">
         <!-- User Account: style can be found in dropdown.less -->
+        <style>
+          /* Avatar Inisial */
+          .user-initials,
+          .user-initials-large {
+            background-color: #3f454b;
+            color: #fff;
+            font-size: 10px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 20px;
+            border-radius: 50%;
+          }
+
+          .user-initials-large {
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+          }
+
+          /* Tata Letak Avatar dan Nama */
+          .user-menu {
+            display: flex;
+            align-items: center;
+          }
+
+          .user-info {
+            margin-left: 10px;
+          }
+          .navbar-nav>.user-menu>.dropdown-menu>li.user-header {
+            height: auto!important;
+            display: flex;
+            justify-content: center;
+          }
+          .navbar-nav>.user-menu>.dropdown-menu>li.user-header>p {
+            margin-top:0;
+            margin-left: 10px;
+          }
+          .user-info p {
+            margin: 0;
+          }
+
+          .user-info small {
+            font-size: 12px;
+            color: #737373;
+          }
+        </style>
+
         <li class="dropdown user user-menu">
+          <?php
+          $nama = session()->get('nama');
+          $nama_array = explode(' ', $nama);
+          $nama_initials = '';
+          foreach ($nama_array as $nama_part) {
+            $nama_initials .= $nama_part[0];
+          }
+          $nama_initials = strtoupper($nama_initials);
+          ?>
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <img src="<?= base_url('assets/img/user2-160x160.jpg') ?>" class="user-image" alt="User Image">
-            <span class="hidden-xs"><?= session()->get('nama'); ?></span>
+            <div class="user-menu">
+              <div class="user-initials">
+                <?= $nama_initials; ?>
+              </div>
+              <div class="user-info">
+                <p><?= $nama; ?></p>
+              </div>
+            </div>
           </a>
           <ul class="dropdown-menu">
-            <!-- User image -->
+            <!-- User initials -->
             <li class="user-header">
-              <img src="<?= base_url('assets/img/user2-160x160.jpg') ?>" class="img-circle" alt="User Image">
+              <div class="user-initials-large">
+                <?= $nama_initials; ?>
+              </div>
 
               <p>
-                <?= session()->get('nama'); ?>
+                <?= $nama; ?>
                 <small><?= session()->get('level'); ?></small>
               </p>
             </li>
@@ -39,6 +106,8 @@
             </li>
           </ul>
         </li>
+
+
       </ul>
     </div>
   </nav>
