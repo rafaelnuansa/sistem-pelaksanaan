@@ -166,6 +166,13 @@
           </li>
         </ul>
       </li>
+
+      
+      <li class="<?= (uri_string() == 'admin/berkas') ? 'active' : '' ?>">
+        <a href="<?= base_url('admin/berkas') ?>">
+          <i class="fa fa-file"></i> <span>Berkas</span>
+        </a>
+      </li>
     </ul>
   </section>
   <!-- /.sidebar -->

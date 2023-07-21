@@ -77,7 +77,7 @@
           <tr>
             <th>Nama Pembimbing</th>
             <td> <?php if ($is_ketua) : ?>
-                <input type="text" class="form-control" name="bimbingan_perusahaan" value="<?= $kelompok->alamat_perusahaan ?>">
+                <input type="text" class="form-control" name="bimbingan_perusahaan" value="<?= $kelompok->bimbingan_perusahaan ?>">
               <?php else :; ?>
               <?= $kelompok->bimbingan_perusahaan ?>
               <?php endif; ?>

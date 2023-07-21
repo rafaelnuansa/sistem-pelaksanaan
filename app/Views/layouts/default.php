@@ -95,7 +95,6 @@
   $(document).ajaxStart(function() { Pace.restart(); });
 </script>
 <script>
-
   $(document).ready(function () {
     $('.sidebar-menu').tree()
   })

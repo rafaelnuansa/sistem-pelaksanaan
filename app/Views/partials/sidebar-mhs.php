@@ -78,6 +78,7 @@
               <i class="fa fa-briefcase"></i> <span>Jurnal Bimbingan</span>
             </a>
           </li>
+          
           <li class="<?= (uri_string() == 'laporan') ? 'active' : '' ?>">
             <a href="<?= base_url('laporan') ?>">
               <i class="fa fa-calendar"></i> <span>Jadwal Sidang</span>
@@ -86,8 +87,8 @@
         </ul>
       </li>
 
-      <li class="<?= (uri_string() == 'mahasiswa/upload-berkas') ? 'active' : '' ?>">
-        <a href="<?= base_url('mahasiswa/upload-berkas') ?>">
+      <li class="<?= (uri_string() == 'mahasiswa/berkas') ? 'active' : '' ?>">
+        <a href="<?= base_url('mahasiswa/berkas') ?>">
           <i class="fa fa-briefcase"></i> <span>Upload Berkas</span>
         </a>
       </li>

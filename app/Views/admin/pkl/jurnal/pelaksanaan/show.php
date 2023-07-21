@@ -18,7 +18,6 @@
                         <th>Hari</th>
                         <th>Jam</th>
                         <th>Keterangan</th>
-                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,7 +28,6 @@
                         <td><?= $jurnal['hari'] ?></td>
                         <td><?= $jurnal['jam'] ?></td>
                         <td><?= $jurnal['keterangan'] ?></td>
-                        <td><?= $jurnal['status'] ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>

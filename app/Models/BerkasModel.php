@@ -13,6 +13,7 @@ class BerkasModel extends Model
         'nama_file',
         'jenis',
         'keterangan',
-        'tanggal'
+        'tanggal',
+        'mahasiswa_id'
     ];
 }

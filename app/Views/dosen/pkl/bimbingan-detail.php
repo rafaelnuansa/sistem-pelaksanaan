@@ -23,7 +23,6 @@
                 <tr>
                     <th>No</th>
                     <th>Hari/Tanggal</th>
-                    <th>Jam</th>
                     <th>Status</th>
                     <th>Keterangan</th>
                     <th>Validasi</th>
@@ -34,7 +33,6 @@
                     <tr>
                         <td><?= ++$index ?></td>
                         <td><?= $row['tanggal'] ?></td>
-                        <td><?= $row['jam'] ?></td>
                         <td><?= $row['catatan'] ?></td>
                         <td><?= $row['status'] ?></td>
                         <td> <?php if ($row['status'] == 'Pending') : ?>

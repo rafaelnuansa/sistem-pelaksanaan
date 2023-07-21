@@ -203,34 +203,6 @@
     </div>
     <!-- /.col -->
     <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="small-box bg-red">
-        <div class="inner">
-          <h3><?= $dosenCount ?></h3>
-
-          <p>Dosen Pembimbing</p>
-        </div>
-        <div class="icon">
-          <i class="ion ion-person-stalker"></i>
-        </div>
-        <a href="<?= base_url('dosen_pembimbing') ?>" class="small-box-footer">Info Lengkap <i class="fa fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- /.col -->
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="small-box bg-red">
-        <div class="inner">
-          <h3>1</h3>
-
-          <p>Dosen Penguji</p>
-        </div>
-        <div class="icon">
-          <i class="ion ion-person-stalker"></i>
-        </div>
-        <a href="#" class="small-box-footer">Info Lengkap <i class="fa fa-arrow-circle-right"></i></a>
-      </div>
-    </div>
-    <!-- /.col -->
-    <div class="col-md-3 col-sm-6 col-xs-12">
       <div class="small-box bg-purple">
         <div class="inner">
           <h3>5</h3>

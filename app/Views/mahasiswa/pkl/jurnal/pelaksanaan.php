@@ -33,8 +33,7 @@
             <th>Hari/Tanggal</th>
             <th>Jam</th>
             <th>Keterangan Kegiatan PKL</th>
-            <th>Status</th>
-            <th></th>
+            <th>Aksi</th>
           </tr>
         </thead>
         <tbody>
@@ -44,7 +43,6 @@
               <td><?= $row['hari'] ?></td>
               <td><?= $row['jam'] ?></td>
               <td><?= $row['keterangan'] ?></td>
-              <td><?= $row['status'] ?></td>
               <td class="text-center">
                 <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-edit-<?= $row['id_jurnal_pelaksanaan'] ?>">Edit</a>
                 <a href="<?= route_to('mahasiswa.pkl.jurnal.pelaksanaan.delete', $row['id_jurnal_pelaksanaan']); ?>" class="btn btn-primary btn-sm">Hapus</a>

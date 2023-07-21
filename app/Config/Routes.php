@@ -83,7 +83,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->get('pkl/edit/(:num)', 'PklController::edit/$1', ['as' => 'admin.pkl.edit']);
     $routes->post('pkl/update/(:num)', 'PklController::update/$1', ['as' => 'admin.pkl.update']);
     $routes->get('pkl/delete/(:num)', 'PklController::delete/$1', ['as' => 'admin.pkl.delete']);
-    
+
     // Rute untuk assign anggota PKL
     $routes->get('pkl/anggota/(:num)', 'PKLController::assignAnggota/$1', ['as' => 'admin.pkl.assign_anggota']);
     $routes->get('pkl/anggota/tambah', 'PKLController::storeAnggota');
@@ -113,7 +113,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->post('pkl/jadwal/simpan', 'PKLJadwalSidangController::simpan', ['as' => 'admin.pkl.jadwal.simpan']);
     $routes->get('pkl/jadwal/detail', 'PKLJadwalSidangController::show');
     $routes->get('pkl/jadwal/update_status/(:num)/(:num)', 'PKLJadwalSidangController::update_status/$1/$2', ['as' => 'admin.pkl.jadwal.update_status']);
-  
+
     // PKL laporan
     $routes->get('pkl/laporan', 'PKLLaporanController::index', ['as' => 'admin.pkl.laporan.index']);
     $routes->get('pkl/laporan/cetak', 'PKLLaporanController::cetak', ['as' => 'admin.pkl.laporan.cetak']);
@@ -142,6 +142,20 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->get('dosen_pembimbing/edit/(:segment)', 'DosenPembimbingController::edit/$1', ['as' => 'admin.dosen_pembimbing.edit']);
     $routes->post('dosen_pembimbing/update/(:segment)', 'DosenPembimbingController::update/$1', ['as' => 'admin.dosen_pembimbing.update']);
     $routes->get('dosen_pembimbing/delete/(:segment)', 'DosenPembimbingController::delete/$1', ['as' => 'admin.dosen_pembimbing.delete']);
+
+    
+    // Menampilkan daftar berkas (index)
+    $routes->get('berkas', 'BerkasController::index');
+    // Menampilkan form tambah berkas (create)
+    $routes->get('berkas/create', 'BerkasController::create');
+    // Menyimpan data berkas setelah proses upload (store)
+    $routes->post('berkas', 'BerkasController::store');
+    // Menampilkan form edit berkas (edit)
+    $routes->get('berkas/edit/(:num)', 'BerkasController::edit/$1');
+    // Update data berkas (update)
+    $routes->post('berkas/update', 'BerkasController::update');
+    // Hapus data berkas (delete)
+    $routes->delete('berkas/(:num)', 'BerkasController::delete/$1');
 });
 
 
@@ -180,8 +194,21 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
     $routes->get('pkl/formulir/log-harian', 'PKLFormulirController::log_harian');
     $routes->get('pkl/jadwal', 'PKLJadwalController::index', ['as' => 'mahasiswa.pkl.jadwal.index']);
     $routes->post('pkl/jadwal/daftar', 'PKLJadwalController::daftar', ['as' => 'mahasiswa.pkl.jadwal.daftar']);
-    
+
     $routes->get('pkl/penilaian/cetak/(:segment)', 'PKLController::cetak/$1');
+
+    // Menampilkan daftar berkas (index)
+    $routes->get('berkas', 'BerkasController::index');
+    // Menampilkan form tambah berkas (create)
+    $routes->get('berkas/create', 'BerkasController::create');
+    // Menyimpan data berkas setelah proses upload (store)
+    $routes->post('berkas', 'BerkasController::store');
+    // Menampilkan form edit berkas (edit)
+    $routes->get('berkas/edit/(:num)', 'BerkasController::edit/$1');
+    // Update data berkas (update)
+    $routes->post('berkas/update', 'BerkasController::update');
+    // Hapus data berkas (delete)
+    $routes->delete('berkas/(:num)', 'BerkasController::delete/$1');
 });
 
 
@@ -203,7 +230,6 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'au
     $routes->post('pkl/revisi/cetak', 'PKLController::cetak_revisi');
     $routes->get('pkl/penilaian/2', 'PKLController::penilaian2');
     $routes->get('pkl/jadwal/update_status/(:num)/(:num)', 'PKLController::update_status_jadwal/$1/$2', ['as' => 'dosen.pkl.jadwal.update_status']);
-  
 });
 
 

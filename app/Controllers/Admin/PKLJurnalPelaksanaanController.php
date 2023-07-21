@@ -39,7 +39,6 @@ class PKLJurnalPelaksanaanController extends BaseController
         return view('admin/pkl/jurnal/pelaksanaan/show', $data);
     }
     
-
     public function create()
     {
         return view('admin/pkl/jurnal/pelaksanaan/create');
@@ -53,7 +52,6 @@ class PKLJurnalPelaksanaanController extends BaseController
             'hari' => $this->request->getPost('hari'),
             'keterangan' => $this->request->getPost('keterangan'),
             'pkl_id' => $this->request->getPost('pkl_id'),
-            'status' => $this->request->getPost('status'),
         ];
 
         $this->jurnalModel->insert($data);
@@ -79,7 +77,6 @@ class PKLJurnalPelaksanaanController extends BaseController
             'hari' => $this->request->getPost('hari'),
             'keterangan' => $this->request->getPost('keterangan'),
             'pkl_id' => $this->request->getPost('pkl_id'),
-            'status' => $this->request->getPost('status'),
         ];
 
         $this->jurnalModel->update($id, $data);

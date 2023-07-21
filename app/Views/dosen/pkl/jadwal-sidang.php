@@ -27,7 +27,8 @@ $this->extend('layouts/default');
           </tr>
         </thead>
         <tbody>
-          <?php $no = 1; foreach ($data as $row) : ?>
+          <?php $no = 1;
+          foreach ($data as $row) : ?>
             <tr>
               <td><?= $no++ ?></td>
               <td><?= $row['nim'] ?></td>
@@ -41,9 +42,9 @@ $this->extend('layouts/default');
                 </button>
               </td>
               <td>
-              <a href="<?= base_url('dosen/pkl/penilaian/cetak/' . $row['id_pkl_jadwal_sidang']) ?>" class="btn btn-success btn-sm" target="_blank">
-          Cetak
-        </a>
+                <a href="<?= base_url('dosen/pkl/penilaian/cetak/' . $row['id_pkl_jadwal_sidang']) ?>" class="btn btn-success btn-sm" target="_blank">
+                  Cetak
+                </a>
               </td>
               <td>
                 <span class="label <?= $row['status'] ? 'bg-primary' : 'bg-dark' ?>">
@@ -62,14 +63,14 @@ $this->extend('layouts/default');
 <div class="modal fade" id="nilaiModal" tabindex="-1" role="dialog" aria-labelledby="nilaiModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      
+
       <form method="POST" action="<?= base_url('dosen/pkl/penilaian/nilai') ?>">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title">Formulir penilaian</h4>
         </div>
-        
+
         <input type="hidden" name="id_pkl_jadwal_sidang" id="id_pkl_jadwal_sidang">
         <div class="modal-body" style="height: 200px;">
           <div class="row mb-2">
@@ -89,7 +90,7 @@ $this->extend('layouts/default');
                     <td><b>Sikap/Penampilan Penyaji</b></td>
                     <td>10</td>
                     <td>
-                      <input type="text" class="form-control" name="nilai_sikap"  id="nilai_sikap">
+                      <input type="text" class="form-control" name="nilai_sikap" id="nilai_sikap">
                     </td>
                   </tr>
                   <tr>

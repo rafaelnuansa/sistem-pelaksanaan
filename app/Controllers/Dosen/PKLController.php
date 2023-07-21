@@ -36,9 +36,6 @@ class PKLController extends BaseController
             'title' => 'Validasi Bimbingan',
             'data' => $mahasiswaBimbingan
         ];
- 
-        // dd($mahasiswaBimbingan);
-
         return view('dosen/pkl/bimbingan', $data);
     }
 
