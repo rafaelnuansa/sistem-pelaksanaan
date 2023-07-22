@@ -202,11 +202,10 @@
       </div>
     </div>
     <!-- /.col -->
-    <div class="col-md-3 col-sm-6 col-xs-12">
+    <iv class="col-md-3 col-sm-6 col-xs-12">
       <div class="small-box bg-purple">
         <div class="inner">
           <h3>5</h3>
-
           <p>Cetak Laporan</p>
         </div>
         <div class="icon">
@@ -214,7 +213,7 @@
         </div>
         <a href="<?= route_to('admin.pkl.laporan.index') ?>" class="small-box-footer">Info Lengkap <i class="fa fa-arrow-circle-right"></i></a>
       </div>
-    </div>
+    </iv>
     <!-- /.col -->
   </div>
 </div>
