@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PKLModel extends Model
+class KKNModel extends Model
 {
     protected $table = 'kkn';
     protected $primaryKey = 'id';

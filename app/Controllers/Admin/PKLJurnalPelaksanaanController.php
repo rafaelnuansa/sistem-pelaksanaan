@@ -29,8 +29,9 @@ class PKLJurnalPelaksanaanController extends BaseController
     }
 
     public function show($id)
-    {
+    { 
         $jurnal = $this->jurnalModel->getJurnalPelaksanaanByIdMahasiswa($id);
+        
         $data = [
             'title' => 'Jurnal Pelaksanaan',
             'jurnals' => $jurnal

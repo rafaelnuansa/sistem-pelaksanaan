@@ -1,11 +1,15 @@
 <?= $this->extend('layouts/default'); ?>
 
 <?= $this->section('content'); ?>
-<div class="container-fluid">
+
+
+<!-- Main content -->
+<section class="content">
+
 <!-- Default box -->
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">Daftar Jurnal Pelaksanaan</h3>
+        <h3 class="box-title">Daftar Jurnal Bimbingan</h3>
     </div>
     <div class="box-body">
         <?php if (session()->getFlashData('success') !== null) : ?>
@@ -14,13 +18,13 @@
 
         <?php if (session()->getFlashData('error') !== null) : ?>
             <div class="alert alert-danger"><?= session()->getFlashData('error') ?></div>
-        <?php endif; ?>
+        <?php endif; ?> 
 
-        <!-- <a href="<?= route_to('admin.jurnal.pelaksanaan.create') ?>" class="btn btn-primary mb-3">Tambah Jurnal Pelaksanaan</a> -->
+        <!-- <a href="<?= route_to('admin.jurnal.bimbingan.create') ?>" class="btn btn-primary mb-3">Tambah Jurnal Bimbingan</a> -->
 
         <div class="table-responsive">
             
-        <table class="table table-bordered datatable" id="mahasiswa">
+        <table class="table table-bordered" id="mahasiswa">
             <thead>
                 <tr>
                     <th>No</th>
@@ -41,25 +45,30 @@
                         <td><?= $mhs['nama_prodi'] ?></td>
                         <td><?= $mhs['nama_kelompok'] ?></td>
                         <td><?= $mhs['nama_perusahaan'] ?></td>
-                        <td> 
-                            <a href="<?= route_to('admin.jurnal.pelaksanaan.show', $mhs['mhs_id']) ?>" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></a>
-                            <!-- <a href="<?= route_to('admin.jurnal.pelaksanaan.delete', $mhs['id']) ?>" class="btn btn-xs btn-danger">Hapus</a> -->
+                        <td>
+                            <a href="<?= route_to('admin.jurnal.bimbingan.show', $mhs['id']) ?>" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></a>
+                            <!-- <a href="<?= route_to('admin.jurnal.bimbingan.delete', $mhs['id']) ?>" class="btn btn-xs btn-danger">Hapus</a> -->
                         </td>
                     </tr>
                 <?php endforeach; ?>
+
             </tbody>
         </table>
         </div>
     </div>
 </div>
 <!-- /.box -->
-</div>
-
+</section>
 <?= $this->endSection(); ?>
 
 
 <?= $this->section('script'); ?>
 <script src="<?= base_url('bower_components/datatables.net/js/jquery.dataTables.min.js') ?>"></script>
 <script src="<?= base_url('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') ?>"></script>
+<script>
+  $('#mahasiswa').DataTable({
+    "pageLength": 10
+  });
 
+</script>
 <?= $this->endSection(); ?>

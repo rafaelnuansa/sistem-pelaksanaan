@@ -143,7 +143,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->post('dosen_pembimbing/update/(:segment)', 'DosenPembimbingController::update/$1', ['as' => 'admin.dosen_pembimbing.update']);
     $routes->get('dosen_pembimbing/delete/(:segment)', 'DosenPembimbingController::delete/$1', ['as' => 'admin.dosen_pembimbing.delete']);
 
-    
+
     // Menampilkan daftar berkas (index)
     $routes->get('berkas', 'BerkasController::index');
     // Menampilkan form tambah berkas (create)
@@ -156,6 +156,24 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->post('berkas/update', 'BerkasController::update');
     // Hapus data berkas (delete)
     $routes->delete('berkas/(:num)', 'BerkasController::delete/$1');
+
+
+    // Admin KKN 
+    $routes->get('kkn', 'KKNController::index', ['as' => 'admin.kkn.index']);
+    $routes->get('kkn/create', 'KKNController::create', ['as' => 'admin.kkn.create']);
+    $routes->post('kkn', 'KKNController::store', ['as' => 'admin.kkn.store']);
+    $routes->get('kkn/edit/(:num)', 'KKNController::edit/$1', ['as' => 'admin.kkn.edit']);
+    $routes->post('kkn/update/(:num)', 'KKNController::update/$1', ['as' => 'admin.kkn.update']);
+    $routes->get('kkn/delete/(:num)', 'KKNController::delete/$1', ['as' => 'admin.kkn.delete']);
+    
+    // Admin KKN Jurnal Pelaksanaan
+    $routes->get('kkn/jurnal/pelaksanaan', 'KKNJurnalPelaksanaanController::index', ['as' => 'admin.kkn.jurnal.pelaksanaan.index']);
+    $routes->get('kkn/jurnal/pelaksanaan/create', 'KKNJurnalPelaksanaanController::create', ['as' => 'admin.kkn.jurnal.pelaksanaan.create']);
+    $routes->post('kkn/jurnal/pelaksanaan', 'KKNJurnalPelaksanaanController::store', ['as' => 'admin.kkn.jurnal.pelaksanaan.store']);
+    $routes->get('kkn/jurnal/pelaksanaan/edit/(:num)', 'KKNJurnalPelaksanaanController::edit/$1', ['as' => 'admin.kkn.jurnal.pelaksanaan.edit']);
+    $routes->post('kkn/jurnal/pelaksanaan/update/(:num)', 'KKNJurnalPelaksanaanController::update/$1', ['as' => 'admin.kkn.jurnal.pelaksanaan.update']);
+    $routes->get('kkn/jurnal/pelaksanaan/show/(:num)', 'KKNJurnalPelaksanaanController::show/$1', ['as' => 'admin.kkn.jurnal.pelaksanaan.show']);
+    $routes->get('kkn/jurnal/pelaksanaan/delete/(:num)', 'KKNJurnalPelaksanaanController::delete/$1', ['as' => 'admin.kkn.jurnal.pelaksanaan.delete']);
 });
 
 

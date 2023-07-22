@@ -25,14 +25,12 @@
         <tbody>
           <?php $nomor = 1; ?>
           <?php foreach ($anggota as $key => $row) : ?>
-            <?php if ($row['status_pkl'] == 'layak') : ?>
               <tr>
                 <td><?= $nomor++ ?></td>
                 <td><?= $row['nim'] ?></td>
                 <td><?= $row['nama'] ?></td>
                 <td><?= $row['is_ketua'] == true ? 'Ketua' : 'Anggota' ?></td>
               </tr>
-            <?php endif; ?>
           <?php endforeach; ?>
         </tbody>
       </table>

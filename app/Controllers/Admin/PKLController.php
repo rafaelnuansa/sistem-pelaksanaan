@@ -31,7 +31,7 @@ class PKLController extends BaseController
             ->join('prodi', 'prodi.id = pkl.prodi_id')
             ->findAll();
 
-        $mahasiswa = $this->mahasiswa->where('status_pkl', 'layak')->findAll();
+        $mahasiswa = $this->mahasiswa->findAll();
 
         $kelompok_list = [];
 
