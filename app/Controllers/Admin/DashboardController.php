@@ -8,6 +8,7 @@ use App\Models\ProdiModel;
 use App\Models\MahasiswaModel;
 use App\Models\DosenModel;
 use App\Models\DosenPembimbingModel;
+use App\Models\KKNModel;
 use App\Models\PKLJadwalModel;
 use App\Models\PKLJurnalBimbinganModel;
 use App\Models\PKLModel;
@@ -31,8 +32,9 @@ class DashboardController extends BaseController
         $pkl = new PKLModel();
         $pklCount = $pkl->countAllResults();
 
-        $pklBimb = new DosenPembimbingModel();
-        $pklBimbCount = $pklBimb->countAllResults();
+        $pklBimb = new PKLModel();
+        $kknBimb = new KKNModel();
+        $pklBimbCount = $pklBimb->countAllResults() + $kknBimb->countAllResults();
         
         $pklJadwal = new PKLJadwalModel();
         $pklJadwalCount = $pklJadwal->countAllResults();

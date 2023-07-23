@@ -8,11 +8,12 @@
     <!-- Default box -->
     <div class="box">
         <div class="box-header with-border">
-            <h3 class="box-title">Jurnal Pelaksanaan Details</h3>
+ 
+        <h3 class="box-title">Jurnal Pelaksanaan <?php echo $mahasiswa->nama ?? '' ;?></h3>
         </div>
         <div class="box-body">
             <table class="table table-bordered" id="datatables">
-                <thead>
+                <thead class="bg-primary">
                     <tr>
                         <th>No</th>
                         <th>Hari</th>

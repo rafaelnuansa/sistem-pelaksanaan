@@ -29,7 +29,7 @@
 
                 <div class="box-body">
                     <table class="table table-striped datatable">
-                        <thead>
+                        <thead class="bg-primary">
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Nama Fakultas</th>

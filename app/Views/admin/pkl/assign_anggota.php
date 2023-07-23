@@ -46,7 +46,6 @@
 
                             <?php $nomor = 0; ?>
                             <?php foreach ($rows as $row) : ?>
-                                <?php if ($row['status_pkl'] == 'layak') : ?>
                                     <tr>
                                         <td><?= $row['id']; ?></td>
                                         <td><?= $row['tahun_akademik'] ?></td>
@@ -66,7 +65,6 @@
 
                                         </td>
                                     </tr>
-                                <?php endif; ?>
                             <?php endforeach; ?>
                         </tbody>
 

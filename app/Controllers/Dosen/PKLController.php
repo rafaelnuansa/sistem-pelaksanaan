@@ -7,6 +7,7 @@ use App\Models\DosenModel;
 use App\Models\DosenPembimbingModel;
 use App\Models\PKLJadwalModel;
 use App\Models\PKLJurnalBimbinganModel;
+use App\Models\PKLNilaiModel;
 use App\Models\ProdiModel;
 use App\Models\TempatModel;
 use Dompdf\Dompdf;
@@ -86,23 +87,169 @@ class PKLController extends BaseController
     public function jadwal_pkl()
     {
         $jadwal_sidang = $this->db->table('pkl_jadwal_sidang')
-            ->select('pkl_jadwal_sidang.*, mahasiswa.nim as nim, dosen.nama as nama, mahasiswa.nama as nama_mahasiswa, dosen.nama as dospeng, tempat_sidang.nama_tempat as tempat_nama')
+            ->select('pkl_jadwal_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospeng.nama as dospeng, dospem.nama as dospem, tempat_sidang.nama_tempat as tempat_nama, pkl.id as pkl_id, pkl_nilai_sidang.*, mahasiswa.id as mahasiswa_id, pkl.id as pkl_id')
             ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
             ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
-            ->join('dosen_pembimbing', 'dosen_pembimbing.mahasiswa_id = mahasiswa.id', 'left')
-            ->join('dosen', 'dosen.id = pkl_jadwal_sidang.dospeng_id', 'left')
+            ->join('dosen as dospeng', 'dospeng.id = pkl_jadwal_sidang.dospeng_id', 'left')
+            ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('pkl_nilai_sidang', 'pkl_nilai_sidang.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id', 'left')
+            ->join('dosen as dospem', 'dospem.id = pkl.dosen_id', 'left')
             ->where('pkl_jadwal_sidang.dospeng_id', $this->dosenId)
             ->get()
             ->getResultArray();
+        // dd($jadwal_sidang);
+
         $data = [
             'title' => 'Jadwal Sidang Ujian',
-            'data' => $jadwal_sidang
+            'data' => $jadwal_sidang,
+            'dosenId' => $this->dosenId,
         ];
 
         // dd($jadwal_sidang);
 
         return view('dosen/pkl/jadwal-sidang', $data);
     }
+
+
+    public function nilai()
+    {
+        $PKLNilaiModel = new PKLNilaiModel();
+        $mahasiswa_id = $this->request->getVar('mahasiswa_id');
+        $pkl_id = $this->request->getVar('pkl_id');
+        $dosen_id = $this->request->getVar('dosen_id');
+        $sidang_id = $this->request->getVar('sidang_id');
+        $catatan = $this->request->getVar('catatan');
+
+        // Check if the record already exists in the database
+        $existingRecord = $PKLNilaiModel->where('sidang_id', $sidang_id)
+            ->first();
+
+        // Retrieve the values from the request and calculate the total_nilai and other fields
+        $nilai_sikap = $this->request->getVar('nilai_sikap');
+        $nilai_penyajian_materi = $this->request->getVar('nilai_penyajian_materi');
+        $nilai_pendahuluan = $this->request->getVar('nilai_pendahuluan');
+        $nilai_tinjauan_pustaka = $this->request->getVar('nilai_tinjauan_pustaka');
+        $nilai_hasil_pembahasan = $this->request->getVar('nilai_hasil_pembahasan');
+        $nilai_kesimpulan_dan_saran = $this->request->getVar('nilai_kesimpulan_dan_saran');
+        $nilai_daftar_pustaka = $this->request->getVar('nilai_daftar_pustaka');
+        $nilai_argumentasi_penyaji = $this->request->getVar('nilai_argumentasi_penyaji');
+        $nilai_penguasaan_materi = $this->request->getVar('nilai_penguasaan_materi');
+        $status_ujian = $this->request->getVar('status_ujian');
+
+        // Calculate the total_nilai based on the provided values
+        $total_nilai = ($nilai_sikap +
+            $nilai_penyajian_materi +
+            $nilai_pendahuluan +
+            $nilai_tinjauan_pustaka +
+            $nilai_hasil_pembahasan +
+            $nilai_kesimpulan_dan_saran +
+            $nilai_daftar_pustaka +
+            $nilai_argumentasi_penyaji +
+            $nilai_penguasaan_materi
+        );
+
+        // Determine the nilai_mutu based on the total_nilai
+        if ($total_nilai >= 80.00) {
+            $nilai_mutu = 'A';
+            $status_ujian = true; // Set status ujian to "Lulus"
+        } elseif ($total_nilai >= 75.00) {
+            $nilai_mutu = 'AB';
+            $status_ujian = true; // Set status ujian to "Lulus"
+        } elseif ($total_nilai >= 70.00) {
+            $nilai_mutu = 'B';
+            $status_ujian = true; // Set status ujian to "Lulus"
+        } elseif ($total_nilai >= 65.00) {
+            $nilai_mutu = 'BC';
+            $status_ujian = true; // Set status ujian to "Lulus"
+        } elseif ($total_nilai >= 60.00) {
+            $nilai_mutu = 'C';
+            $status_ujian = true; // Set status ujian to "Lulus"
+        } elseif ($total_nilai >= 56.00) {
+            $nilai_mutu = 'CD';
+            $status_ujian = false; // Set status ujian to "Tidak Lulus"
+        } elseif ($total_nilai >= 46.00) {
+            $nilai_mutu = 'D';
+            $status_ujian = false; // Set status ujian to "Tidak Lulus"
+        } else {
+            $nilai_mutu = 'E';
+            $status_ujian = false; // Set status ujian to "Tidak Lulus"
+        }
+
+        // Prepare data for insert/update
+        $data = [
+            'mahasiswa_id' => $mahasiswa_id,
+            'pkl_id' => $pkl_id,
+            'dosen_id' => $dosen_id,
+            'sidang_id' => $sidang_id,
+            'nilai_sikap' => $nilai_sikap,
+            'nilai_penyajian_materi' => $nilai_penyajian_materi,
+            'nilai_pendahuluan' => $nilai_pendahuluan,
+            'nilai_tinjauan_pustaka' => $nilai_tinjauan_pustaka,
+            'nilai_hasil_pembahasan' => $nilai_hasil_pembahasan,
+            'nilai_kesimpulan_dan_saran' => $nilai_kesimpulan_dan_saran,
+            'nilai_daftar_pustaka' => $nilai_daftar_pustaka,
+            'nilai_argumentasi_penyaji' => $nilai_argumentasi_penyaji,
+            'nilai_penguasaan_materi' => $nilai_penguasaan_materi,
+            'catatan' => $catatan,
+            'total_nilai' => $total_nilai,
+            'nilai_mutu' => $nilai_mutu,
+            'status_ujian' => $status_ujian,
+        ];
+
+        // dd($data);
+        // Check if the record exists, then perform insert/update accordingly
+        if ($existingRecord) {
+            // If the record exists, update it
+            $PKLNilaiModel->update($existingRecord['id_nilai'], $data);
+        } else {
+            // If the record does not exist, insert it
+            $PKLNilaiModel->insert($data);
+        }
+
+        session()->setFlashdata('success', 'Berhasil dinilai');
+
+        return redirect()->back();
+    }
+
+
+    public function cetak($sidang_id,)
+    {
+        $PKLNilaiModel = new PKLNilaiModel();
+
+        // Fetch the data from the database based on the $sidang_id
+        $data = $PKLNilaiModel
+            ->select('pkl_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, pkl.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, pkl_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, pkl_jadwal_sidang.*')
+            ->join('mahasiswa', 'mahasiswa.id = pkl_nilai_sidang.mahasiswa_id')
+            ->join('dosen', 'dosen.id = pkl_nilai_sidang.dosen_id')
+            ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
+            ->join('fakultas', 'fakultas.id = prodi.fakultas_id')
+            ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
+            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
+            ->join('pkl_judul_laporan', 'pkl_judul_laporan.mahasiswa_id = mahasiswa.id')
+            ->join('pkl_jadwal_sidang', 'pkl_jadwal_sidang.id_pkl_jadwal_sidang  = pkl_nilai_sidang.sidang_id')
+            ->join('tempat_sidang', 'tempat_sidang.id_tempat  = pkl_jadwal_sidang.tempat_id')
+            ->where('sidang_id', $sidang_id)
+            ->get()->getRow();
+        // dd($data);
+        if (!$data) {
+            // If data not found, you can show an error message or redirect back
+            return redirect()->back()->with('error', 'Data not found.');
+        }
+        // load HTML content
+        $this->pdf->loadHtml(view('pdf/penilaian_pkl', ['data' => $data]));
+
+        // (optional) setup the paper size and orientation
+        $this->pdf->setPaper('A4');
+
+        // render html as PDF
+        $this->pdf->render();
+
+        // output the generated pdf
+        return $this->pdf->stream('Laporan', array("Attachment" => false));
+    }
+
+
 
     public function jadwal_pkl_bimbingan()
     {
@@ -136,89 +283,32 @@ class PKLController extends BaseController
             return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
 
-        $data['status'] = 'Approved';
+        $data['status'] = 'Telah divalidasi';
         $this->PKLJurnalBimbingan->save($data);
 
-        session()->setFlashdata('success', 'Berhasil di approve');
+        session()->setFlashdata('success', 'Jurnal berhasil divalidasi');
         return redirect()->back();
     }
 
-    public function nilai()
+    public function reset_bimbingan()
     {
+        $id_jurnal_bimbingan = $this->request->getVar('id');
 
-        $PKLJadwalModel = new PKLJadwalModel();
-        $id_pkl_jadwal_sidang = $this->request->getVar('id_pkl_jadwal_sidang');
-        $nilai_sikap = $this->request->getVar('nilai_sikap');
-        $nilai_materi = $this->request->getVar('nilai_materi');
-        $nilai_pendahuluan = $this->request->getVar('nilai_pendahuluan');
-        $nilai_tinjauan_pustaka = $this->request->getVar('nilai_tinjauan_pustaka');
-        $nilai_pembahasan = $this->request->getVar('nilai_pembahasan');
-        $nilai_kesimpulan = $this->request->getVar('nilai_kesimpulan');
-        $nilai_daftar_pustaka = $this->request->getVar('nilai_daftar_pustaka');
-        $nilai_argumentasi = $this->request->getVar('nilai_argumentasi');
-        $nilai_penguasaan = $this->request->getVar('nilai_penguasaan');
-        $komentar = $this->request->getVar('komentar');
-        // Calculate the total nilai by summing all the components
-        $total_nilai = $nilai_sikap + $nilai_materi + $nilai_pendahuluan + $nilai_tinjauan_pustaka + $nilai_pembahasan + $nilai_kesimpulan + $nilai_daftar_pustaka + $nilai_argumentasi + $nilai_penguasaan;
-
-        $data = [
-            'nilai_sikap' => $nilai_sikap,
-            'nilai_materi' => $nilai_materi,
-            'nilai_pendahuluan' => $nilai_pendahuluan,
-            'nilai_tinjauan_pustaka' => $nilai_tinjauan_pustaka,
-            'nilai_pembahasan' => $nilai_pembahasan,
-            'nilai_kesimpulan' => $nilai_kesimpulan,
-            'nilai_daftar_pustaka' => $nilai_daftar_pustaka,
-            'nilai_argumentasi' => $nilai_argumentasi,
-            'nilai_penguasaan' => $nilai_penguasaan,
-            'total_nilai' => $total_nilai,
-            'status' => 1,
-            'komentar' => $komentar
-        ];
-
-        // dd($total_nilai);
-        $PKLJadwalModel->update($id_pkl_jadwal_sidang, $data);
-        session()->setFlashdata('success', 'Berhasil di nilai');
-        return redirect()->back();
-    }
-
-    public function cetak($id)
-    {
-        // Fetch the data from the database based on the $id
-        // $data = $PKLJadwalModel->find($id);
-        $data = $this->db->table('pkl_jadwal_sidang')
-        ->select('pkl_jadwal_sidang.*, pkl_judul_laporan.*, fakultas.nama as fakultas, pkl.tahun_akademik as tahun_akademik, prodi.nama_prodi as prodi, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan , dosen.nidn as nidn, dosen.nama as nama, mahasiswa.nama as nama_mahasiswa, dosen.nama as dospeng, tempat_sidang.nama_tempat as tempat_nama')
-        ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
-        ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
-        ->join('dosen_pembimbing', 'dosen_pembimbing.mahasiswa_id = mahasiswa.id', 'left')
-        ->join('dosen', 'dosen.id = pkl_jadwal_sidang.dospeng_id', 'left')
-        ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
-        ->join('fakultas', 'fakultas.id = prodi.fakultas_id', 'left')
-        ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id', 'left')
-        ->join('pkl', 'pkl_anggota.pkl_id = pkl.id', 'left')
-        ->join('pkl_judul_laporan', 'pkl_judul_laporan.mahasiswa_id = mahasiswa.id', 'left')
-        ->where('pkl_jadwal_sidang.id_pkl_jadwal_sidang', $id)
-        ->get()
-        ->getRow();
-        // dd($data);
-        // If the data is not found, you can handle the error or redirect to an error page
+        $data = $this->PKLJurnalBimbingan->where('id_jurnal_bimbingan', $id_jurnal_bimbingan)->first();
         if (!$data) {
-            return redirect()->to('/error_page');
+            // Data dengan ID yang diberikan tidak ditemukan
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
 
-        // load HTML content
-        $this->pdf->loadHtml(view('pdf/penilaian_pkl', ['data' => $data]));
-    
-        // (optional) setup the paper size and orientation
-        $this->pdf->setPaper('A4');
-    
-        // render html as PDF
-        $this->pdf->render();
-    
-        // output the generated pdf
-        return $this->pdf->stream('Laporan', array("Attachment" => false));
+        $data['status'] = 'Menunggu Validasi';
+        $this->PKLJurnalBimbingan->save($data);
+
+        session()->setFlashdata('success', 'Jurnal berhasil direset');
+        return redirect()->back();
     }
-    
+
+
+
 
     public function cetak_revisi()
     {

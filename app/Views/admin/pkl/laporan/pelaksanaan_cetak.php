@@ -38,9 +38,6 @@
         <?php if (!empty($prodi_id)) : ?>
             <h3>Prodi: <?= $prodi_id ?></h3>
         <?php endif; ?>
-        <?php if (!empty($status)) : ?>
-            <h3>Status: <?= $status ?></h3>
-        <?php endif; ?>
     <?php else : ?>
         <h1>Laporan Pelaksanaan PKL - Semua Data</h1>
     <?php endif; ?>
@@ -55,7 +52,6 @@
                     <th>Prodi</th>
                     <th>Instansi</th>
                     <th>Tahun Akademik</th>
-                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,7 +63,6 @@
                         <td><?= $data['nama_prodi'] ?></td>
                         <td><?= $data['nama_perusahaan'] ?></td>
                         <td><?= $data['tahun_akademik'] ?></td>
-                        <td><?= $data['status'] ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

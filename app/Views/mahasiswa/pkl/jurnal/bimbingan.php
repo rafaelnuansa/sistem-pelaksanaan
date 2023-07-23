@@ -16,19 +16,27 @@
       <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
         <i class="fa fa-times"></i></button>
     </div>
-  </div> 
+  </div>
   <div class="box-body">
     <?php if ($kelompokId) : ?>
       <button type="button" class="btn btn-primary mb-2" style="margin-right: 5px;" data-toggle="modal" data-target="#modal-tambah">
         Tambah Jurnal
       </button>
-      <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-judul">
-        Judul Laporan
-      </button>
+      <?php if ($judul_laporan) :; ?>
+
+        <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-judul">
+          Edit
+        </button>
+      <?php else : ?>
+
+        <button type="button" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-judul">
+          Judul Laporan
+        </button>
+      <?php endif; ?>
       <div class="table-responsive" style="margin-top:20px">
 
         <table class="table table-hover table-bordered datatable" style="margin-top: 10px;">
-          <thead>
+          <thead class="bg-primary">
             <tr>
               <th>No</th>
               <th>Hari/Tanggal</th>
@@ -38,15 +46,23 @@
             </tr>
           </thead>
           <tbody>
-            <?php $no=1; foreach ($data as $i => $row) : ?>
+            <?php $no = 1;
+            foreach ($data as $i => $row) : ?>
               <tr>
                 <td><?= $no++ ?></td>
                 <td><?= $row['tanggal'] ?></td>
                 <td><?= $row['catatan'] ?></td>
-                <td><?= $row['status'] ?></td>
+                <?php if ($row['status'] == 'Telah divalidasi') : ?>
+                  <td><span class="label label-primary"><?= $row['status'] ?></span></td>
+                <?php else : ?>
+                  <td><span class="label label-danger"><?= $row['status'] ?></span></td>
+                <?php endif; ?>
                 <td class="text-center">
-                  <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-edit-<?= $row['id_jurnal_bimbingan'] ?>">Edit</a>
-                  <a href="<?= route_to('mahasiswa.pkl.jurnal.bimbingan.delete', $row['id_jurnal_bimbingan']); ?>" class="btn btn-primary btn-sm">Hapus</a>
+                  <?php if ($row['status'] == 'Telah divalidasi') : ?>
+                  <?php else : ?>
+                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-edit-<?= $row['id_jurnal_bimbingan'] ?>">Edit</a>
+                    <a href="<?= route_to('mahasiswa.pkl.jurnal.bimbingan.delete', $row['id_jurnal_bimbingan']); ?>" class="btn btn-primary btn-sm">Hapus</a>
+                  <?php endif; ?>
                 </td>
               </tr>
             <?php endforeach; ?>
@@ -154,7 +170,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label for="">Judul Laporan</label>
-                <input type="text" class="form-control" name="judul_laporan" placeholder="Masukkan Judul Laporan">
+                <input type="text" class="form-control" name="judul_laporan" value="<?php if($judul_laporan):?><?= $judul_laporan;?><?php endif;?>" placeholder="Masukkan Judul Laporan">
               </div>
             </div>
           </div>

@@ -29,7 +29,7 @@
 
                 <div class="box-body">
                     <table class="table table-hover datatable">
-                        <thead>
+                    <thead class="bg-primary">
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Nama Dosen</th>

@@ -21,7 +21,7 @@
         <div class="table-responsive">
             
         <table class="table table-bordered datatable" id="mahasiswa">
-            <thead>
+        <thead class="bg-primary">
                 <tr>
                     <th>No</th>
                     <th>NIM</th>

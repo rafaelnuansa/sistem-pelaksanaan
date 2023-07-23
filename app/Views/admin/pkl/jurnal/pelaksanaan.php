@@ -3,16 +3,15 @@
 <?= $this->section('content'); ?>
 
 <!-- Default box -->
-<?php if(session()->getFlashData('success') !== null): ?>
-<div class="alert alert-success"><?= session()->getFlashData('success') ?></div>
+<?php if (session()->getFlashData('success') !== null) : ?>
+  <div class="alert alert-success"><?= session()->getFlashData('success') ?></div>
 <?php endif; ?>
 <div class="box">
   <div class="box-header with-border">
     <h3 class="box-title">Jurnal Pelaksanaan</h3>
 
     <div class="box-tools pull-right">
-      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
-              title="Collapse">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
         <i class="fa fa-minus"></i></button>
       <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
         <i class="fa fa-times"></i></button>
@@ -23,7 +22,7 @@
       Tambah Jurnal
     </button> -->
     <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
-      <thead>
+      <thead class="bg-primary">
         <tr>
           <th>No</th>
           <th>Nama mahasiswa</th>
@@ -31,12 +30,12 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach($data as $index => $row): ?>
+        <?php foreach ($data as $index => $row) : ?>
           <tr>
             <td><?= ++$index ?></td>
             <td><?= $row['nama_mhs'] ?></td>
             <td class="text-center">
-              <a href="<?= base_url('pkl/jurnal/pelaksanaan/detail/'.$row['nama_mhs']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
+              <a href="<?= base_url('pkl/jurnal/pelaksanaan/detail/' . $row['nama_mhs']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
             </td>
           </tr>
         <?php endforeach; ?>
@@ -56,36 +55,36 @@
       </div>
       <div class="modal-body">
         <form method="POST" action="<?= base_url('pkl/jurnal/1') ?>">
-        <div class="row mb-2">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="">Jam</label>
-              <input type="time" class="form-control" name="jam">
+          <div class="row mb-2">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="">Jam</label>
+                <input type="time" class="form-control" name="jam">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="">Hari / Tanggal</label>
+                <input type="date" class="form-control" name="hari">
+              </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="">Hari / Tanggal</label>
-              <input type="date" class="form-control" name="hari">
+          <div class="row mb-2">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="">DPL</label>
+                <input type="text" class="form-control" name="dpl">
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row mb-2">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="">DPL</label>
-              <input type="text" class="form-control" name="dpl">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="">Keterangan kegiatan PKL</label>
+                <textarea name="keterangan" class="form-control" cols="30" rows="5"></textarea>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="">Keterangan kegiatan PKL</label>
-              <textarea name="keterangan" class="form-control" cols="30" rows="5"></textarea>
-            </div>
-          </div>
-        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
@@ -102,11 +101,10 @@
 
 <?= $this->section('script'); ?>
 <script>
-
   $('.delete').click(function() {
     const ok = confirm('Yakin ingin menghapus kelompok?');
 
-    if(ok) {
+    if (ok) {
       $(this).parent().submit();
     }
   });

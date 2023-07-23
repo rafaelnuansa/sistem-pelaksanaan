@@ -6,13 +6,13 @@
 <section class="content">
 
     <!-- Default box -->
-    <div class="box">
+    <div class="box"> 
         <div class="box-header with-border">
-            <h3 class="box-title">Jurnal Bimbingan Details</h3>
-        </div>
+            <h3 class="box-title">Jurnal Bimbingan <?php echo $mahasiswa->nama ?? '' ;?></h3>
+        </div> 
         <div class="box-body">
             <table class="table table-bordered" id="datatables">
-                <thead>
+                <thead class="bg-primary">
                     <tr>
                         <th>No</th>
                         <th>Hari</th>
@@ -25,8 +25,8 @@
                     <?php foreach ($jurnals as $jurnal): ?>
                     <tr>
                         <td><?= $no++ ?></td>
-                        <td><?= $jurnal['hari'] ?></td>
-                        <td><?= $jurnal['keterangan'] ?></td>
+                        <td><?= $jurnal['tanggal'] ?></td>
+                        <td><?= $jurnal['catatan'] ?></td>
                         <td><?= $jurnal['status'] ?></td>
                     </tr>
                     <?php endforeach; ?>

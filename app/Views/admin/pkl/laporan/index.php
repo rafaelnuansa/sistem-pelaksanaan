@@ -16,7 +16,7 @@ Data Laporan PKL
             </div>
             <div class="box-body">
                 <table class="table table-bordered">
-                    <thead>
+                    <thead class="bg-primary">
                         <tr>
                             <th>Laporan</th>
                             <th>Aksi</th>

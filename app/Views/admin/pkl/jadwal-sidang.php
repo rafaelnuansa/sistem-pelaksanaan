@@ -22,13 +22,14 @@
       <a href="<?= base_url('downloads/surat-tugas.pdf') ?>" class="btn btn-primary" target="_blank"><i class="fa fa-print" style="margin-right: 4px;"></i> Cetak Surat Tugas</a>
     </div> -->
     <div class="table-responsive">
-      <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
-        <thead>
+      <table class="table table-hover datatable " style="border: 1px solid #f0f0f0; margin-top: 10px;">
+        <thead class="bg-primary">
           <tr>
             <th>No</th>
             <th>NIM</th>
-            <th>Nama mahasiswa</th>
-            <th>Dosen penguji</th>
+            <th>Nama Mahasiswa</th>
+            <th>Dosen Penguji</th>
+            <th>Dosen Pembimbing</th>
             <th>Tempat</th>
             <th>Hari/Tanggal</th>
             <th>Status</th>
@@ -36,19 +37,22 @@
         </thead>
         <tbody>
           <?php foreach ($data as $i => $row) : ?>
-            <tr>
+            <tr> 
               <td><?= ++$i ?></td>
               <td><?= $row['nim'] ?></td>
               <td><?= $row['nama_mahasiswa'] ?></td>
-              <td><?= $row['dospeng'] ?></td>
+              <td><span class="label label-primary"><?= $row['dospeng'] ?></span></td>
+              <td><span class="label label-danger"><?= $row['dospem'] ?></span></td>
               <td><?= $row['tempat_nama'] ?></td>
               <td><?= $row['tanggal'] ?></td>
               <td>
-                <?php if (!$row['status']) : ?>
-                  <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 1) ?>" class="badge bg-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a>
-                <?php else : ?>
-                  <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 0) ?>" class="badge bg-success" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Belum Melaksanakan?')">Sudah Melaksanakan</a>
-                <?php endif; ?>
+             
+              <span class="label <?= $row['total_nilai'] === null ? 'label-warning' : ($row['status_ujian'] ? 'label-primary' : 'label-danger') ?>">
+                  <?= $row['total_nilai'] === null ? 'Belum Melaksanakan' : ($row['status_ujian'] ? 'Lulus' : 'Tidak Lulus') ?>
+                </span>
+                  <!-- <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 1) ?>" class="badge label-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a> -->
+                  <!-- <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 0) ?>" class="badge bg-success" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Belum Melaksanakan?')">Sudah Melaksanakan</a> -->
+           
               </td>
             </tr>
           <?php endforeach; ?>
@@ -73,7 +77,7 @@
   </div>
   <div class="box-body">
     <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
-      <thead>
+      <thead class="bg-primary">
         <tr>
           <th>No</th>
           <th>Nama mahasiswa</th>
@@ -91,34 +95,34 @@
             <td><?= ++$i ?></td>
             <td><?= $row['nama'] ?></td>
             <td>
-              <?php if ($row['lampiran_pembayaran']) : ?>
-                <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['lampiran_pembayaran']) ?>" class="btn btn-primary"><i class="fa fa-file"></i></a>
+              <?php if ($row['kwitansi']) : ?>
+                <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['kwitansi']) ?>" class="btn btn-primary"><i class="fa fa-file"></i></a>
               <?php else : ?>
                 -
               <?php endif; ?>
             </td>
             <td>
-              <?php if ($row['lampiran_krs']) : ?>
-                <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['lampiran_krs']) ?>" class="btn btn-primary"><i class="fa fa-file"></i></a>
+              <?php if ($row['krs']) : ?>
+                <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['krs']) ?>" class="btn btn-primary"><i class="fa fa-file"></i></a>
               <?php else : ?>
                 -
               <?php endif; ?>
             </td>
             <td>
-              <?php if ($row['lampiran_laporan']) : ?>
-                <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['lampiran_laporan']) ?>" class="btn btn-primary"><i class="fa fa-file"></i></a>
+              <?php if ($row['laporan']) : ?>
+                <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['laporan']) ?>" class="btn btn-primary"><i class="fa fa-file"></i></a>
               <?php else : ?>
                 -
               <?php endif; ?>
             </td>
             <td>
-              <?php if ($row['lampiran_keterangan']) : ?>
-                <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['lampiran_keterangan']) ?>" class="btn btn-primary"><i class="fa fa-file"></i></a>
+              <?php if ($row['sk_pkl']) : ?>
+                <a target="_blank" href="<?= base_url('uploads/pkl/' . $row['sk_pkl']) ?>" class="btn btn-primary"><i class="fa fa-file"></i></a>
               <?php else : ?>
                 -
               <?php endif; ?>
             </td>
-            <td><span class="label label-primary"><?= $row['status'] ?></span></td>
+            <td><span class="label label-primary"><?= $row['status_ujian'] ?></span></td>
             <td class="text-center">
               <button class="btn btn-success approve btn-sm" data-id="<?= $row['id_pkl_ujian'] ?>" data-mahasiswa-id="<?= $row['mahasiswa_id'] ?>" data-mahasiswa-nama="<?= $row['nama'] ?>" data-nama-kelompok="<?= $row['nama_kelompok'] ?>" data-nama-dospem="<?= $row['dospem_nama'] ?>"><i class="fa fa-check"></i></button>
             </td>

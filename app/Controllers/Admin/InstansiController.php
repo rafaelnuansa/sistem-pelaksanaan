@@ -27,15 +27,13 @@ class InstansiController extends BaseController
         $data = [
             'nama_perusahaan' => $this->request->getPost('nama_perusahaan'),
             'alamat' => $this->request->getPost('alamat'),
-            'pembimbing_lapangan' => $this->request->getPost('pembimbing_lapangan'),
-            'no_pembimbing_lapangan' => $this->request->getPost('no_pembimbing_lapangan'),
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ];
 
         $instansiModel->insert($data);
 
-        return redirect()->to('/admin/instansi')->with('success', 'Instansi created successfully');
+        return redirect()->to('/admin/instansi')->with('success', 'Instansi berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -53,14 +51,12 @@ class InstansiController extends BaseController
         $data = [
             'nama_perusahaan' => $this->request->getPost('nama_perusahaan'),
             'alamat' => $this->request->getPost('alamat'),
-            'pembimbing_lapangan' => $this->request->getPost('pembimbing_lapangan'),
-            'no_pembimbing_lapangan' => $this->request->getPost('no_pembimbing_lapangan'),
             'updated_at' => date('Y-m-d H:i:s')
         ];
 
         $instansiModel->update($id, $data);
 
-        return redirect()->to('/admin/instansi')->with('success', 'Instansi updated successfully');
+        return redirect()->to('/admin/instansi')->with('success', 'Instansi berhasil diupdate');
     }
 
     public function delete($id)
@@ -69,6 +65,6 @@ class InstansiController extends BaseController
 
         $instansiModel->delete($id);
 
-        return redirect()->to('/admin/instansi')->with('success', 'Instansi deleted successfully');
+        return redirect()->to('/admin/instansi')->with('success', 'Instansi berhasil dihapus');
     }
 }

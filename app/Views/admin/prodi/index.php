@@ -29,7 +29,7 @@
 
                 <div class="box-body">
                     <table class="table table-striped datatable">
-                        <thead>
+                        <thead class="bg-primary">
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Nama Program Studi</th>
@@ -39,7 +39,8 @@
                         </thead>
                         <tbody>
                             <?php if ($prodi) : ?>
-                                <?php $no = 1; foreach ($prodi as $row) : ?>
+                                <?php $no = 1;
+                                foreach ($prodi as $row) : ?>
                                     <tr>
                                         <th scope="row"><?= $no++; ?></th>
                                         <td><?= $row['nama_prodi']; ?></td>

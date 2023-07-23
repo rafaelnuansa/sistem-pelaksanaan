@@ -19,15 +19,18 @@
   </div>
   <div class="box-body">
     <?php if ($kelompokId) : ?>
-      <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-tambah">
-        Tambah Jurnal
-      </button>
+      <div style="margin-bottom:20px;">
+        <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-tambah">
+          Tambah Jurnal
+        </button>
 
-      <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-formulir">
-        Formulir
-      </button>
+        <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#modal-formulir">
+          Formulir
+        </button>
+
+      </div>
       <table class="table table-bordered datatable" style="margin-top: 10px;">
-        <thead>
+        <thead class="bg-primary">
           <tr>
             <th>No</th>
             <th>Hari/Tanggal</th>
@@ -171,7 +174,7 @@
               <td>1</td>
               <td>Formulir penilaian PKL</td>
               <td>
-                <a href="<?= base_url('downloads/formulir-penilaian.docx') ?>" target="_blank" class="btn btn-primary">Cetak</a>
+                <a href="<?= base_url('mahasiswa/pkl/formulir/penilaian') ?>" target="_blank" class="btn btn-primary">Cetak</a>
               </td>
             </tr>
             <tr>
@@ -185,7 +188,7 @@
               <td>3</td>
               <td>Log Harian</td>
               <td>
-                <a href="<?= base_url('mahasiswa/pkl/formulir/log-harian') ?>" target="_blank" class="btn btn-primary">Cetak</a>
+                <a href="<?= route_to('mahasiswa.pkl.jurnal.pelaksanaan.cetak') ?>" target="_blank" class="btn btn-primary">Cetak</a>
               </td>
             </tr>
           </tbody>

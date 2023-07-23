@@ -13,9 +13,9 @@
 
       <li class="treeview <?= (strpos(uri_string(), 'admin/mahasiswa') === 0
                             || strpos(uri_string(), 'admin/dosen') === 0
-                            || strpos(uri_string(), 'admin/dosen_pembimbing') === 0
                             || strpos(uri_string(), 'admin/users') === 0
                             || strpos(uri_string(), 'admin/fakultas') === 0
+                            || strpos(uri_string(), 'admin/instansi') === 0
                             || strpos(uri_string(), 'admin/tempat') === 0
                             || strpos(uri_string(), 'admin/prodi') === 0) ? 'active' : '' ?>">
         <a href="#">
@@ -49,12 +49,11 @@
             </a>
           </li>
 
-          <li class="<?= (uri_string() == 'admin/dosen_pembimbing') ? 'active' : '' ?>">
-            <a href="<?= base_url('admin/dosen_pembimbing') ?>">
-              <i class="fa fa-users"></i> <span>Dosen Pembimbing</span>
+          <li class="<?= (uri_string() == 'admin/instansi') ? 'active' : '' ?>">
+            <a href="<?= base_url('admin/instansi') ?>">
+              <i class="fa fa-building-o"></i> <span>Instansi</span>
             </a>
           </li>
-
           <li class="<?= (uri_string() == 'admin/tempat') ? 'active' : '' ?>">
             <a href="<?= base_url('admin/tempat') ?>">
               <i class="fa fa-building-o"></i> <span>Tempat Sidang</span>

@@ -32,13 +32,17 @@ class PKLJadwalSidangController extends BaseController
         $dosens = $this->dosen->orderBy('nama', 'ASC')->findAll(); // Fetch all dosens from the database
         $tempats = $this->tempat->orderBy('nama_tempat', 'ASC')->findAll(); // Fetch all dosens from the database
         $jadwal_sidang = $this->db->table('pkl_jadwal_sidang')
-            ->select('pkl_jadwal_sidang.*, mahasiswa.nim as nim, dosen.nama as nama, mahasiswa.nama as nama_mahasiswa, dosen.nama as dospeng, tempat_sidang.nama_tempat as tempat_nama')
-            ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
-            ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
-            ->join('dosen_pembimbing', 'dosen_pembimbing.mahasiswa_id = mahasiswa.id', 'left')
-            ->join('dosen', 'dosen.id = pkl_jadwal_sidang.dospeng_id', 'left')
-            ->get()
-            ->getResultArray();
+        ->select('pkl_jadwal_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospem.nama as dospem, dospeng.nama as dospeng, tempat_sidang.nama_tempat as tempat_nama, pkl_nilai_sidang.*')
+        ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
+        ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
+        ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id', 'left')
+        ->join('pkl', 'pkl.id = pkl_anggota.pkl_id', 'left')
+        ->join('pkl_nilai_sidang', 'pkl_nilai_sidang.mahasiswa_id = mahasiswa.id', 'left')
+        ->join('dosen as dospem', 'dospem.id = pkl.dosen_id', 'left') // Join to get the supervisor (dosen pembimbing)
+        ->join('dosen as dospeng', 'dospeng.id = pkl_jadwal_sidang.dospeng_id', 'left') // Join to get the examiner (dosen penguji)
+        ->get() 
+        ->getResultArray();
+    
         
         $data = [
             'title' => 'Jadwal Sidang',

@@ -14,7 +14,8 @@ class PKLJurnalPelaksanaanController extends BaseController
     public function __construct()
     {
         $this->jurnalModel = new PKLJurnalPelaksanaanModel();
-        $this->mahasiswaModel = new MahasiswaModel();
+        $this->mahasiswaModel = new MahasiswaModel(); 
+        $this->db = \Config\Database::connect();
     }
 
     public function index()
@@ -32,8 +33,10 @@ class PKLJurnalPelaksanaanController extends BaseController
     { 
         $jurnal = $this->jurnalModel->getJurnalPelaksanaanByIdMahasiswa($id);
         
+        $mhs = $this->db->table('mahasiswa')->select('*')->where('id', $id)->get()->getRow();
         $data = [
             'title' => 'Jurnal Pelaksanaan',
+            'mahasiswa' => $mhs,
             'jurnals' => $jurnal
         ];
     

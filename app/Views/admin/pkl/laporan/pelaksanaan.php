@@ -44,16 +44,6 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="status" class="control-label">Status</label>
-                                <select class="form-control" name="status" id="status">
-                                    <option value="">Semua Status</option>
-                                    <option value="1" <?= ($status == 'Pending') ? 'selected' : '' ?>>Pending</option>
-                                    <option value="0" <?= ($status == 'Selesai') ? 'selected' : '' ?>>Selesai</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Filter</button>
                             </div>
                         </div>
@@ -83,9 +73,10 @@
                                 <th>NIM</th>
                                 <th>Nama Mahasiswa</th>
                                 <th>Tahun Akademik</th>
-                                <th>Status</th>
                                 <th>Prodi</th>
                                 <th>Nama Perusahaan</th>
+                                <th>Hari</th>
+                                <th>Keterangan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,9 +86,10 @@
                                     <td><?= $pkl['nim'] ?></td>
                                     <td><?= $pkl['nama_mahasiswa'] ?></td>
                                     <td><?= $pkl['tahun_akademik'] ?></td>
-                                    <td><?= ($pkl['status'] == 'Pending') ? 'Pending' : 'Selesai' ?></td>
                                     <td><?= $pkl['nama_prodi'] ?></td>
                                     <td><?= $pkl['nama_perusahaan'] ?></td>
+                                    <td><?= $pkl['hari'] ?></td>
+                                    <td><?= $pkl['keterangan'] ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

@@ -25,11 +25,22 @@ class PKLController extends BaseController
     public function index()
     {
         $pklModel = new PKLModel();
-        $pkls = $pklModel
-            ->select('pkl.*, dosen.nama AS nama_dosen, prodi.nama_prodi')
+        $pklsWithInstansi = $pklModel
+            ->select('pkl.*, dosen.nama AS nama_dosen, prodi.nama_prodi, instansi.nama_perusahaan as nama_perusahaan, instansi.alamat as alamat_perusahaan')
             ->join('dosen', 'dosen.id = pkl.dosen_id')
             ->join('prodi', 'prodi.id = pkl.prodi_id')
+            ->join('instansi', 'pkl.instansi_id = instansi.id', 'left')
+            ->where('pkl.instansi_id >', 0)
             ->findAll();
+
+        $pklsWithoutInstansi = $pklModel
+            ->select('pkl.*, dosen.nama AS nama_dosen, prodi.nama_prodi, "Belum ada instansi" as nama_perusahaan, "Belum tersedia" as alamat_perusahaan', false)
+            ->join('dosen', 'dosen.id = pkl.dosen_id')
+            ->join('prodi', 'prodi.id = pkl.prodi_id')
+            ->where('pkl.instansi_id', 0)
+            ->findAll();
+
+        $pkls = array_merge($pklsWithInstansi, $pklsWithoutInstansi);
 
         $mahasiswa = $this->mahasiswa->findAll();
 
@@ -50,6 +61,10 @@ class PKLController extends BaseController
                 'nama_prodi' => $row['nama_prodi'],
                 'nama_dosen' => $row['nama_dosen'],
                 'nama_perusahaan' => $row['nama_perusahaan'],
+                'alamat_perusahaan' => $row['alamat_perusahaan'],
+                'bimbingan_perusahaan' => $row['bimbingan_perusahaan'],
+                'jabatan_bimbingan_perusahaan' => $row['jabatan_bimbingan_perusahaan'],
+                'no_perusahaan' => $row['no_perusahaan'],
                 'ketua_kelompok' => ($ketua_kelompok) ? $ketua_kelompok['nama'] : 'Belum ada ketua',
             ];
         }
@@ -152,32 +167,29 @@ class PKLController extends BaseController
     {
         $pkl = $this->pkl->find($kelompok_id);
         $mahasiswa = $this->mahasiswa
-        ->select('mahasiswa.id as id, pkl_anggota.id as pkl_anggota_id, mahasiswa.nim, mahasiswa.nama', )
-        ->join('pkl_anggota', 'mahasiswa.id = pkl_anggota.mahasiswa_id', 'left')
-        ->where('mahasiswa.status_pkl', 'layak')
-        ->where('mahasiswa.prodi_id', $pkl['prodi_id'])
-        ->whereNotIn('mahasiswa.id', function ($builder) use ($kelompok_id) {
-            $builder->select('mahasiswa_id')
-                ->from('pkl_anggota')
-                ->where('pkl_id', $kelompok_id);
-        })
-        ->get()
-        ->getResultArray();
-    
+            ->select('mahasiswa.id as id, pkl_anggota.id as pkl_anggota_id, mahasiswa.nim, mahasiswa.nama',)
+            ->join('pkl_anggota', 'mahasiswa.id = pkl_anggota.mahasiswa_id', 'left')
+            ->where('mahasiswa.prodi_id', $pkl['prodi_id'])
+            ->whereNotIn('mahasiswa.id', function ($builder) use ($kelompok_id) {
+                $builder->select('mahasiswa_id')
+                    ->from('pkl_anggota')
+                    ->where('pkl_id', $kelompok_id);
+            })
+            ->get()
+            ->getResultArray();
+
 
         $rows = $this->anggota
-        ->select('pkl_anggota.id as pkl_anggota_id, pkl.id as pkl_id, mahasiswa.id as mahasiswa_id, prodi.id as prodi_id, mahasiswa.*, pkl.*, prodi.*, pkl.*, pkl_anggota.*')
-        ->where('pkl_id', $kelompok_id)
-        ->join('pkl', 'pkl_anggota.pkl_id = pkl.id')
-        ->join('mahasiswa', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
-        ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
-        ->get()
-        ->getResultArray();
-            // dd($rows);
+            ->select('pkl_anggota.id as pkl_anggota_id, pkl.id as pkl_id, mahasiswa.id as mahasiswa_id, prodi.id as prodi_id, mahasiswa.*, pkl.*, prodi.*, pkl.*, pkl_anggota.*')
+            ->where('pkl_id', $kelompok_id)
+            ->join('pkl', 'pkl_anggota.pkl_id = pkl.id')
+            ->join('mahasiswa', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
+            ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
+            ->get()
+            ->getResultArray();
 
         $prodi = $this->prodi->find($pkl['prodi_id']);
         $dosen = $this->dosen->find($pkl['dosen_id']);
-
 
         $data = [
             'title' => 'Tambah Kelompok',
@@ -220,7 +232,7 @@ class PKLController extends BaseController
         return redirect()->back()->with('success', 'Anggota PKL berhasil dihapus.');
     }
 
-    
+
     public function statusAnggota()
     {
         $id = $this->request->getVar('id');
@@ -236,14 +248,13 @@ class PKLController extends BaseController
                 session()->setFlashdata('error', 'Hanya boleh ada satu anggota dengan status Ketua!');
                 return redirect()->back();
             }
-        } 
-    
+        }
+
         $data = $this->anggota->find($id);
         $data['is_ketua'] = ($status == 'Ketua') ? true : false;
-    
+
         $this->anggota->save($data);
         session()->setFlashdata('success', 'Status berhasil diubah!');
         return redirect()->back();
     }
-    
 }

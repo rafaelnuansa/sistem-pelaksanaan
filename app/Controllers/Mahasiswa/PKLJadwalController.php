@@ -3,6 +3,7 @@
 namespace App\Controllers\Mahasiswa;
 
 use App\Controllers\BaseController;
+use App\Models\PKLAnggotaModel;
 use App\Models\PKLJadwalModel;
 use App\Models\PKLUjianModel;
 use App\Models\ProdiModel;
@@ -19,6 +20,11 @@ class PKLJadwalController extends BaseController
         $this->ProdiModel = new ProdiModel();
         $this->PKLUjianModel = new PKLUjianModel();
         $this->mahasiswaId = session()->get('mahasiswa_id');
+        $this->AnggotaModel = new PKLAnggotaModel();
+        $this->getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
+        if ($this->getKelompok) {
+            $this->kelompokId = $this->getKelompok->id;
+        }
         $this->db = \Config\Database::connect();
     }
 
@@ -26,141 +32,110 @@ class PKLJadwalController extends BaseController
     {
 
         $jadwal_sidang = $this->db->table('pkl_jadwal_sidang')
-            ->select('pkl_jadwal_sidang.*, mahasiswa.nim as nim,  dosen_pembimbing.*, mahasiswa.nama as nama_mahasiswa, dosen.nama as dospeng, dosen_penguji.nama as penguji, tempat_sidang.nama_tempat as tempat_nama')
-            ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
-            ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
-            ->join('dosen_pembimbing', 'dosen_pembimbing.mahasiswa_id = mahasiswa.id', 'left')
-            ->join('dosen', 'dosen.id = pkl_jadwal_sidang.dospeng_id', 'left')
-            ->join('dosen as dosen_penguji', 'dosen_penguji.id = dosen_pembimbing.dosen_id', 'left')
-            ->where('pkl_jadwal_sidang.mahasiswa_id', $this->mahasiswaId)
-            ->where('dosen_pembimbing.mahasiswa_id', $this->mahasiswaId)
-            ->groupBy('pkl_jadwal_sidang.tanggal')
-            ->get()
-            ->getResultArray();
-
-        // dd($this->mahasiswaId);
-
+        ->select('pkl_jadwal_sidang.*, pkl_nilai_sidang.*, fakultas.nama as fakultas, dospem.nama as dospem, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, pkl.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, pkl_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn')
+        ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id')
+        ->join('dosen', 'dosen.id = pkl_jadwal_sidang.dospeng_id')
+        ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
+        ->join('fakultas', 'fakultas.id = prodi.fakultas_id')
+        ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
+        ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
+        ->join('dosen as dospem', 'dospem.id = pkl.dosen_id')
+        ->join('pkl_judul_laporan', 'pkl_judul_laporan.mahasiswa_id = mahasiswa.id')
+        ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id')
+        ->join('pkl_nilai_sidang', 'pkl_jadwal_sidang.id_pkl_jadwal_sidang = pkl_nilai_sidang.sidang_id', 'left') // Use left join instead of inner join
+        ->where('pkl_jadwal_sidang.mahasiswa_id', $this->mahasiswaId)
+        ->groupBy('pkl_jadwal_sidang.tanggal')
+        ->get()
+        ->getResultArray();
+    
+// dd($jadwal_sidang);
         $persyaratan = $this->PKLUjianModel->where('mahasiswa_id', $this->mahasiswaId)->findAll();
         $data = [
             'title' => 'Jadwal Sidang',
             'data' =>  $jadwal_sidang,
             'persyaratan' => $persyaratan,
             'jurusan' => $this->ProdiModel->findAll(),
+            'kelompokId' => $this->kelompokId ?? null,
 
         ];
+
         return view('mahasiswa/pkl/jadwal-sidang', $data);
     }
 
     public function daftar()
     {
         $ujianModel = new PKLUjianModel();
-        // Periksa apakah mahasiswa sudah melakukan pendaftaran sebelumnya
-        $isDaftar = $ujianModel->where('mahasiswa_id', session()->get('mahasiswa_id'))->first();
+        $mahasiswaId = session()->get('mahasiswa_id');
 
-        // Jika mahasiswa sudah melakukan pendaftaran sebelumnya
-        if ($isDaftar) {
-            // Mengambil nama mahasiswa dari session dan mengubahnya menjadi lowercase
-            $namaMahasiswa = strtolower(session()->get('nama'));
-            // Mengganti spasi dengan garis bawah
-            $namaMahasiswa = str_replace(' ', '_', $namaMahasiswa);
-            // Mengganti karakter lain dengan garis bawah
-            $namaMahasiswa = preg_replace('/[^a-zA-Z0-9]/', '_', $namaMahasiswa);
+        // Check if the student has registered before
+        $isRegistered = $ujianModel->where('mahasiswa_id', $mahasiswaId)->first();
 
-            // Mengambil data file lampiran yang ada
-            $lampiran = [
-                'lampiran_pembayaran' => $isDaftar['lampiran_pembayaran'],
-                'lampiran_krs' => $isDaftar['lampiran_krs'],
-                'lampiran_laporan' => $isDaftar['lampiran_laporan'],
-                'lampiran_keterangan' => $isDaftar['lampiran_keterangan']
+        // If the student has registered before
+        if ($isRegistered) {
+            // File fields and their corresponding database columns
+            $lampiranFields = [
+                'kwitansi',
+                'krs',
+                'laporan',
+                'sk_pkl'
             ];
 
-            // Mengambil data file lampiran yang baru diunggah
-            $newLampiran = [
-                'lampiran_pembayaran' => $this->request->getFile('lampiran_pembayaran'),
-                'lampiran_krs' => $this->request->getFile('lampiran_krs'),
-                'lampiran_laporan' => $this->request->getFile('lampiran_laporan'),
-                'lampiran_keterangan' => $this->request->getFile('lampiran_keterangan')
-            ];
+            // Upload and update lampiran files if they are provided
+            foreach ($lampiranFields as $field) {
+                $file = $this->request->getFile($field);
 
-            // Mengupdate lampiran yang ada dengan file baru jika ada
-            foreach ($newLampiran as $key => $file) {
-                // Cek apakah file lampiran baru diunggah
                 if ($file && $file->isValid() && !$file->hasMoved()) {
-                    // Menghapus file lampiran yang lama
-                    // unlink('uploads/pkl/' . $lampiran[$key]);
-
-                    // Menyiapkan nama file lampiran dengan format: nama_mahasiswa_lampiran.extensi
-                    $ext = $file->getClientExtension();
-                    $newFileName = $namaMahasiswa . '_lampiran_' . $key . '.' . $ext;
-
-                    // Memindahkan file lampiran baru ke folder yang ditentukan
+                    $fileExtension = $file->getClientExtension();
+                    $newFileName = $this->generateUniqueFileName($fileExtension);
                     $file->move('uploads/pkl/', $newFileName);
-
-                    // Mengupdate data lampiran dengan nama file yang baru
-                    $isDaftar[$key] = $newFileName;
+                    $isRegistered[$field] = $newFileName;
                 }
             }
 
-            // Menyimpan data lampiran yang telah diupdate
-            $ujianModel->save($isDaftar);
+            // Save the updated lampiran data
+            $ujianModel->save($isRegistered);
 
             session()->setFlashdata('success', 'Berhasil mengupdate lampiran');
             return redirect()->to('/mahasiswa/pkl/jadwal');
         }
 
-        $namaMahasiswa = strtolower(session()->get('nama'));
-        // Mengganti spasi dengan garis bawah
-        $namaMahasiswa = str_replace(' ', '_', $namaMahasiswa);
-        // Mengganti karakter lain dengan garis bawah
-        $namaMahasiswa = preg_replace('/[^a-zA-Z0-9]/', '_', $namaMahasiswa);
-        // Mahasiswa belum melakukan pendaftaran sebelumnya, maka jalankan kode pendaftaran baru
-        $lampiran_pembayaran = $this->request->getFile('lampiran_pembayaran');
-        $lampiran_krs = $this->request->getFile('lampiran_krs');
-        $lampiran_laporan = $this->request->getFile('lampiran_laporan');
-        $lampiran_keterangan = $this->request->getFile('lampiran_keterangan');
-
-        // Menyiapkan variabel untuk menyimpan nama file lampiran
-        $file2 = '';
-        $file3 = '';
-        $file4 = '';
-        $file5 = '';
-
-        // Mengunggah file lampiran pembayaran jika ada
-        if ($lampiran_pembayaran && $lampiran_pembayaran->isValid() && !$lampiran_pembayaran->hasMoved()) {
-            $file2 = $namaMahasiswa . '_lampiran_pembayaran.' . $lampiran_pembayaran->getClientExtension();
-            $lampiran_pembayaran->move('uploads/pkl/', $file2);
-        }
-
-        // Mengunggah file lampiran KRS jika ada
-        if ($lampiran_krs && $lampiran_krs->isValid() && !$lampiran_krs->hasMoved()) {
-            $file3 = $namaMahasiswa . '_lampiran_krs.' . $lampiran_krs->getClientExtension();
-            $lampiran_krs->move('uploads/pkl/', $file3);
-        }
-
-        // Mengunggah file lampiran laporan jika ada
-        if ($lampiran_laporan && $lampiran_laporan->isValid() && !$lampiran_laporan->hasMoved()) {
-            $file4 = $namaMahasiswa . '_lampiran_laporan.' . $lampiran_laporan->getClientExtension();
-            $lampiran_laporan->move('uploads/pkl/', $file4);
-        }
-
-        // Mengunggah file lampiran keterangan jika ada
-        if ($lampiran_keterangan && $lampiran_keterangan->isValid() && !$lampiran_keterangan->hasMoved()) {
-            $file5 = $namaMahasiswa . '_lampiran_keterangan.' . $lampiran_keterangan->getClientExtension();
-            $lampiran_keterangan->move('uploads/pkl/', $file5);
-        }
-
+        // If the student hasn't registered before
         $data = [
             'nama' => session()->get('nama'),
-            'lampiran_pembayaran' => $file2,
-            'lampiran_krs' => $file3,
-            'lampiran_laporan' => $file4,
-            'lampiran_keterangan' => $file5,
-            'mahasiswa_id' => session()->get('mahasiswa_id')
+            'mahasiswa_id' => $mahasiswaId
         ];
+
+        // File fields and their corresponding database columns
+        $lampiranFields = [
+            'kwitansi',
+            'krs',
+            'laporan',
+            'sk_pkl'
+        ];
+
+        // Upload and store lampiran files if they are provided
+        foreach ($lampiranFields as $field) {
+            $file = $this->request->getFile($field);
+
+            if ($file && $file->isValid() && !$file->hasMoved()) {
+                $fileExtension = $file->getClientExtension();
+                $newFileName = $this->generateUniqueFileName($fileExtension);
+                $file->move('uploads/pkl/', $newFileName);
+                $data[$field] = $newFileName;
+            }
+        }
 
         $ujianModel->insert($data);
 
         session()->setFlashdata('success', 'Berhasil melakukan pendaftaran');
         return redirect()->to('/mahasiswa/pkl/jadwal');
+    }
+
+    private function generateUniqueFileName($extension)
+    {
+        $timestamp = date('YmdHis');
+        $randomString = bin2hex(random_bytes(8));
+        $fileName = $timestamp . '_' . $randomString . '.' . $extension;
+        return $fileName;
     }
 }

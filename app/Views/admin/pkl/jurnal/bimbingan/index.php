@@ -25,29 +25,31 @@
         <div class="table-responsive">
             
         <table class="table table-bordered" id="mahasiswa">
-            <thead>
+            <thead class="bg-primary">
                 <tr>
                     <th>No</th>
                     <th>NIM</th>
-                    <th>Nama Mahasiswa</th>
+                    <th>Mahasiswa</th>
+                    <th>Pembimbing</th>
                     <th>Prodi</th>
                     <th>Kelompok</th>
                     <th>Instansi</th>
                     <th>Aksi</th>
                 </tr>
-            </thead>
+            </thead> 
             <tbody>
                 <?php foreach ($mahasiswa as $key => $mhs) : ?>
                     <tr>
                         <td><?= $key + 1 ?></td>
                         <td><?= $mhs['nim'] ?></td>
                         <td><?= $mhs['nama'] ?></td>
+                        <td><?= $mhs['dospem'] ?></td>
                         <td><?= $mhs['nama_prodi'] ?></td>
                         <td><?= $mhs['nama_kelompok'] ?></td>
                         <td><?= $mhs['nama_perusahaan'] ?></td>
                         <td>
-                            <a href="<?= route_to('admin.jurnal.bimbingan.show', $mhs['id']) ?>" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></a>
-                            <!-- <a href="<?= route_to('admin.jurnal.bimbingan.delete', $mhs['id']) ?>" class="btn btn-xs btn-danger">Hapus</a> -->
+                            <a href="<?= route_to('admin.jurnal.bimbingan.show', $mhs['mhs_id']) ?>" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></a>
+                            <!-- <a href="<?= route_to('admin.jurnal.bimbingan.delete', $mhs['mhs_id']) ?>" class="btn btn-xs btn-danger">Hapus</a> -->
                         </td>
                     </tr>
                 <?php endforeach; ?>

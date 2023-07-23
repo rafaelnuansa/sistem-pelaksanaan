@@ -37,7 +37,6 @@
       <tbody>
         <?php $nomor = 0; ?>
         <?php foreach($rows as $index => $row): ?>
-          <?php if($row['status_pkl'] == 'layak'): ?>
           <tr>
             <td><?= ++$nomor; ?></td>
             <td><?= $row['tahun_akademik'] ?></td>
@@ -56,7 +55,6 @@
               </form>
             </td>
           </tr>
-        <?php endif; ?>
         <?php endforeach; ?>
       </tbody>
     </table>

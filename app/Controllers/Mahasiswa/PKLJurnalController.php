@@ -22,7 +22,9 @@ class PKLJurnalController extends BaseController
         $this->JudulLaporan = new PKLJudulLaporanModel();
         $this->AnggotaModel = new PKLAnggotaModel();
         $this->getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
-        $this->kelompokId = $this->getKelompok->id;
+        if ($this->getKelompok) {
+            $this->kelompokId = $this->getKelompok->id;
+        }
         $this->mahasiswaId = session()->get('mahasiswa_id');
         $this->db = \Config\Database::connect();
     }
@@ -46,11 +48,54 @@ class PKLJurnalController extends BaseController
             // Tindakan yang diambil jika belum ada kelompok
             $data = [
                 'title' => 'Jurnal Pelaksanaan',
-                'data' => []
+                'data' => [],
+                'kelompokId' => null,
             ];
 
             return view('mahasiswa/pkl/jurnal/pelaksanaan', $data);
         }
+    }
+
+    public function pelaksanaan_cetak()
+    {
+        $getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
+
+        // Memeriksa apakah $getKelompok mengembalikan nilai atau tidak
+
+        $this->kelompokId = $getKelompok->id;
+        // Lanjutkan dengan kode Anda yang sudah ada
+        $jurnal = $this->PKLJurnalPelaksanaanModel->getJurnalPelaksanaanByIdMahasiswa($this->mahasiswaId);
+        // Check if $jurnal is not empty and extract the data if available
+        if (!empty($jurnal)) {
+            // Get the first row from the $jurnal array
+            $firstRow = reset($jurnal);
+
+            // Extract the 'nama_perusahaan' and 'alamat_perusahaan' from the first row
+            $nama_perusahaan = $firstRow['nama_perusahaan'];
+            $alamat_perusahaan = $firstRow['alamat_perusahaan'];
+            
+        }
+
+        $data = [
+            'title' => 'Jurnal Pelaksanaan',
+            'data' => $jurnal,
+            'kelompokId' => $this->kelompokId ?? '',
+            'mahasiswa' => $this->db->table('mahasiswa')->where('id', $this->mahasiswaId)->get()->getRow(),
+            'nama_perusahaan' => $nama_perusahaan,
+            'alamat_perusahaan' => $alamat_perusahaan,
+        ];
+
+        // Load the view file as a string
+        $html = view('mahasiswa/pkl/jurnal/pelaksanaan_cetak', $data);
+
+        // Create a new Dompdf instance
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+
+        $dompdf->render();
+
+        // Output the generated PDF to the browser
+        $dompdf->stream('laporan_jadwal_pkl.pdf', ['Attachment' => false]);
     }
 
     public function edit_pelaksanaan($id)
@@ -131,13 +176,14 @@ class PKLJurnalController extends BaseController
     public function bimbingan()
     {
         $judul_laporan = $this->JudulLaporan->where('mahasiswa_id', $this->mahasiswaId)->first();
+
         $data = [
             'title' => 'Jurnal Bimbingan',
             'data' => $this->PKLJurnalBimbinganModel->where('mahasiswa_id', $this->mahasiswaId)->findAll(),
             'judul_laporan' => ($judul_laporan != null) ? $judul_laporan['judul_laporan'] : null,
-            'kelompokId' => $this->kelompokId,
+            'kelompokId' => $this->kelompokId ?? null,
         ];
-        
+
         // dd($data['data']);
         return view('mahasiswa/pkl/jurnal/bimbingan', $data);
     }

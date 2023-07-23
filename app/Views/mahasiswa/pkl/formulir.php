@@ -9,7 +9,7 @@
 <div class="box">
   <div class="box-body">
     <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;">
-      <thead>
+      <thead class="bg-primary">
         <tr>
           <th>No</th>
           <th>Keterangan</th>

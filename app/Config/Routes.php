@@ -74,7 +74,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->post('instansi/store', 'InstansiController::store');
     $routes->get('instansi/edit/(:num)', 'InstansiController::edit/$1');
     $routes->post('instansi/update/(:num)', 'InstansiController::update/$1');
-    $routes->delete('instansi/delete/(:num)', 'InstansiController::delete/$1');
+    $routes->get('instansi/delete/(:num)', 'InstansiController::delete/$1');
 
     // Admin PKL 
     $routes->get('pkl', 'PklController::index', ['as' => 'admin.pkl.index']);
@@ -135,15 +135,6 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->get('tempat/show/(:num)', 'TempatController::show/$1', ['as' => 'admin.tempat.show']);
     $routes->get('tempat/delete/(:num)', 'TempatController::delete/$1', ['as' => 'admin.tempat.delete']);
 
-    // Dosen Pembimbing 
-    $routes->get('dosen_pembimbing', 'DosenPembimbingController::index', ['as' => 'admin.dosen_pembimbing.index']);
-    $routes->get('dosen_pembimbing/create', 'DosenPembimbingController::create', ['as' => 'admin.dosen_pembimbing.create']);
-    $routes->post('dosen_pembimbing', 'DosenPembimbingController::store', ['as' => 'admin.dosen_pembimbing.store']);
-    $routes->get('dosen_pembimbing/edit/(:segment)', 'DosenPembimbingController::edit/$1', ['as' => 'admin.dosen_pembimbing.edit']);
-    $routes->post('dosen_pembimbing/update/(:segment)', 'DosenPembimbingController::update/$1', ['as' => 'admin.dosen_pembimbing.update']);
-    $routes->get('dosen_pembimbing/delete/(:segment)', 'DosenPembimbingController::delete/$1', ['as' => 'admin.dosen_pembimbing.delete']);
-
-
     // Menampilkan daftar berkas (index)
     $routes->get('berkas', 'BerkasController::index');
     // Menampilkan form tambah berkas (create)
@@ -188,8 +179,10 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
     $routes->post('pkl', 'PKLController::update_instansi');
     // Jurnal Pelaksanaan 
     $routes->get('pkl/jurnal', 'PKLJurnalController::index');
+
     // Jurnal Pelaksanaan 
     $routes->get('pkl/jurnal/pelaksanaan', 'PKLJurnalController::pelaksanaan', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan']);
+    $routes->get('pkl/jurnal/pelaksanaan/cetak', 'PKLJurnalController::pelaksanaan_cetak', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.cetak']);
     $routes->post('pkl/jurnal/pelaksanaan', 'PKLJurnalController::storePelaksanaan', ['as' => 'mahasiswa.pkl.jurnal.pelaksanaan.store']);
     $routes->post('pkl/simpan_instansi', 'PKLController::simpan_instansi', ['as' => 'mahasiswa.pkl.simpan_instansi']);
     $routes->post('pkl/edit_instansi', 'PKLController::edit_instansi', ['as' => 'mahasiswa.pkl.edit_instansi']);
@@ -206,9 +199,9 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
     $routes->post('pkl/jurnal/bimbingan/edit/(:num)', 'PKLJurnalController::edit_bimbingan/$1', ['as' => 'mahasiswa.pkl.jurnal.bimbingan.edit']);
     $routes->get('pkl/jurnal/bimbingan/delete/(:num)', 'PKLJurnalController::delete_bimbingan/$1', ['as' => 'mahasiswa.pkl.jurnal.bimbingan.delete']);
 
-
     // Formulir penilaian
     $routes->get('pkl/formulir', 'PKLFormulirController::index');
+    $routes->get('pkl/formulir/penilaian', 'PKLFormulirController::penilaian'); 
     $routes->get('pkl/formulir/log-harian', 'PKLFormulirController::log_harian');
     $routes->get('pkl/jadwal', 'PKLJadwalController::index', ['as' => 'mahasiswa.pkl.jadwal.index']);
     $routes->post('pkl/jadwal/daftar', 'PKLJadwalController::daftar', ['as' => 'mahasiswa.pkl.jadwal.daftar']);
@@ -233,8 +226,9 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
 
 $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'authDosen'], function ($routes) {
     $routes->get('dashboard', 'DashboardController::index');
-    $routes->get('pkl', 'PKLController::index');
+    $routes->get('pkl', 'PKLController::index'); 
     $routes->get('pkl/approve', 'PKLController::approve_bimbingan', ['as' => 'dosen.pkl.validasi.bimbingan']);
+    $routes->get('pkl/reset', 'PKLController::reset_bimbingan', ['as' => 'dosen.pkl.validasi.bimbingan.reset']);
     $routes->get('pkl/jurnal/detail/(:segment)', 'PKLController::bimbingan_detail/$1');
     $routes->get('pkl/detail', 'PKLController::detail');
     $routes->get('pkl/jadwal', 'PKLController::jadwal_pkl');

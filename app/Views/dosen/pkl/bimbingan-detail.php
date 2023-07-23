@@ -34,12 +34,16 @@
                         <td><?= ++$index ?></td>
                         <td><?= $row['tanggal'] ?></td>
                         <td><?= $row['catatan'] ?></td>
-                        <td><?= $row['status'] ?></td>
-                        <td> <?php if ($row['status'] == 'Pending') : ?>
-                            <a href="<?= route_to('dosen.pkl.validasi.bimbingan') ?>?id=<?= $row['id_jurnal_bimbingan'] ?>" class="btn btn-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a>
-<?php else : ?>
-    <a href="#" class="btn btn-success">Sudah Melaksanakan</a>
-<?php endif; ?>
+                        <?php if ($row['status'] == 'Telah divalidasi') : ?>
+                            <td><span class="label label-primary"><?= $row['status'] ?></span></td>
+                        <?php else : ?>
+                            <td><span class="label label-danger"><?= $row['status'] ?></span></td>
+                        <?php endif; ?>
+                        <td> <?php if ($row['status'] == 'Menunggu Validasi') : ?>
+                                <a href="<?= route_to('dosen.pkl.validasi.bimbingan') ?>?id=<?= $row['id_jurnal_bimbingan'] ?>" class="btn btn-sm btn-primary" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Tervalidasi?')">Validasi</a>
+                            <?php else : ?>
+                                <a href="<?= route_to('dosen.pkl.validasi.bimbingan.reset') ?>?id=<?= $row['id_jurnal_bimbingan'] ?>" onclick="return confirm('Apakah Anda yakin ingin mereset status ini?')" class="btn btn-success">Reset</a>
+                            <?php endif; ?>
 
                         </td>
                     </tr>

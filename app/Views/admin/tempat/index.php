@@ -26,11 +26,12 @@
                 <a href="<?= route_to('admin.tempat.create'); ?>" class="btn btn-primary mb-2">Tambah Tempat</a>
                 <div class="table-responsive" style="margin-top: 20px;">
                     <table class="table table-striped datatable">
-                        <thead>
+                      
+                    <thead class="bg-primary">
                             <tr>
-                                <th>No</th>
-                                <th>Nama Tempat</th>
-                                <th>Aksi</th>
+                                <th>NO</th>
+                                <th>NAMA TEMPAT</th>
+                                <th>AKSI</th>
                             </tr>
                         </thead>
                         <tbody>

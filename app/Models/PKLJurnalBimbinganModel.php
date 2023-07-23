@@ -11,9 +11,19 @@ class PKLJurnalBimbinganModel extends Model
     protected $primaryKey = 'id_jurnal_bimbingan';
     protected $allowedFields = ['mahasiswa_id', 'tanggal', 'catatan', 'pkl_id', 'status'];
 
-
-    // Mengambil data jurnal bimbingan beserta data mahasiswa dan pkl terkait
     public function getJurnalBimbinganByIdMahasiswa($id_mahasiswa)
+    {
+        $query = $this->select('pkl_jurnal_bimbingan.*, mahasiswa.*, pkl.*')
+            ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_bimbingan.mahasiswa_id')
+            ->join('pkl', 'pkl.id = pkl_jurnal_bimbingan.pkl_id')
+            ->orderBy('pkl_jurnal_bimbingan.tanggal', 'asc')
+            ->where('mahasiswa_id', $id_mahasiswa)
+            ->get();
+ 
+        return $query->getResultArray();
+    }
+    // Mengambil data jurnal bimbingan beserta data mahasiswa dan pkl terkait
+    public function getJurnalBimbinganByIdMahasiswaold($id_mahasiswa)
     {
         $query = $this->select('pkl_jurnal_bimbingan.*, mahasiswa.*, pkl.*')
             ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_bimbingan.mahasiswa_id')
@@ -75,10 +85,8 @@ class PKLJurnalBimbinganModel extends Model
         ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_bimbingan.mahasiswa_id')
         ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
         ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
-        ->join('dosen_pembimbing', 'dosen_pembimbing.dosen_id = pkl.dosen_id')
-        ->join('dosen', 'dosen.id = dosen_pembimbing.dosen_id')
-        ->where('dosen_pembimbing.dosen_id', $dosenId)
-        ->where('dosen_pembimbing.jenis_pembimbing', 'PKL')
+        ->join('dosen', 'dosen.id = pkl.dosen_id')
+        ->where('pkl.dosen_id', $dosenId)
         ->get();
         return $query->getResultArray();
     }
@@ -88,9 +96,8 @@ class PKLJurnalBimbinganModel extends Model
         $query = $this->select('pkl_jurnal_bimbingan.*, prodi.nama_prodi as nama_prodi, mahasiswa.*, pkl.*, mahasiswa.nama as nama_mahasiswa')
             ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_bimbingan.mahasiswa_id')
             ->join('pkl', 'pkl.id = pkl_jurnal_bimbingan.pkl_id')
-            ->join('dosen_pembimbing', 'dosen_pembimbing.dosen_id = pkl.dosen_id')
             ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
-            ->where('dosen_pembimbing.dosen_id', $dosen_id)
+            ->where('pkl.dosen_id', $dosen_id)
             ->groupBy('mahasiswa.id')
             ->get();
 
