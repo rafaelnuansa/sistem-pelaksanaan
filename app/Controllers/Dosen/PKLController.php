@@ -213,7 +213,7 @@ class PKLController extends BaseController
     }
 
 
-    public function cetak($sidang_id,)
+    public function cetak($sidang_id)
     {
         $PKLNilaiModel = new PKLNilaiModel();
 
@@ -248,8 +248,6 @@ class PKLController extends BaseController
         // output the generated pdf
         return $this->pdf->stream('Laporan', array("Attachment" => false));
     }
-
-
 
     public function jadwal_pkl_bimbingan()
     {

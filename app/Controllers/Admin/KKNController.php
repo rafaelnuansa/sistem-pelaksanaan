@@ -25,11 +25,22 @@ class KKNController extends BaseController
     public function index()
     {
         $kknModel = new KKNModel();
-        $kkns = $kknModel
-            ->select('kkn.*, dosen.nama AS nama_dosen, prodi.nama_prodi')
+        $kknsWithInstansi = $kknModel
+            ->select('kkn.*, dosen.nama AS nama_dosen, prodi.nama_prodi, kkn_lokasi.nama_lokasi as nama_lokasi, kkn_lokasi.alamat_lokasi as alamat_lokasi')
             ->join('dosen', 'dosen.id = kkn.dosen_id')
             ->join('prodi', 'prodi.id = kkn.prodi_id')
+            ->join('kkn_lokasi', 'kkn.lokasi_id = kkn_lokasi.id', 'left')
+            ->where('kkn.lokasi_id >', 0)
             ->findAll();
+
+        $kknsWithoutInstansi = $kknModel
+            ->select('kkn.*, dosen.nama AS nama_dosen, prodi.nama_prodi, "Belum ada lokasi" as nama_lokasi, "Belum tersedia" as alamat_lokasi', false)
+            ->join('dosen', 'dosen.id = kkn.dosen_id')
+            ->join('prodi', 'prodi.id = kkn.prodi_id')
+            ->where('kkn.lokasi_id', 0)
+            ->findAll();
+
+        $kkns = array_merge($kknsWithInstansi, $kknsWithoutInstansi);
 
         $mahasiswa = $this->mahasiswa->findAll();
 
@@ -49,7 +60,11 @@ class KKNController extends BaseController
                 'tgl_selesai' => $row['tgl_selesai'],
                 'nama_prodi' => $row['nama_prodi'],
                 'nama_dosen' => $row['nama_dosen'],
-                'nama_perusahaan' => $row['nama_perusahaan'],
+                'nama_lokasi' => $row['nama_lokasi'],
+                'alamat_lokasi' => $row['alamat_lokasi'],
+                'bimbingan_perusahaan' => $row['bimbingan_perusahaan'],
+                'jabatan_bimbingan_perusahaan' => $row['jabatan_bimbingan_perusahaan'],
+                'no_perusahaan' => $row['no_perusahaan'],
                 'ketua_kelompok' => ($ketua_kelompok) ? $ketua_kelompok['nama'] : 'Belum ada ketua',
             ];
         }
@@ -152,32 +167,29 @@ class KKNController extends BaseController
     {
         $kkn = $this->kkn->find($kelompok_id);
         $mahasiswa = $this->mahasiswa
-        ->select('mahasiswa.id as id, kkn_anggota.id as kkn_anggota_id, mahasiswa.nim, mahasiswa.nama', )
-        ->join('kkn_anggota', 'mahasiswa.id = kkn_anggota.mahasiswa_id', 'left')
-        ->where('mahasiswa.status_kkn', 'layak')
-        ->where('mahasiswa.prodi_id', $kkn['prodi_id'])
-        ->whereNotIn('mahasiswa.id', function ($builder) use ($kelompok_id) {
-            $builder->select('mahasiswa_id')
-                ->from('kkn_anggota')
-                ->where('kkn_id', $kelompok_id);
-        })
-        ->get()
-        ->getResultArray();
-    
+            ->select('mahasiswa.id as id, kkn_anggota.id as kkn_anggota_id, mahasiswa.nim, mahasiswa.nama',)
+            ->join('kkn_anggota', 'mahasiswa.id = kkn_anggota.mahasiswa_id', 'left')
+            // ->where('mahasiswa.prodi_id', $kkn['prodi_id'])
+            ->whereNotIn('mahasiswa.id', function ($builder) use ($kelompok_id) {
+                $builder->select('mahasiswa_id')
+                    ->from('kkn_anggota')
+                    ->where('kkn_id', $kelompok_id);
+            })
+            ->get()
+            ->getResultArray();
+
 
         $rows = $this->anggota
-        ->select('kkn_anggota.id as kkn_anggota_id, kkn.id as kkn_id, mahasiswa.id as mahasiswa_id, prodi.id as prodi_id, mahasiswa.*, kkn.*, prodi.*, kkn.*, kkn_anggota.*')
-        ->where('kkn_id', $kelompok_id)
-        ->join('kkn', 'kkn_anggota.kkn_id = kkn.id')
-        ->join('mahasiswa', 'kkn_anggota.mahasiswa_id = mahasiswa.id')
-        ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
-        ->get()
-        ->getResultArray();
-            // dd($rows);
+            ->select('kkn_anggota.id as kkn_anggota_id, kkn.id as kkn_id, mahasiswa.id as mahasiswa_id, prodi.id as prodi_id, mahasiswa.*, kkn.*, prodi.*, kkn.*, kkn_anggota.*')
+            ->where('kkn_id', $kelompok_id)
+            ->join('kkn', 'kkn_anggota.kkn_id = kkn.id')
+            ->join('mahasiswa', 'kkn_anggota.mahasiswa_id = mahasiswa.id')
+            ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
+            ->get()
+            ->getResultArray();
 
         $prodi = $this->prodi->find($kkn['prodi_id']);
         $dosen = $this->dosen->find($kkn['dosen_id']);
-
 
         $data = [
             'title' => 'Tambah Kelompok',
@@ -220,7 +232,7 @@ class KKNController extends BaseController
         return redirect()->back()->with('success', 'Anggota KKN berhasil dihapus.');
     }
 
-    
+
     public function statusAnggota()
     {
         $id = $this->request->getVar('id');
@@ -236,14 +248,13 @@ class KKNController extends BaseController
                 session()->setFlashdata('error', 'Hanya boleh ada satu anggota dengan status Ketua!');
                 return redirect()->back();
             }
-        } 
-    
+        }
+
         $data = $this->anggota->find($id);
         $data['is_ketua'] = ($status == 'Ketua') ? true : false;
-    
+
         $this->anggota->save($data);
         session()->setFlashdata('success', 'Status berhasil diubah!');
         return redirect()->back();
     }
-    
 }

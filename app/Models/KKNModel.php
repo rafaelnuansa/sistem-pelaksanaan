@@ -8,6 +8,7 @@ class KKNModel extends Model
 {
     protected $table = 'kkn';
     protected $primaryKey = 'id';
+
     protected $allowedFields = [
         'nama_kelompok',
         'tgl_mulai',
@@ -19,6 +20,7 @@ class KKNModel extends Model
         'created_at',
         'updated_at',
     ];
+    
     protected $useTimestamps = true;
 
 }

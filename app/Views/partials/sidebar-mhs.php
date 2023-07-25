@@ -46,19 +46,25 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li class="<?= (uri_string() == 'pengeluaran') ? 'active' : '' ?>">
-            <a href="<?= base_url('pengeluaran') ?>">
+          
+        <li class="<?= (uri_string() == 'mahasiswa/kkn') ? 'active' : '' ?>">
+            <a href="<?= base_url('mahasiswa/kkn') ?>">
+              <i class="fa fa-briefcase"></i> <span>Kelompok KKN</span>
+            </a>
+          </li>
+        <li class="<?= (uri_string() == 'mahasiswa/kkn/jurnal/pelaksanaan') ? 'active' : '' ?>">
+            <a href="<?= base_url('mahasiswa/kkn/jurnal/pelaksanaan') ?>">
               <i class="fa fa-briefcase"></i> <span>Jurnal Pelaksanaan</span>
             </a>
           </li>
-          <li class="<?= (uri_string() == 'laporan') ? 'active' : '' ?>">
-            <a href="<?= base_url('laporan') ?>">
-              <i class="fa fa-briefcase"></i> <span>Surat izin observasi</span>
+          <li class="<?= (uri_string() == 'mahasiswa/kkn/jurnal/monitoring') ? 'active' : '' ?>">
+            <a href="<?= base_url('mahasiswa/kkn/jurnal/monitoring') ?>">
+              <i class="fa fa-briefcase"></i> <span>Jurnal Monitoring</span>
             </a>
           </li>
-          <li class="<?= (uri_string() == 'laporan') ? 'active' : '' ?>">
-            <a href="<?= base_url('laporan') ?>">
-              <i class="fa fa-briefcase"></i> <span>Jurnal Bimbingan</span>
+          <li class="<?= (uri_string() == 'mahasiswa/kkn/surat_izin_observasi') ? 'active' : '' ?>">
+            <a href="<?= base_url('mahasiswa/kkn/surat_izin_observasi') ?>">
+              <i class="fa fa-envelope"></i> <span>Surat Izin Observasi</span>
             </a>
           </li>
         </ul>

@@ -1,14 +1,11 @@
 <?= $this->extend('layouts/default'); ?>
-
 <?= $this->section('content'); ?>
-
-
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Data KKN</h3>
+                    <h3 class="box-title">Data Kelompok KKN</h3>
                     <div class="box-tools">
                         <a href="<?= site_url('/admin/kkn/create'); ?>" class="btn btn-primary btn-sm">Tambah KKN</a>
                     </div>
@@ -46,7 +43,7 @@
                                         <td><?= $kkn['tahun_akademik']; ?></td>
                                         <td><?= $kkn['nama_dosen']; ?></td>
                                         <td><?= $kkn['nama_prodi']; ?></td>
-                                        <td><?= $kkn['nama_perusahaan']; ?></td>
+                                        <td><?= $kkn['nama_lokasi'] ?? ''; ?></td>
                                         <td> <span class="label label-primary"> <?= $kkn['ketua_kelompok'] ?></span>
 
                                         </td>
@@ -65,5 +62,4 @@
         </div>
     </div>
 </section>
-
-<?= $this->endSection(); ?>
+<?= $this->endSection(); ?>``

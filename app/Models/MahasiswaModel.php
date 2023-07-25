@@ -47,6 +47,18 @@ class MahasiswaModel extends Model
         return $query->getResultArray();
     }
 
+    public function getMahasiswaHasKKN()
+    {
+        $query = $this->select('mahasiswa.*, prodi.nama_prodi, kkn.*, mahasiswa.id as mhs_id, kkn_lokasi.nama_lokasi as nama_lokasi, kkn_lokasi.alamat_lokasi as alamat_lokasi, dospem.nama as dospem')
+            ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
+            ->join('kkn_anggota', 'kkn_anggota.mahasiswa_id = mahasiswa.id')
+            ->join('kkn', 'kkn.id = kkn_anggota.kkn_id')
+            ->join('dosen as dospem', 'dospem.id = kkn.dosen_id')
+            ->join('kkn_lokasi', 'kkn_lokasi.id = kkn.lokasi_id', 'left')
+            ->get();
+        return $query->getResultArray();
+    }
+
     public function getMahasiswaBySession()
     {
         // Ambil data sesi mahasiswa_id

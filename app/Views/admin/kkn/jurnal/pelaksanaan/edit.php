@@ -9,7 +9,7 @@
 
 <h1>Edit Jurnal Pelaksanaan</h1>
 
-<form action="<?= route('admin.jurnal.pelaksanaan.update', $jurnal['id_jurnal_pelaksanaan']) ?>" method="POST">
+<form action="<?= route('admin.kkn.jurnal.pelaksanaan.update', $jurnal['id_jurnal_pelaksanaan']) ?>" method="POST">
     <?= csrf_field() ?>
     <?= method_field('PUT') ?>
 

@@ -12,7 +12,7 @@
             <div class="alert alert-success"><?= session()->getFlashData('success') ?></div>
         <?php endif; ?>
 
-        <form action="<?= route_to('admin.jurnal.pelaksanaan.store') ?>" method="POST">
+        <form action="<?= route_to('admin.kkn.jurnal.pelaksanaan.store') ?>" method="POST">
             <?= csrf_field() ?>
 
             <div class="form-group">

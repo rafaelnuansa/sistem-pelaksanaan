@@ -76,6 +76,15 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->post('instansi/update/(:num)', 'InstansiController::update/$1');
     $routes->get('instansi/delete/(:num)', 'InstansiController::delete/$1');
 
+
+    // Admin Lokasi KKN 
+    $routes->get('lokasi', 'KKNLokasiController::index');
+    $routes->get('lokasi/create', 'KKNLokasiController::create');
+    $routes->post('lokasi/store', 'KKNLokasiController::store');
+    $routes->get('lokasi/edit/(:num)', 'KKNLokasiController::edit/$1');
+    $routes->post('lokasi/update/(:num)', 'KKNLokasiController::update/$1');
+    $routes->get('lokasi/delete/(:num)', 'KKNLokasiController::delete/$1');
+
     // Admin PKL 
     $routes->get('pkl', 'PklController::index', ['as' => 'admin.pkl.index']);
     $routes->get('pkl/create', 'PklController::create', ['as' => 'admin.pkl.create']);
@@ -89,6 +98,14 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->get('pkl/anggota/tambah', 'PKLController::storeAnggota');
     $routes->post('pkl/anggota/delete', 'PKLController::deleteAnggota');
     $routes->get('pkl/anggota/status', 'PKLController::statusAnggota');
+
+
+    // Rute untuk assign anggota KKN
+    $routes->get('kkn/anggota/(:num)', 'KKNController::assignAnggota/$1', ['as' => 'admin.kkn.assign_anggota']);
+    $routes->get('kkn/anggota/tambah', 'KKNController::storeAnggota');
+    $routes->post('kkn/anggota/delete', 'KKNController::deleteAnggota');
+    $routes->get('kkn/anggota/status', 'KKNController::statusAnggota');
+
 
     // Admin PKL Jurnal Pelaksanaan
     $routes->get('pkl/jurnal/pelaksanaan', 'PKLJurnalPelaksanaanController::index', ['as' => 'admin.jurnal.pelaksanaan.index']);
@@ -107,6 +124,16 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->post('pkl/jurnal/bimbingan/update/(:num)', 'PKLJurnalBimbinganController::update/$1', ['as' => 'admin.jurnal.bimbingan.update']);
     $routes->get('pkl/jurnal/bimbingan/show/(:num)', 'PKLJurnalBimbinganController::show/$1', ['as' => 'admin.jurnal.bimbingan.show']);
     $routes->get('pkl/jurnal/bimbingan/delete/(:num)', 'PKLJurnalBimbinganController::delete/$1', ['as' => 'admin.jurnal.bimbingan.delete']);
+
+
+    // Admin KKN Jurnal Monitoring
+    $routes->get('kkn/jurnal/monitoring', 'KKNJurnalMonitoringController::index', ['as' => 'admin.jurnal.monitoring.index']);
+    $routes->get('kkn/jurnal/monitoring/create', 'KKNJurnalMonitoringController::create', ['as' => 'admin.jurnal.monitoring.create']);
+    $routes->post('kkn/jurnal/monitoring', 'KKNJurnalMonitoringController::store', ['as' => 'admin.jurnal.monitoring.store']);
+    $routes->get('kkn/jurnal/monitoring/edit/(:num)', 'KKNJurnalMonitoringController::edit/$1', ['as' => 'admin.jurnal.monitoring.edit']);
+    $routes->post('kkn/jurnal/monitoring/update/(:num)', 'KKNJurnalMonitoringController::update/$1', ['as' => 'admin.jurnal.monitoring.update']);
+    $routes->get('kkn/jurnal/monitoring/show/(:num)', 'KKNJurnalMonitoringController::show/$1', ['as' => 'admin.jurnal.monitoring.show']);
+    $routes->get('kkn/jurnal/monitoring/delete/(:num)', 'KKNJurnalMonitoringController::delete/$1', ['as' => 'admin.jurnal.monitoring.delete']);
 
     // Jadwal sidang
     $routes->get('pkl/jadwal', 'PKLJadwalSidangController::index');
@@ -156,7 +183,7 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->get('kkn/edit/(:num)', 'KKNController::edit/$1', ['as' => 'admin.kkn.edit']);
     $routes->post('kkn/update/(:num)', 'KKNController::update/$1', ['as' => 'admin.kkn.update']);
     $routes->get('kkn/delete/(:num)', 'KKNController::delete/$1', ['as' => 'admin.kkn.delete']);
-    
+
     // Admin KKN Jurnal Pelaksanaan
     $routes->get('kkn/jurnal/pelaksanaan', 'KKNJurnalPelaksanaanController::index', ['as' => 'admin.kkn.jurnal.pelaksanaan.index']);
     $routes->get('kkn/jurnal/pelaksanaan/create', 'KKNJurnalPelaksanaanController::create', ['as' => 'admin.kkn.jurnal.pelaksanaan.create']);
@@ -173,9 +200,10 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
     $routes->get('', 'DashboardController::index', ['as' => 'mahasiswa.dashboard']);
     $routes->get('dashboard', 'DashboardController::index', ['as' => 'mahasiswa.dashboard.index']);
 
+    $routes->get('', 'PKLController::index');
+
     // Menu PKL Mahasiswa 
     $routes->get('pkl', 'PKLController::index');
-    $routes->get('', 'PKLController::index');
     $routes->post('pkl', 'PKLController::update_instansi');
     // Jurnal Pelaksanaan 
     $routes->get('pkl/jurnal', 'PKLJurnalController::index');
@@ -201,12 +229,53 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
 
     // Formulir penilaian
     $routes->get('pkl/formulir', 'PKLFormulirController::index');
-    $routes->get('pkl/formulir/penilaian', 'PKLFormulirController::penilaian'); 
+    $routes->get('pkl/formulir/penilaian', 'PKLFormulirController::penilaian');
     $routes->get('pkl/formulir/log-harian', 'PKLFormulirController::log_harian');
     $routes->get('pkl/jadwal', 'PKLJadwalController::index', ['as' => 'mahasiswa.pkl.jadwal.index']);
     $routes->post('pkl/jadwal/daftar', 'PKLJadwalController::daftar', ['as' => 'mahasiswa.pkl.jadwal.daftar']);
 
     $routes->get('pkl/penilaian/cetak/(:segment)', 'PKLController::cetak/$1');
+
+
+    // KKN 
+
+    // Menu KKN Mahasiswa 
+    $routes->get('kkn', 'KKNController::index');
+    $routes->post('kkn', 'KKNController::update_instansi');
+    // Jurnal Pelaksanaan 
+    $routes->get('kkn/jurnal', 'KKNJurnalController::index');
+
+    // Jurnal Pelaksanaan 
+    $routes->get('kkn/jurnal/pelaksanaan', 'KKNJurnalController::pelaksanaan', ['as' => 'mahasiswa.kkn.jurnal.pelaksanaan']);
+    $routes->get('kkn/jurnal/pelaksanaan/cetak', 'KKNJurnalController::pelaksanaan_cetak', ['as' => 'mahasiswa.kkn.jurnal.pelaksanaan.cetak']);
+    $routes->post('kkn/jurnal/pelaksanaan', 'KKNJurnalController::storePelaksanaan', ['as' => 'mahasiswa.kkn.jurnal.pelaksanaan.store']);
+    $routes->post('kkn/simpan_lokasi', 'KKNController::simpan_lokasi', ['as' => 'mahasiswa.kkn.simpan_lokasi']);
+    $routes->post('kkn/edit_lokasi', 'KKNController::edit_lokasi', ['as' => 'mahasiswa.kkn.edit_lokasi']);
+    $routes->post('kkn/jurnal/pelaksanaan/edit/(:num)', 'KKNJurnalController::edit_pelaksanaan/$1', ['as' => 'mahasiswa.kkn.jurnal.pelaksanaan.edit']);
+    $routes->get('kkn/jurnal/pelaksanaan/delete/(:num)', 'KKNJurnalController::delete_pelaksanaan/$1', ['as' => 'mahasiswa.kkn.jurnal.pelaksanaan.delete']);
+
+    // Jurnal Monitoring 
+    $routes->get('kkn/jurnal/monitoring', 'KKNJurnalController::monitoring',  ['as' => 'mahasiswa.kkn.jurnal.monitoring']);
+    $routes->post('kkn/jurnal/monitoring', 'KKNJurnalController::storeMonitoring',  ['as' => 'mahasiswa.kkn.jurnal.monitoring.store']);
+    $routes->post('kkn/jurnal/monitoring/simpan_judul', 'KKNJurnalController::simpanJudulLaporan',  ['as' => 'mahasiswa.kkn.jurnal.monitoring.simpanJudul']);
+
+    $routes->get('kkn/jurnal/monitoring/validasi/(:segment)', 'KKNJurnalController::validasiMonitoring/$1', ['as' => 'mahasiswa.kkn.jurnal.monitoring.validasi']);
+    $routes->get('kkn/jurnal/monitoring/unvalidasi/(:segment)', 'KKNJurnalController::unvalidasiMonitoring/$1', ['as' => 'mahasiswa.kkn.jurnal.monitoring.unvalidasi']);
+    $routes->post('kkn/jurnal/monitoring/edit/(:num)', 'KKNJurnalController::edit_monitoring/$1', ['as' => 'mahasiswa.kkn.jurnal.monitoring.edit']);
+    $routes->get('kkn/jurnal/monitoring/delete/(:num)', 'KKNJurnalController::delete_monitoring/$1', ['as' => 'mahasiswa.kkn.jurnal.monitoring.delete']);
+
+    // Surat IZIN Observasi KKN
+    $routes->get('kkn/surat_izin_observasi', 'KKNController::surat_izin_observasi',  ['as' => 'mahasiswa.kkn.surat_izin_observasi']);
+
+    // Formulir penilaian
+    $routes->get('kkn/formulir', 'KKNFormulirController::index');
+    $routes->get('kkn/formulir/penilaian', 'KKNFormulirController::penilaian');
+    $routes->get('kkn/formulir/log-harian', 'KKNFormulirController::log_harian');
+    $routes->get('kkn/jadwal', 'KKNJadwalController::index', ['as' => 'mahasiswa.kkn.jadwal.index']);
+    $routes->post('kkn/jadwal/daftar', 'KKNJadwalController::daftar', ['as' => 'mahasiswa.kkn.jadwal.daftar']);
+    $routes->get('kkn/penilaian/cetak/(:segment)', 'KKNController::cetak/$1');
+
+    //  KKN END 
 
     // Menampilkan daftar berkas (index)
     $routes->get('berkas', 'BerkasController::index');
@@ -226,7 +295,7 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
 
 $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'authDosen'], function ($routes) {
     $routes->get('dashboard', 'DashboardController::index');
-    $routes->get('pkl', 'PKLController::index'); 
+    $routes->get('pkl', 'PKLController::index');
     $routes->get('pkl/approve', 'PKLController::approve_bimbingan', ['as' => 'dosen.pkl.validasi.bimbingan']);
     $routes->get('pkl/reset', 'PKLController::reset_bimbingan', ['as' => 'dosen.pkl.validasi.bimbingan.reset']);
     $routes->get('pkl/jurnal/detail/(:segment)', 'PKLController::bimbingan_detail/$1');

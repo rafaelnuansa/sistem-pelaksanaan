@@ -122,7 +122,7 @@
                 -
               <?php endif; ?>
             </td>
-            <td><span class="label label-primary"><?= $row['status_ujian'] ?></span></td>
+            <td><span class="label label-primary"><?= $row['status_ujian'] ?? '' ?></span></td>
             <td class="text-center">
               <button class="btn btn-success approve btn-sm" data-id="<?= $row['id_pkl_ujian'] ?>" data-mahasiswa-id="<?= $row['mahasiswa_id'] ?>" data-mahasiswa-nama="<?= $row['nama'] ?>" data-nama-kelompok="<?= $row['nama_kelompok'] ?>" data-nama-dospem="<?= $row['dospem_nama'] ?>"><i class="fa fa-check"></i></button>
             </td>

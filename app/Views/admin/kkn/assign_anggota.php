@@ -46,27 +46,25 @@
 
                             <?php $nomor = 0; ?>
                             <?php foreach ($rows as $row) : ?>
-                                <?php if ($row['status_pkl'] == 'layak') : ?>
                                     <tr>
                                         <td><?= $row['id']; ?></td>
                                         <td><?= $row['tahun_akademik'] ?></td>
                                         <td><?= $row['nama'] ?></td>
                                         <td><?= $row['nama_prodi'] ?></td>
                                         <td>
-                                            <select name="status" data-pkl_id="<?= $id_kelompok;?>" data-id="<?= $row['id'] ?>" class="form-control roles">
+                                            <select name="status" data-kkn_id="<?= $id_kelompok;?>" data-id="<?= $row['id'] ?>" class="form-control roles">
                                                 <option value="Anggota" <?= ($row['is_ketua'] == false) ? ' selected' : '' ?>>Anggota</option>
                                                 <option value="Ketua" <?= ($row['is_ketua'] == true) ? ' selected' : '' ?>>Ketua</option>
                                             </select>
                                         </td>
                                         <td>
-                                            <form style="display: inline;" action="<?= base_url('admin/pkl/anggota/delete') ?>" method="POST">
+                                            <form style="display: inline;" action="<?= base_url('admin/kkn/anggota/delete') ?>" method="POST">
                                                 <input type="hidden" name="id" value="<?= $row['id'] ?>">
                                                 <button type="button" class="btn btn-danger btn-sm delete"><i class="fa fa-trash"></i></button>
                                             </form>
 
                                         </td>
                                     </tr>
-                                <?php endif; ?>
                             <?php endforeach; ?>
                         </tbody>
 
@@ -90,7 +88,7 @@
             </div>
             <div class="modal-body">
 
-                <form method="POST" action="<?= base_url('pkl/kelompok') ?>">
+                <form method="POST" action="<?= base_url('kkn/kelompok') ?>">
                     <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;" id="mahasiswa">
                         <thead>
                             <tr>
@@ -109,7 +107,7 @@
                                     <td><?= $row['nim'] ?></td>
                                     <td><?= $row['nama'] ?></td>
                                     <td class="text-center">
-                                        <a href="<?= base_url('admin/pkl/anggota/tambah?pkl=' . $id_kelompok . '&mahasiswa_id=' . $row['id']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i></a>
+                                        <a href="<?= base_url('admin/kkn/anggota/tambah?kkn=' . $id_kelompok . '&mahasiswa_id=' . $row['id']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i></a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -146,9 +144,9 @@
 
     $('.roles').change(function() {
         const id = $(this).attr('data-id');
-        const pkl_id = $(this).attr('data-pkl_id');
+        const kkn_id = $(this).attr('data-kkn_id');
         const status = $(this).val();
-        window.open("<?= base_url('admin/pkl/anggota/status') ?>?pkl_id="+pkl_id+'&id=' + id + '&status=' + status, '_self');
+        window.open("<?= base_url('admin/kkn/anggota/status') ?>?kkn_id="+kkn_id+'&id=' + id + '&status=' + status, '_self');
     });
 
     $('.add').click(function() {

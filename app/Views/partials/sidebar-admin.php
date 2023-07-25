@@ -16,6 +16,7 @@
                             || strpos(uri_string(), 'admin/users') === 0
                             || strpos(uri_string(), 'admin/fakultas') === 0
                             || strpos(uri_string(), 'admin/instansi') === 0
+                            || strpos(uri_string(), 'admin/lokasi') === 0
                             || strpos(uri_string(), 'admin/tempat') === 0
                             || strpos(uri_string(), 'admin/prodi') === 0) ? 'active' : '' ?>">
         <a href="#">
@@ -52,6 +53,12 @@
           <li class="<?= (uri_string() == 'admin/instansi') ? 'active' : '' ?>">
             <a href="<?= base_url('admin/instansi') ?>">
               <i class="fa fa-building-o"></i> <span>Instansi</span>
+            </a>
+          </li>
+          
+          <li class="<?= (uri_string() == 'admin/lokasi') ? 'active' : '' ?>">
+            <a href="<?= base_url('admin/lokasi') ?>">
+              <i class="fa fa-building-o"></i> <span>Lokasi KKN</span>
             </a>
           </li>
           <li class="<?= (uri_string() == 'admin/tempat') ? 'active' : '' ?>">

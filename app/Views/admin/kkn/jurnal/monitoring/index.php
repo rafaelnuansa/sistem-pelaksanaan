@@ -9,7 +9,7 @@
 <!-- Default box -->
 <div class="box">
     <div class="box-header with-border">
-        <h3 class="box-title">Daftar Jurnal Bimbingan</h3>
+        <h3 class="box-title">Daftar Jurnal Monitoring</h3>
     </div>
     <div class="box-body">
         <?php if (session()->getFlashData('success') !== null) : ?>
@@ -20,7 +20,7 @@
             <div class="alert alert-danger"><?= session()->getFlashData('error') ?></div>
         <?php endif; ?> 
 
-        <!-- <a href="<?= route_to('admin.jurnal.bimbingan.create') ?>" class="btn btn-primary mb-3">Tambah Jurnal Bimbingan</a> -->
+        <!-- <a href="<?= route_to('admin.jurnal.bimbingan.create') ?>" class="btn btn-primary mb-3">Tambah Jurnal Monitoring</a> -->
 
         <div class="table-responsive">
             
@@ -32,7 +32,7 @@
                     <th>Nama Mahasiswa</th>
                     <th>Prodi</th>
                     <th>Kelompok</th>
-                    <th>Instansi</th>
+                    <th>Lokasi</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -44,7 +44,7 @@
                         <td><?= $mhs['nama'] ?></td>
                         <td><?= $mhs['nama_prodi'] ?></td>
                         <td><?= $mhs['nama_kelompok'] ?></td>
-                        <td><?= $mhs['nama_perusahaan'] ?></td>
+                        <td><?= $mhs['nama_lokasi'] ?? '' ?></td>
                         <td>
                             <a href="<?= route_to('admin.jurnal.bimbingan.show', $mhs['id']) ?>" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></a>
                             <!-- <a href="<?= route_to('admin.jurnal.bimbingan.delete', $mhs['id']) ?>" class="btn btn-xs btn-danger">Hapus</a> -->

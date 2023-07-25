@@ -3,31 +3,29 @@
 namespace App\Controllers\Mahasiswa;
 
 use App\Controllers\BaseController;
-use App\Models\InstansiModel;
+use App\Models\KKNLokasiModel;
 use App\Models\MahasiswaModel;
-use App\Models\PKLAnggotaModel;
-use App\Models\PKLJudulLaporanModel;
-use App\Models\PKLJurnalBimbinganModel;
-use App\Models\PKLJurnalPelaksanaanModel;
-use App\Models\PKLModel;
-use App\Models\PKLNilaiModel;
+use App\Models\KKNAnggotaModel;
+use App\Models\KKNJurnalMonitoringModel;
+use App\Models\KKNJurnalPelaksanaanModel;
+use App\Models\KKNModel;
+use App\Models\KKNNilaiModel;
 use App\Models\ProdiModel;
 use Dompdf\Dompdf;
 
-class PKLController extends BaseController
+class KKNController extends BaseController
 {
     public function __construct()
     {
         $this->pdf = new Dompdf();
-        $this->PKLJurnalPelaksanaanModel = new PKLJurnalPelaksanaanModel();
-        $this->PKLJurnalBimbinganModel = new PKLJurnalBimbinganModel();
+        $this->KKNJurnalPelaksanaanModel = new KKNJurnalPelaksanaanModel();
+        $this->KKNJurnalMonitoringModel = new KKNJurnalMonitoringModel();
         $this->ProdiModel = new ProdiModel();
-        $this->PKLJudulLaporanModel = new PKLJudulLaporanModel();
-        $this->InstansiModel = new InstansiModel();
-        $this->PKLModel = new PKLModel();
+        $this->KKNLokasiModel = new KKNLokasiModel();
+        $this->KKNModel = new KKNModel();
         $this->MahasiswaModel = new MahasiswaModel();
-        $this->AnggotaModel = new PKLAnggotaModel();
-        $this->InstansiModel = new InstansiModel();
+        $this->AnggotaModel = new KKNAnggotaModel();
+        $this->KKNLokasiModel = new KKNLokasiModel();
         $this->mahasiswaId = session()->get('mahasiswa_id');
         $this->getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
         if($this->getKelompok){
@@ -50,45 +48,45 @@ class PKLController extends BaseController
                 ->first();
 
             $anggota = $this->AnggotaModel
-                ->where('pkl_id', $kelompokId)
-                ->join('pkl', 'pkl_anggota.pkl_id = pkl.id')
-                ->join('mahasiswa', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
+                ->where('kkn_id', $kelompokId)
+                ->join('kkn', 'kkn_anggota.kkn_id = kkn.id')
+                ->join('mahasiswa', 'kkn_anggota.mahasiswa_id = mahasiswa.id')
                 ->get()
                 ->getResultArray(); 
                 
             $dospem = $this->db->table('dosen')
                 ->select('dosen.*, dosen.nama as dospem')
-                ->join('pkl', 'pkl.dosen_id = dosen.id', 'left')
-                ->join('pkl_anggota', 'pkl_anggota.pkl_id = pkl.id', 'left')
-                ->join('mahasiswa', 'pkl_anggota.mahasiswa_id = mahasiswa.id', 'left')
+                ->join('kkn', 'kkn.dosen_id = dosen.id', 'left')
+                ->join('kkn_anggota', 'kkn_anggota.kkn_id = kkn.id', 'left')
+                ->join('mahasiswa', 'kkn_anggota.mahasiswa_id = mahasiswa.id', 'left')
                 ->where('mahasiswa.id', $this->mahasiswaId)
                 ->get()
                 ->getRow();
             // dd($getKelompok);
-            $instansi = $this->InstansiModel->findAll();
-            // dd($instansi);
+            $lokasi = $this->KKNLokasiModel->findAll();
+            // dd($lokasi);
             $data = [
-                'title' => 'Kelompok PKL ',
+                'title' => 'Kelompok KKN ',
                 'anggota' => $anggota,
                 'dospem' => $dospem,
                 'akun' => $akun,
                 'nama_kelompok' =>  $getKelompok->nama_kelompok,
                 'is_ketua' => $is_ketua,
                 'kelompok' => $getKelompok,
-                'instansi' => $instansi,
+                'lokasi' => $lokasi,
             ];
         } else {
             // Tindakan yang diambil jika kelompokId tidak ada atau belum punya kelompok
             $data = [
-                'title' => 'Kelompok PKL',
+                'title' => 'Kelompok KKN',
                 'anggota' => [],
-                'instansi' => null,
+                'lokasi' => null,
                 'kelompok' => null,
                 'akun' => null,
             ];
         }
 
-        return view('mahasiswa/pkl/index', $data);
+        return view('mahasiswa/kkn/index', $data);
     }
 
     public function pelaksanaan()
@@ -97,53 +95,37 @@ class PKLController extends BaseController
         // dd($this->kelompokId);
         $data = [
             'title' => 'Jurnal Pelaksanaan',
-            'data' => $this->PKLJurnalPelaksanaanModel->where('mahasiswa_id', KKN)->findAll(),
+            'data' => $this->KKNJurnalPelaksanaanModel->where('mahasiswa_id', $this->mahasiswaId)->findAll(),
             'kelompokId' => $this->kelompokId,
         ];
 
-        return view('mahasiswa/pkl/jurnal/pelaksanaan', $data);
+        return view('mahasiswa/kkn/jurnal/pelaksanaan', $data);
     }
 
-    public function bimbingan()
+    public function monitoring()
     {
-        $judul_laporan = $this->PKLJudulLaporanModel->where('mahasiswa_id', $this->mahasiswaId)->first();
-
         $data = [
-            'title' => 'Jurnal Bimbingan',
-            'data' => $this->PKLJurnalBimbinganModel->where('mahasiswa_id', KKN)->findAll(),
-            'judul_laporan' => ($judul_laporan != null) ? $judul_laporan['judul_laporan'] : null
+            'title' => 'Jurnal Monitoring',
+            'data' => $this->KKNJurnalMonitoringModel->where('mahasiswa_id', $this->mahasiswaId)->findAll(),
         ];
 
-        return view('mahasiswa/pkl/jurnal/bimbingan', $data);
+        return view('mahasiswa/kkn/jurnal/monitoring', $data);
     }
 
-    public function simpan_judul()
+    public function edit_lokasi()
     {
-
-        $this->PKLJudulLaporanModel->insert([
-            'judul' => $this->request->getVar('judul_laporan'),
-            'user_id' => session()->get('id')
-        ]);
-
-        session()->setFlashdata('success', 'Judul berhasil disimpan!');
-
-        return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan');
-    }
-
-    public function edit_instansi()
-    {
-        $PKLModel = new PKLModel();
+        $KKNModel = new KKNModel();
         $kelompokId = $this->request->getVar('kelompok_id');
     
         // Jika mengisi form yang freetext
         $data = [
-            'instansi_id' => $this->request->getPost('instansi_id'),
-            'bimbingan_perusahaan' => $this->request->getPost('bimbingan_perusahaan'),
+            'lokasi_id' => $this->request->getPost('lokasi_id'),
+            'monitoring_perusahaan' => $this->request->getPost('monitoring_perusahaan'),
             'no_perusahaan' => $this->request->getPost('no_perusahaan'),
-            'jabatan_bimbingan_perusahaan' => $this->request->getPost('jabatan_bimbingan_perusahaan'),
+            'jabatan_monitoring_perusahaan' => $this->request->getPost('jabatan_monitoring_perusahaan'),
         ];
     
-        if ($PKLModel->update($kelompokId, $data)) {
+        if ($KKNModel->update($kelompokId, $data)) {
             // Data updated successfully
             session()->setFlashdata('success', 'Data berhasil diperbarui.');
         } else {
@@ -151,42 +133,42 @@ class PKLController extends BaseController
             session()->setFlashdata('error', 'Gagal memperbarui data.');
         }
     
-        return redirect()->to('/mahasiswa/pkl');
+        return redirect()->to('/mahasiswa/kkn');
     }
     public function approve($id)
     {
-        $data = $this->PKLJurnalPelaksanaanModel->find($id);
+        $data = $this->KKNJurnalPelaksanaanModel->find($id);
         $data['status'] = 'Approved';
 
-        $this->PKLJurnalPelaksanaanModel->save($data);
+        $this->KKNJurnalPelaksanaanModel->save($data);
 
         session()->setFlashdata('success', 'Jurnal berhasil di validasi!');
 
-        return redirect()->to('/mahasiswa/pkl/jurnal/pelaksanaan');
+        return redirect()->to('/mahasiswa/kkn/jurnal/pelaksanaan');
     }
 
     public function unapprove2($id)
     {
-        $data = $this->PKLJurnalBimbinganModel->find($id);
+        $data = $this->KKNJurnalMonitoringModel->find($id);
         $data['status'] = 'Pending';
 
-        $this->PKLJurnalBimbinganModel->save($data);
+        $this->KKNJurnalMonitoringModel->save($data);
 
         session()->setFlashdata('success', 'Jurnal berhasil di validasi!');
 
-        return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan');
+        return redirect()->to('/mahasiswa/kkn/jurnal/monitoring');
     }
 
     public function approve2($id)
     {
-        $data = $this->PKLJurnalBimbinganModel->find($id);
+        $data = $this->KKNJurnalMonitoringModel->find($id);
         $data['status'] = 'Approved';
 
-        $this->PKLJurnalBimbinganModel->save($data);
+        $this->KKNJurnalMonitoringModel->save($data);
 
         session()->setFlashdata('success', 'Jurnal berhasil di validasi!');
 
-        return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan');
+        return redirect()->to('/mahasiswa/kkn/jurnal/monitoring');
     }
 
     public function simpan()
@@ -199,11 +181,11 @@ class PKLController extends BaseController
         ];
 
         // insert data
-        $this->PKLJurnalPelaksanaanModel->insert($data);
+        $this->KKNJurnalPelaksanaanModel->insert($data);
 
         session()->setFlashdata('success', 'Data berhasil disimpan!');
 
-        return redirect()->to('/mahasiswa/pkl/jurnal/pelaksanaan');
+        return redirect()->to('/mahasiswa/kkn/jurnal/pelaksanaan');
     }
 
     public function simpan2()
@@ -217,21 +199,21 @@ class PKLController extends BaseController
         ];
 
         // insert data
-        $this->PKLJurnalBimbinganModel->insert($data);
+        $this->KKNJurnalMonitoringModel->insert($data);
 
         session()->setFlashdata('success', 'Data berhasil disimpan!');
 
-        return redirect()->to('/mahasiswa/pkl/jurnal/bimbingan');
+        return redirect()->to('/mahasiswa/kkn/jurnal/monitoring');
     }
 
     public function log_harian()
     {
         $title = 'Log harian';
-        $data = $this->PKLJurnalPelaksanaanModel->where('kelompok', session()->get('kelompok'))->findAll();
-        $total = $this->PKLJurnalPelaksanaanModel->where('kelompok', session()->get('kelompok'))->countAllResults();
+        $data = $this->KKNJurnalPelaksanaanModel->where('kelompok', session()->get('kelompok'))->findAll();
+        $total = $this->KKNJurnalPelaksanaanModel->where('kelompok', session()->get('kelompok'))->countAllResults();
 
         // load HTML content
-        $this->pdf->loadHtml(view('pdf/jurnal/pelaksanaan_pkl', compact('data', 'total', 'title')));
+        $this->pdf->loadHtml(view('pdf/jurnal/pelaksanaan_kkn', compact('data', 'total', 'title')));
 
         // (optional) setup the paper size and orientation
         $this->pdf->setPaper('A4', 'landscape');
@@ -245,20 +227,20 @@ class PKLController extends BaseController
 
     public function cetak($id)
     {
-        $PKLNilaiModel = new PKLNilaiModel();
+        $KKNNilaiModel = new KKNNilaiModel();
 
         // Fetch the data from the database based on the $sidang_id
-        $data = $PKLNilaiModel 
-        ->select('pkl_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, pkl.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, pkl_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, pkl_jadwal_sidang.*')
-        ->join('mahasiswa', 'mahasiswa.id = pkl_nilai_sidang.mahasiswa_id')
-        ->join('dosen', 'dosen.id = pkl_nilai_sidang.dosen_id')
+        $data = $KKNNilaiModel 
+        ->select('kkn_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, kkn.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, kkn_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, kkn_jadwal_sidang.*')
+        ->join('mahasiswa', 'mahasiswa.id = kkn_nilai_sidang.mahasiswa_id')
+        ->join('dosen', 'dosen.id = kkn_nilai_sidang.dosen_id')
         ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
         ->join('fakultas', 'fakultas.id = prodi.fakultas_id')
-        ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
-        ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
-        ->join('pkl_judul_laporan', 'pkl_judul_laporan.mahasiswa_id = mahasiswa.id')
-        ->join('pkl_jadwal_sidang', 'pkl_jadwal_sidang.id_pkl_jadwal_sidang  = pkl_nilai_sidang.sidang_id')
-        ->join('tempat_sidang', 'tempat_sidang.id_tempat  = pkl_jadwal_sidang.tempat_id')
+        ->join('kkn_anggota', 'kkn_anggota.mahasiswa_id = mahasiswa.id')
+        ->join('kkn', 'kkn.id = kkn_anggota.kkn_id')
+        ->join('kkn_judul_laporan', 'kkn_judul_laporan.mahasiswa_id = mahasiswa.id')
+        ->join('kkn_jadwal_sidang', 'kkn_jadwal_sidang.id_kkn_jadwal_sidang  = kkn_nilai_sidang.sidang_id')
+        ->join('tempat_sidang', 'tempat_sidang.id_tempat  = kkn_jadwal_sidang.tempat_id')
             ->where('sidang_id', $id)
             ->get()->getRow();
         // dd($data);
@@ -267,7 +249,7 @@ class PKLController extends BaseController
             return redirect()->back()->with('error', 'Data not found.');
         }
         // load HTML content
-        $this->pdf->loadHtml(view('pdf/penilaian_pkl', ['data' => $data]));
+        $this->pdf->loadHtml(view('pdf/penilaian_kkn', ['data' => $data]));
 
         // (optional) setup the paper size and orientation
         $this->pdf->setPaper('A4');
@@ -278,4 +260,20 @@ class PKLController extends BaseController
         // output the generated pdf
         return $this->pdf->stream('Laporan', array("Attachment" => false));
     }
+
+    
+    public function surat_izin_observasi()
+    {
+
+        // dd($this->kelompokId);
+        $data = [
+            'title' => 'Jurnal Pelaksanaan',
+            'data' => $this->KKNJurnalPelaksanaanModel->where('mahasiswa_id', $this->mahasiswaId)->findAll(),
+            'kelompokId' => $this->kelompokId,
+        ];
+
+        return "Surat Izin Observasi";
+        // return view('mahasiswa/kkn/jurnal/pelaksanaan', $data);
+    }
+
 }

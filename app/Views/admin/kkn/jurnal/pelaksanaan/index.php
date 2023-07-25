@@ -16,7 +16,7 @@
             <div class="alert alert-danger"><?= session()->getFlashData('error') ?></div>
         <?php endif; ?>
 
-        <!-- <a href="<?= route_to('admin.jurnal.pelaksanaan.create') ?>" class="btn btn-primary mb-3">Tambah Jurnal Pelaksanaan</a> -->
+        <!-- <a href="<?= route_to('admin.kkn.jurnal.pelaksanaan.create') ?>" class="btn btn-primary mb-3">Tambah Jurnal Pelaksanaan</a> -->
 
         <div class="table-responsive">
             
@@ -28,7 +28,7 @@
                     <th>Nama Mahasiswa</th>
                     <th>Prodi</th>
                     <th>Kelompok</th>
-                    <th>Instansi</th>
+                    <th>Lokasi</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -40,10 +40,10 @@
                         <td><?= $mhs['nama'] ?></td>
                         <td><?= $mhs['nama_prodi'] ?></td>
                         <td><?= $mhs['nama_kelompok'] ?></td>
-                        <td><?= $mhs['nama_perusahaan'] ?></td>
+                        <td><?= $mhs['nama_lokasi'] ?? '' ?></td>
                         <td>
-                            <a href="<?= route_to('admin.jurnal.pelaksanaan.show', $mhs['id']) ?>" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></a>
-                            <!-- <a href="<?= route_to('admin.jurnal.pelaksanaan.delete', $mhs['id']) ?>" class="btn btn-xs btn-danger">Hapus</a> -->
+                            <a href="<?= route_to('admin.kkn.jurnal.pelaksanaan.show', $mhs['id']) ?>" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></a>
+                            <!-- <a href="<?= route_to('admin.kkn.jurnal.pelaksanaan.delete', $mhs['id']) ?>" class="btn btn-xs btn-danger">Hapus</a> -->
                         </td>
                     </tr>
                 <?php endforeach; ?>

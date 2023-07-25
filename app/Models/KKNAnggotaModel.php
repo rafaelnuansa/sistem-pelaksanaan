@@ -14,7 +14,6 @@ class KKNAnggotaModel extends Model
         'is_ketua'
     ];
 
-
     public function getKelompokIdBySessionIdMhs()
     {
         $mahasiswaId = session()->get('mahasiswa_id');
