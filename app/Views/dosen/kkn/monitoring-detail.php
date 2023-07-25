@@ -42,9 +42,8 @@
                         <td> <?php if ($row['status'] == 'Menunggu Validasi') : ?>
                                 <a href="<?= route_to('dosen.kkn.validasi.monitoring') ?>?id=<?= $row['id_jurnal_monitoring'] ?>" class="btn btn-sm btn-primary" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Tervalidasi?')">Validasi</a>
                             <?php else : ?>
-                                <a href="<?= route_to('dosen.kkn.validasi.monitoring.reset') ?>?id=<?= $row['id_jurnal_monitoring'] ?>" onclick="return confirm('Apakah Anda yakin ingin mereset status ini?')" class="btn btn-success">Reset</a>
+                                <a href="<?= route_to('dosen.kkn.validasi.monitoring.reset') ?>?id=<?= $row['id_jurnal_monitoring'] ?>" onclick="return confirm('Apakah Anda yakin ingin mereset status ini?')" class="btn btn-success btn-sm">Reset</a>
                             <?php endif; ?>
-
                         </td>
                     </tr>
                 <?php endforeach; ?>

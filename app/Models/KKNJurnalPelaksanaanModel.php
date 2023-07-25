@@ -57,4 +57,30 @@ class KKNJurnalPelaksanaanModel extends Model
         return $query->getResultArray();
     }
 
+ 
+    public function getMahasiswaPelaksanaan($dosen_id)
+    {
+        $query = $this->select('kkn_jurnal_pelaksanaan.*, prodi.nama_prodi as nama_prodi, mahasiswa.*, kkn.*, mahasiswa.nama as nama_mahasiswa')
+            ->join('mahasiswa', 'mahasiswa.id = kkn_jurnal_pelaksanaan.mahasiswa_id')
+            ->join('kkn', 'kkn.id = kkn_jurnal_pelaksanaan.kkn_id')
+            ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
+            ->where('kkn.dosen_id', $dosen_id)
+            ->orderBy('kkn_jurnal_pelaksanaan.hari', 'DESC')
+            ->orderBy('kkn_jurnal_pelaksanaan.jam', 'DESC')
+            ->groupBy('mahasiswa.id')
+            ->get();
+
+        return $query->getResultArray();
+    }
+
+    
+    public function dosenGetJurnalDanMahasiswaPelaksanaan($mahasiswa_id)
+    {
+        $query = $this->select('kkn_jurnal_pelaksanaan.*, mahasiswa.*, kkn.*, mahasiswa.id as mhs_id, mahasiswa.nama as nama_mahasiswa')
+            ->join('mahasiswa', 'mahasiswa.id = kkn_jurnal_pelaksanaan.mahasiswa_id')
+            ->join('kkn', 'kkn.id = kkn_jurnal_pelaksanaan.kkn_id')
+            ->where('kkn_jurnal_pelaksanaan.mahasiswa_id', $mahasiswa_id)
+            ->get();
+        return $query;
+    }
 }

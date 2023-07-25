@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\DosenModel;
 use App\Models\DosenPembimbingModel;
 use App\Models\KKNJurnalMonitoringModel;
+use App\Models\KKNJurnalPelaksanaanModel;
 use App\Models\KKNNilaiModel;
 use App\Models\ProdiModel;
 use App\Models\TempatModel;
@@ -18,6 +19,7 @@ class KKNController extends BaseController
         $this->pdf = new Dompdf();
         $this->db = \Config\Database::connect();
         $this->KKNJurnalMonitoring = new KKNJurnalMonitoringModel();
+        $this->KKNJurnalPelaksanaan = new KKNJurnalPelaksanaanModel();
         $this->ProdiModel = new ProdiModel();
         $this->DosenModel = new DosenModel();
         $this->dosenId = session()->get('dosen_id');
@@ -26,7 +28,6 @@ class KKNController extends BaseController
 
     public function index()
     {
-
         // dd($this->dosenId);
         $mahasiswaMonitoring = $this->KKNJurnalMonitoring->getMahasiswaMonitoring($this->dosenId);
         $data = [
@@ -38,15 +39,27 @@ class KKNController extends BaseController
 
     
     public function pelaksanaan()
-    {
+    { 
 
-        // dd($this->dosenId);
-        $mahasiswaMonitoring = $this->KKNJurnalMonitoring->getMahasiswaMonitoring($this->dosenId);
+        $mahasiswa = $this->KKNJurnalPelaksanaan->getMahasiswaPelaksanaan($this->dosenId);
         $data = [
             'title' => 'Validasi Monitoring',
-            'data' => $mahasiswaMonitoring
+            'data' => $mahasiswa
         ];
-        return view('dosen/kkn/monitoring', $data);
+        return view('dosen/kkn/pelaksanaan', $data);
+    }
+
+    public function pelaksanaan_detail($mahasiswa_id)
+    {
+        $rows = $this->KKNJurnalPelaksanaan->dosenGetJurnalDanMahasiswaPelaksanaan($mahasiswa_id);
+        $getDetail = $rows->getRow();
+        $dataList = $rows->getResultArray();
+        $data = [
+            'title' => "Jurnal Pelaksanaan " . $getDetail->nama,
+            'data' => $dataList
+        ];
+
+        return view('dosen/kkn/pelaksanaan-detail', $data);
     }
 
     public function validasi_penguji()
@@ -108,7 +121,6 @@ class KKNController extends BaseController
 
         return view('dosen/kkn/jadwal-sidang', $data);
     }
-
 
     public function nilai()
     {
@@ -303,8 +315,39 @@ class KKNController extends BaseController
         return redirect()->back();
     }
 
+    public function approve_pelaksanaan()
+    {
+        $id_jurnal_pelaksanaan = $this->request->getVar('id');
 
+        $data = $this->KKNJurnalPelaksanaan->where('id_jurnal_pelaksanaan', $id_jurnal_pelaksanaan)->first();
+        if (!$data) {
+            // Data dengan ID yang diberikan tidak ditemukan
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
+        }
 
+        $data['status'] = 'Telah divalidasi';
+        $this->KKNJurnalPelaksanaan->save($data);
+
+        session()->setFlashdata('success', 'Jurnal berhasil divalidasi');
+        return redirect()->back();
+    }
+
+    public function reset_pelaksanaan()
+    {
+        $id_jurnal_pelaksanaan = $this->request->getVar('id');
+
+        $data = $this->KKNJurnalPelaksanaan->where('id_jurnal_pelaksanaan', $id_jurnal_pelaksanaan)->first();
+        if (!$data) {
+            // Data dengan ID yang diberikan tidak ditemukan
+            return redirect()->back()->with('error', 'Data tidak ditemukan');
+        }
+
+        $data['status'] = 'Menunggu Validasi';
+        $this->KKNJurnalPelaksanaan->save($data);
+
+        session()->setFlashdata('success', 'Jurnal berhasil direset');
+        return redirect()->back();
+    }
 
     public function cetak_revisi()
     {

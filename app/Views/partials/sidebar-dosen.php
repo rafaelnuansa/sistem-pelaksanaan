@@ -49,8 +49,8 @@
                 <i class="fa fa-briefcase"></i> <span>Validasi Monitoring</span>
               </a>
             </li>
-            <li class="<?= (uri_string() == 'dosen/kkn/jurnal/pelaksanaan') ? 'active' : '' ?>">
-              <a href="<?= base_url('dosen/kkn/jurnal/pelaksanaan') ?>">
+            <li class="<?= (uri_string() == 'dosen/kkn/pelaksanaan') ? 'active' : '' ?>">
+              <a href="<?= base_url('dosen/kkn/pelaksanaan') ?>">
                 <i class="fa fa-briefcase"></i> <span>Jurnal Pelaksanaan</span>
               </a>
             </li>

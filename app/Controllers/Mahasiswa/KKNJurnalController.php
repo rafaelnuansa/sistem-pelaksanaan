@@ -223,7 +223,7 @@ class KKNJurnalController extends BaseController
             'jam' => $this->request->getVar('jam'),
             'tanggal' => $this->request->getVar('tanggal'),
             'kkn_id' => $this->kelompokId,
-            'catatan' => $this->request->getVar('keterangan'),
+            'catatan' => $this->request->getVar('catatan'),
         ];
         // insert data
         $this->KKNJurnalMonitoringModel->insert($data);

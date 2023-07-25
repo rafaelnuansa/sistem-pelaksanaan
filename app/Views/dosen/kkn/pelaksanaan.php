@@ -19,31 +19,28 @@
     </div>
     <div class="box-body">
         <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
-        <thead class="bg-primary">
+            <thead class="bg-primary">
                 <tr>
                     <th>No</th>
-                    <th>Hari/Tanggal</th>
-                    <th>Status</th>
-                    <th>Keterangan</th>
-                    <th>Validasi</th>
+                    <th>NIM</th>
+                    <th>Nama mahasiswa</th>
+                    <th>Tahun Akademik</th>
+                    <th>Nama Kelompok</th>
+                    <th>Prodi</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($data as $index => $row) : ?>
                     <tr>
                         <td><?= ++$index ?></td>
-                        <td><?= $row['tanggal'] ?></td>
-                        <td><?= $row['catatan'] ?></td>
-                        <?php if ($row['status'] == 'Telah divalidasi') : ?>
-                            <td><span class="label label-primary"><?= $row['status'] ?></span></td>
-                        <?php else : ?>
-                            <td><span class="label label-danger"><?= $row['status'] ?></span></td>
-                        <?php endif; ?>
-                        <td> <?php if ($row['status'] == 'Menunggu Validasi') : ?>
-                                <a href="<?= route_to('dosen.kkn.validasi.monitoring') ?>?id=<?= $row['id_jurnal_monitoring'] ?>" class="btn btn-sm btn-primary" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Tervalidasi?')">Validasi</a>
-                            <?php else : ?>
-                                <a href="<?= route_to('dosen.kkn.validasi.monitoring.reset') ?>?id=<?= $row['id_jurnal_monitoring'] ?>" onclick="return confirm('Apakah Anda yakin ingin mereset status ini?')" class="btn btn-success">Reset</a>
-                            <?php endif; ?>
+                        <td><?= $row['nim'] ?></td>
+                        <td><?= $row['nama_mahasiswa'] ?></td>
+                        <td><?= $row['tahun_akademik'] ?></td>
+                        <td><?= $row['nama_kelompok'] ?></td>
+                        <td><?= $row['nama_prodi'] ?></td>
+                        <td>
+                            <a href="<?= base_url('dosen/kkn/pelaksanaan/' . $row['mahasiswa_id']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
 
                         </td>
                     </tr>

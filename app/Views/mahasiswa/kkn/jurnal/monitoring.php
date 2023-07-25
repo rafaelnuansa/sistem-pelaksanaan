@@ -49,8 +49,8 @@
                 <td class="text-center">
                   <?php if ($row['status'] == 'Telah divalidasi') : ?>
                   <?php else : ?>
-                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-edit-<?= $row['id_jurnal_bimbingan'] ?>">Edit</a>
-                    <a href="<?= route_to('mahasiswa.kkn.jurnal.bimbingan.delete', $row['id_jurnal_bimbingan']); ?>" class="btn btn-primary btn-sm">Hapus</a>
+                    <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-edit-<?= $row['id_jurnal_monitoring'] ?>">Edit</a>
+                    <a href="<?= route_to('mahasiswa.kkn.jurnal.monitoring.delete', $row['id_jurnal_monitoring']); ?>" class="btn btn-primary btn-sm">Hapus</a>
                   <?php endif; ?>
                 </td>
               </tr>
@@ -65,7 +65,7 @@
 </div>
 
 <?php foreach ($data as $row) : ?>
-  <div class="modal fade" id="modal-edit-<?= $row['id_jurnal_bimbingan'] ?>">
+  <div class="modal fade" id="modal-edit-<?= $row['id_jurnal_monitoring'] ?>">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -74,7 +74,7 @@
           <h4 class="modal-title">Edit Jurnal</h4>
         </div>
         <div class="modal-body">
-          <form method="POST" action="<?= route_to('mahasiswa.kkn.jurnal.bimbingan.edit', $row['id_jurnal_bimbingan']); ?>">
+          <form method="POST" action="<?= route_to('mahasiswa.kkn.jurnal.monitoring.edit', $row['id_jurnal_monitoring']); ?>">
 
             <div class="row mb-2">
               <div class="col-md-6">
@@ -116,7 +116,7 @@
         <h4 class="modal-title">Tambahkan Jurnal</h4>
       </div>
       <div class="modal-body">
-        <form method="POST" action="<?= route_to('mahasiswa.kkn.jurnal.bimbingan.store') ?>" enctype="multipart/form-data">
+        <form method="POST" action="<?= route_to('mahasiswa.kkn.jurnal.monitoring.store') ?>" enctype="multipart/form-data">
           <div class="row mb-2">
             <div class="col-md-6">
               <div class="form-group">
@@ -129,7 +129,7 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label for="">Catatan</label>
-                <textarea name="keterangan" class="form-control" cols="30" rows="5"></textarea>
+                <textarea name="catatan" class="form-control" cols="30" rows="5"></textarea>
               </div>
             </div>
           </div>

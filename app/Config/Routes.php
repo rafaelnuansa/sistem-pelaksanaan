@@ -203,9 +203,11 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
 
     // Admin Skripsi Bimbingan
     $routes->get('skripsi/bimbingan', 'SkripsiBimbinganController::index', ['as' => 'admin.skripsi.bimbingan.index']);
- 
-    // Admin Skripsi Sidang
+    $routes->get('skripsi/bimbingan/(:num)', 'SkripsiBimbinganController::show/$1', ['as' => 'admin.skripsi.bimbingan.show']);
+
+    // Admin Skripsi Sidang 
     $routes->get('skripsi/sidang', 'SkripsiSidangController::index', ['as' => 'admin.skripsi.sidang.index']);
+    $routes->post('skripsi/sidang/simpan', 'SkripsiSidangController::simpan', ['as' => 'admin.skripsi.sidang.simpan']);
 
     // Rute untuk assign mahasiswa dosbing
     $routes->get('skripsi/(:num)', 'SkripsiController::assignMhs/$1', ['as' => 'admin.skripsi.assign']);
@@ -297,6 +299,23 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
 
     //  KKN END 
 
+    // MHS SKRIPSI 
+    // Menu KKN Mahasiswa 
+    $routes->get('skripsi', 'SkripsiController::index');
+    $routes->post('skripsi', 'SkripsiController::edit_judul', ['as' => 'mahasiswa.skripsi.edit_judul']);
+    // Bimbingan Skripsi 
+    $routes->get('skripsi/bimbingan', 'SkripsiBimbinganController::index');
+    $routes->post('skripsi/bimbingan', 'SkripsiBimbinganController::store', ['as' => 'mahasiswa.skripsi.bimbingan.store']);
+    
+    $routes->post('skripsi/bimbingan/edit/(:num)', 'SkripsiBimbinganController::update/$1', ['as' => 'mahasiswa.skripsi.bimbingan.edit']);
+    $routes->get('skripsi/bimbingan/delete/(:num)', 'SkripsiBimbinganController::delete/$1', ['as' => 'mahasiswa.skripsi.bimbingan.delete']);
+    $routes->get('skripsi/sidang', 'SkripsiSidangController::index');
+    $routes->post('skripsi/sidang', 'SkripsiSidangController::daftar', ['as' => 'mahasiswa.skripsi.daftar']);
+
+    // END MHS SKRIPSI
+
+
+
     // Menampilkan daftar berkas (index)
     $routes->get('berkas', 'BerkasController::index');
     // Menampilkan form tambah berkas (create)
@@ -336,6 +355,11 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'au
     $routes->get('kkn', 'KKNController::index');
 
     $routes->get('kkn/pelaksanaan', 'KKNController::pelaksanaan');
+    $routes->get('kkn/pelaksanaan/approve', 'KKNController::approve_pelaksanaan', ['as' => 'dosen.kkn.validasi.pelaksanaan']);
+    $routes->get('kkn/pelaksanaan/reset', 'KKNController::reset_pelaksanaan', ['as' => 'dosen.kkn.validasi.pelaksanaan.reset']);
+   
+    $routes->get('kkn/pelaksanaan/(:segment)', 'KKNController::pelaksanaan_detail/$1');
+
     $routes->get('kkn/approve', 'KKNController::approve_monitoring', ['as' => 'dosen.kkn.validasi.monitoring']);
     $routes->get('kkn/reset', 'KKNController::reset_monitoring', ['as' => 'dosen.kkn.validasi.monitoring.reset']);
     $routes->get('kkn/jurnal/detail/(:segment)', 'KKNController::monitoring_detail/$1');

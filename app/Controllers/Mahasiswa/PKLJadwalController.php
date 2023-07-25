@@ -48,7 +48,6 @@ class PKLJadwalController extends BaseController
         ->get()
         ->getResultArray();
     
-// dd($jadwal_sidang);
         $persyaratan = $this->PKLUjianModel->where('mahasiswa_id', $this->mahasiswaId)->findAll();
         $data = [
             'title' => 'Jadwal Sidang',

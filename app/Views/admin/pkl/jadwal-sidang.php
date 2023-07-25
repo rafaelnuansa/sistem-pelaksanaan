@@ -169,7 +169,7 @@
           <div class="row mb-2">
             <div class="col-md-12">
               <div class="form-group">
-                <label for="">Nama Kelompok PKL</label>
+                <label for="">Dosen Pembimbing</label>
                 <input type="text" readonly class="form-control" name="nama_dospem">
               </div>
             </div>

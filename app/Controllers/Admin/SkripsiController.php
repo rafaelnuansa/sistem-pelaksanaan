@@ -56,7 +56,6 @@ class SkripsiController extends BaseController
         $mahasiswaModel = new MahasiswaModel();
         $mahasiswas = $mahasiswaModel->findAll();
 
-
         $data = [
             'title' => 'Tambah Skripsi',
             'dosens' => $dosens,

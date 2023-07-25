@@ -23,6 +23,7 @@
                 <tr>
                     <th>No</th>
                     <th>Hari/Tanggal</th>
+                    <th>Jam</th>
                     <th>Status</th>
                     <th>Keterangan</th>
                     <th>Validasi</th>
@@ -32,17 +33,18 @@
                 <?php foreach ($data as $index => $row) : ?>
                     <tr>
                         <td><?= ++$index ?></td>
-                        <td><?= $row['tanggal'] ?></td>
-                        <td><?= $row['catatan'] ?></td>
+                        <td><?= $row['hari'] ?></td>
+                        <td><?= $row['jam'] ?></td>
+                        <td><?= $row['keterangan'] ?></td>
                         <?php if ($row['status'] == 'Telah divalidasi') : ?>
                             <td><span class="label label-primary"><?= $row['status'] ?></span></td>
                         <?php else : ?>
                             <td><span class="label label-danger"><?= $row['status'] ?></span></td>
                         <?php endif; ?>
                         <td> <?php if ($row['status'] == 'Menunggu Validasi') : ?>
-                                <a href="<?= route_to('dosen.kkn.validasi.monitoring') ?>?id=<?= $row['id_jurnal_monitoring'] ?>" class="btn btn-sm btn-primary" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Tervalidasi?')">Validasi</a>
+                                <a href="<?= route_to('dosen.kkn.validasi.pelaksanaan') ?>?id=<?= $row['id_jurnal_pelaksanaan'] ?>" class="btn btn-sm btn-primary" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Tervalidasi?')">Validasi</a>
                             <?php else : ?>
-                                <a href="<?= route_to('dosen.kkn.validasi.monitoring.reset') ?>?id=<?= $row['id_jurnal_monitoring'] ?>" onclick="return confirm('Apakah Anda yakin ingin mereset status ini?')" class="btn btn-success">Reset</a>
+                                <a href="<?= route_to('dosen.kkn.validasi.pelaksanaan.reset') ?>?id=<?= $row['id_jurnal_pelaksanaan'] ?>" onclick="return confirm('Apakah Anda yakin ingin mereset status ini?')" class="btn btn-success btn-sm">Reset</a>
                             <?php endif; ?>
 
                         </td>

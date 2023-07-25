@@ -79,15 +79,22 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li class="<?= (uri_string() == 'pemasukan') ? 'active' : '' ?>">
-            <a href="<?= base_url('pemasukan') ?>">
+          
+        <li class="<?= (uri_string() == 'mahasiswa/skripsi') ? 'active' : '' ?>">
+            <a href="<?= base_url('mahasiswa/skripsi') ?>">
+              <i class="fa fa-briefcase"></i> <span>Skripsi</span>
+            </a>
+          </li>
+
+          <li class="<?= (uri_string() == 'mahasiswa/skripsi/bimbingan') ? 'active' : '' ?>">
+            <a href="<?= base_url('mahasiswa/skripsi/bimbingan') ?>">
               <i class="fa fa-briefcase"></i> <span>Jurnal Bimbingan</span>
             </a>
           </li>
           
-          <li class="<?= (uri_string() == 'laporan') ? 'active' : '' ?>">
-            <a href="<?= base_url('laporan') ?>">
-              <i class="fa fa-calendar"></i> <span>Jadwal Sidang</span>
+          <li class="<?= (uri_string() == 'mahasiswa/skripsi/sidang') ? 'active' : '' ?>">
+            <a href="<?= base_url('mahasiswa/skripsi/sidang') ?>">
+              <i class="fa fa-calendar"></i> <span>Persyaratan Sidang</span>
             </a>
           </li>
         </ul>
