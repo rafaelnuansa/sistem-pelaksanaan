@@ -25,7 +25,6 @@ class PKLController extends BaseController
         $this->DosenModel = new DosenModel();
         $this->dosenId = session()->get('dosen_id');
         $this->TempatModel = new TempatModel();
-        $this->DosenPembimbingModel = new DosenPembimbingModel();
     }
 
     public function index()

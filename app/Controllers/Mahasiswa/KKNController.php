@@ -272,6 +272,4 @@ class KKNController extends BaseController
 
         return view('mahasiswa/kkn/suratizinobservasi', $data);
     }
- 
-    
 }

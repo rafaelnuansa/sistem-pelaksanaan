@@ -55,7 +55,7 @@
               <i class="fa fa-building-o"></i> <span>Instansi</span>
             </a>
           </li>
-          
+
           <li class="<?= (uri_string() == 'admin/lokasi') ? 'active' : '' ?>">
             <a href="<?= base_url('admin/lokasi') ?>">
               <i class="fa fa-building-o"></i> <span>Lokasi KKN</span>
@@ -155,25 +155,26 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li class="<?= (uri_string() == 'pemasukan') ? 'active' : '' ?>">
-            <a href="<?= base_url('pemasukan') ?>">
+
+        <li class="<?= (uri_string() == 'admin/skripsi') ? 'active' : '' ?>">
+            <a href="<?= base_url('admin/skripsi') ?>">
+              <i class="fa fa-users"></i> <span>Data Skripsi</span>
+            </a>
+          </li>
+          <li class="<?= (uri_string() == 'admin/skripsi/bimbingan') ? 'active' : '' ?>">
+            <a href="<?= base_url('admin/skripsi/bimbingan') ?>">
               <i class="fa fa-briefcase"></i> <span>Jurnal Bimbingan</span>
             </a>
           </li>
-          <li class="<?= (uri_string() == 'laporan') ? 'active' : '' ?>">
-            <a href="<?= base_url('laporan') ?>">
+          <li class="<?= (uri_string() == 'admin/skripsi/sidang') ? 'active' : '' ?>">
+            <a href="<?= base_url('admin/skripsi/sidang') ?>">
               <i class="fa fa-calendar"></i> <span>Jadwal Sidang</span>
-            </a>
-          </li>
-          <li class="<?= (uri_string() == 'laporan') ? 'active' : '' ?>">
-            <a href="<?= base_url('laporan') ?>">
-              <i class="fa fa-briefcase"></i> <span>Menentukan Dosbing</span>
             </a>
           </li>
         </ul>
       </li>
 
-      
+
       <li class="<?= (uri_string() == 'admin/berkas') ? 'active' : '' ?>">
         <a href="<?= base_url('admin/berkas') ?>">
           <i class="fa fa-file"></i> <span>Berkas</span>

@@ -5,6 +5,12 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu" data-widget="tree">
       <li class="header">MENU</li>
+      
+      <li class="<?= (uri_string() == 'dosen/dashboard') ? 'active' : '' ?>">
+              <a href="<?= base_url('dosen/dashboard') ?>">
+                <i class="fa fa-home"></i> <span>Dashboard</span>
+              </a>
+            </li>
       <li class="treeview <?= (strpos(uri_string(), 'dosen/pkl') !== false) ? 'active' : '' ?>">
         <a href="#">
           <i class="fa fa-book"></i>
@@ -37,21 +43,18 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="<?= (uri_string() == 'pengeluaran') ? 'active' : '' ?>">
-              <a href="<?= base_url('pengeluaran') ?>">
+            
+          <li class="<?= (uri_string() == 'dosen/kkn') ? 'active' : '' ?>">
+              <a href="<?= base_url('dosen/kkn') ?>">
+                <i class="fa fa-briefcase"></i> <span>Validasi Monitoring</span>
+              </a>
+            </li>
+            <li class="<?= (uri_string() == 'dosen/kkn/jurnal/pelaksanaan') ? 'active' : '' ?>">
+              <a href="<?= base_url('dosen/kkn/jurnal/pelaksanaan') ?>">
                 <i class="fa fa-briefcase"></i> <span>Jurnal Pelaksanaan</span>
               </a>
             </li>
-            <li class="<?= (uri_string() == 'laporan') ? 'active' : '' ?>">
-              <a href="<?= base_url('laporan') ?>">
-                <i class="fa fa-briefcase"></i> <span>Surat izin observasi</span>
-              </a>
-            </li>
-            <li class="<?= (uri_string() == 'laporan') ? 'active' : '' ?>">
-              <a href="<?= base_url('laporan') ?>">
-                <i class="fa fa-briefcase"></i> <span>Jurnal Bimbingan</span>
-              </a>
-            </li>
+            
           </ul>
         </li>
 

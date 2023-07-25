@@ -1,16 +1,14 @@
 <?= $this->extend('layouts/default'); ?>
 
 <?= $this->section('content'); ?>
-
-
 <section class="content">
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Data PKL</h3>
+                    <h3 class="box-title">Data Skripsi</h3>
                     <div class="box-tools">
-                        <a href="<?= site_url('/admin/pkl/create'); ?>" class="btn btn-primary btn-sm">Tambah PKL</a>
+                        <a href="<?= site_url('/admin/skripsi/create'); ?>" class="btn btn-primary btn-sm">Tambah Skripsi</a>
                     </div>
                 </div>
                 <div class="box-body">
@@ -19,55 +17,44 @@
                             <?= session()->getFlashdata('success'); ?>
                         </div>
                     <?php endif; ?>
+                    
+                    <?php if (session()->getFlashdata('error')) : ?>
+                        <div class="alert alert-danger">
+                            <?= session()->getFlashdata('error'); ?>
+                        </div>
+                    <?php endif; ?>
                     <div class="table-responsive">
 
                         <table class="table table-bordered datatable ">
                             <thead class="bg-primary">
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Kelompok</th>
+                                    <th>Nim</th>
+                                    <th>Mahasiswa</th>
+                                    <th>Dosen Pembimbing</th>
                                     <th>Tanggal Mulai</th>
                                     <th>Tanggal Selesai</th>
                                     <th>Tahun Akademik</th>
-                                    <th>Dosen Pembimbing</th>
                                     <th>Prodi</th>
-                                    <th>Instansi</th>
-                                    <th>Ketua</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($pkls as $key => $pkl) : ?>
+                                <?php $no = 1; foreach ($skripsis as $row) : ?>
                                     <tr>
-                                        <td><?= $key + 1; ?></td>
-                                        <td><?= $pkl['nama_kelompok']; ?></td>
-                                        <td><?= $pkl['tgl_mulai']; ?></td>
-                                        <td><?= $pkl['tgl_selesai']; ?></td>
-                                        <td><?= $pkl['tahun_akademik']; ?></td>
-                                        <td><?= $pkl['nama_dosen']; ?></td>
-                                        <td><?= $pkl['nama_prodi']; ?></td>
+                                        <td><?= $no++; ?></td>
+                                        <td><?= $row['nim']; ?></td>
+                                        <td><?= $row['nama_mahasiswa']; ?></td>
+                                        <td><?= $row['nama_dosen']; ?></td>
+                                        <td><?= $row['tgl_mulai']; ?></td>
+                                        <td><?= $row['tgl_selesai']; ?></td>
+                                        <td><?= $row['tahun_akademik']; ?></td>
+                                        <td><?= $row['nama_prodi']; ?></td>
                                         <td>
-                                            <?php if ($pkl['nama_perusahaan'] === 'Belum ada instansi') : ?>
-                                                <span class="label label-danger"><?= $pkl['nama_perusahaan'] ?></span>
-                                            <?php else : ?>
-                                                <span class="label label-primary show-instansi-modal" data-nama-perusahaan="<?= $pkl['nama_perusahaan'] ?>" data-no-perusahaan="<?= $pkl['no_perusahaan'] ?>" data-bimbingan-perusahaan="<?= $pkl['bimbingan_perusahaan'] ?>" data-jabatan-bimbingan-perusahaan="<?= $pkl['jabatan_bimbingan_perusahaan'] ?>" data-alamat-perusahaan="<?= $pkl['alamat_perusahaan'] ?>">
-                                                    <?= $pkl['nama_perusahaan'] ?>
-                                                </span>
-                                            <?php endif; ?>
+                                            <a href="<?= site_url('/admin/skripsi/edit/' . $row['id']); ?>" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                            <a href="<?= site_url('admin/skripsi/delete/' . $row['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"><i class="fa fa-trash"></i></a>
                                         </td>
 
-                                        <?php if ($pkl['ketua_kelompok'] == 'Belum ada ketua') : ?>
-                                            <td> <span class="label label-danger"> <?= $pkl['ketua_kelompok'] ?></span>
-                                            <?php else : ?>
-                                            <td> <span class="label label-primary"> <?= $pkl['ketua_kelompok'] ?></span>
-                                            <?php endif; ?>
-
-                                            </td>
-                                            <td>
-                                                <a href="<?= site_url('/admin/pkl/anggota/' . $pkl['id']); ?>" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i></a>
-                                                <a href="<?= site_url('/admin/pkl/edit/' . $pkl['id']); ?>" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
-                                                <a href="<?= site_url('admin/pkl/delete/' . $pkl['id']) ?>" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus Kelompok PKL ini?')"><i class="fa fa-trash"></i></a>
-                                            </td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

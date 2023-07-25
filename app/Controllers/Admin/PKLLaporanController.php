@@ -3,7 +3,6 @@
 namespace App\Controllers\Admin;
 
 use App\Controllers\BaseController;
-use App\Models\DosenPembimbingModel;
 use App\Models\InstansiModel;
 use App\Models\MahasiswaModel;
 use App\Models\PKLAnggotaModel;
@@ -28,7 +27,6 @@ class PKLLaporanController extends BaseController
         $this->Jadwal = new PKLJadwalModel();
         $this->Prodi = new ProdiModel();
         $this->Instansi = new InstansiModel();
-        $this->Dospem = new DosenPembimbingModel();
         $this->Mahasiswa = new MahasiswaModel();
     }
     public function index()

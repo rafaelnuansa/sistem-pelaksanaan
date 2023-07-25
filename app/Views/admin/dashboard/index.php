@@ -2,8 +2,8 @@
 <?= $this->section('content'); ?>
 
 <div class="container-fluid">
-  
-<div class="row">
+
+  <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
       <div class="small-box bg-yellow">
         <div class="inner">
@@ -181,7 +181,7 @@
             </div>
             <div class="modal-body">
               <!-- Modal content here -->
-             
+
               <div class="row" style="margin-bottom: 10px;">
                 <div class="col-md-12">
                   <a href="<?php echo base_url('admin/pkl/jadwal'); ?>" class="btn btn-default btn-block">PKL</a>
