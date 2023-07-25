@@ -13,7 +13,7 @@ class KKNJurnalPelaksanaanModel extends Model
     // Mengambil data jurnal pelaksanaan beserta data mahasiswa dan kkn terkait
     public function getJurnalPelaksanaanByIdMahasiswa($id_mahasiswa)
     {
-        $queryWithInstansi = $this->select('kkn_jurnal_pelaksanaan.*, mahasiswa.*, kkn.*, kkn_lokasi.nama_lokasi as nama_lokasi, kkn_lokasi.alamat_lokasi as alamat_perusahaan')
+        $queryWithInstansi = $this->select('kkn_jurnal_pelaksanaan.*, mahasiswa.*, kkn.*, kkn_lokasi.nama_lokasi as nama_lokasi, kkn_lokasi.alamat_lokasi as alamat_lokasi')
             ->join('mahasiswa', 'mahasiswa.id = kkn_jurnal_pelaksanaan.mahasiswa_id')
             ->join('kkn', 'kkn.id = kkn_jurnal_pelaksanaan.kkn_id')
             ->join('kkn_lokasi', 'kkn_lokasi.id = kkn.lokasi_id', 'left')

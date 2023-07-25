@@ -62,9 +62,8 @@ class KKNController extends BaseController
                 'nama_dosen' => $row['nama_dosen'],
                 'nama_lokasi' => $row['nama_lokasi'],
                 'alamat_lokasi' => $row['alamat_lokasi'],
-                'bimbingan_perusahaan' => $row['bimbingan_perusahaan'],
-                'jabatan_bimbingan_perusahaan' => $row['jabatan_bimbingan_perusahaan'],
-                'no_perusahaan' => $row['no_perusahaan'],
+                'nama_kepala_desa' => $row['nama_kepala_desa'],
+                'no_kepala_desa' => $row['no_kepala_desa'],
                 'ketua_kelompok' => ($ketua_kelompok) ? $ketua_kelompok['nama'] : 'Belum ada ketua',
             ];
         }

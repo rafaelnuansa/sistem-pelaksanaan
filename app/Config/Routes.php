@@ -266,6 +266,7 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
 
     // Surat IZIN Observasi KKN
     $routes->get('kkn/surat_izin_observasi', 'KKNController::surat_izin_observasi',  ['as' => 'mahasiswa.kkn.surat_izin_observasi']);
+    $routes->get('kkn/surat_izin_observasi/view', 'KKNController::view_surat',  ['as' => 'mahasiswa.kkn.view_sio']);
 
     // Formulir penilaian
     $routes->get('kkn/formulir', 'KKNFormulirController::index');

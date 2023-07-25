@@ -12,7 +12,7 @@
         </div>
         <div class="box-body">
             <table class="table table-bordered" id="datatables">
-                <thead>
+            <thead class="bg-primary">
                     <tr>
                         <th>No</th>
                         <th>Hari</th>

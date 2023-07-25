@@ -8,7 +8,7 @@
 <?php if ($anggota) : ?>
   <div class="box">
     <div class="box-header with-border">
-      <h3 class="box-title">Daftar Anggota Kelompok <?php $nama_kelompok; ?></h3>
+      <h3 class="box-title">Kelompok KKN <?php if($nama_kelompok):;?> | <?php endif;?> <?php echo $nama_kelompok ?? '' ?></h3>
     </div>
 
     <div class="box-body">
@@ -65,7 +65,7 @@
                     <?php endforeach; ?>
                   </select>
                   <?php if (empty($kelompok->lokasi_id)) : ?>
-                    <span class="text-danger">Jika perusahaan belum terdaftar harap hubungi admin/staff tata usaha</span>
+                    <span class="text-danger">Jika lokasi belum terdaftar harap hubungi admin/staff tata usaha</span>
                   <?php endif; ?>
                 <?php else :; ?>
                   <select disabled class="form-control" name="lokasi_id">
@@ -75,7 +75,7 @@
                     <?php endforeach; ?>
                   </select>
                   <?php if (empty($kelompok->lokasi_id)) : ?>
-                    <span class="text-danger">Jika perusahaan belum terdaftar harap hubungi admin/staff tata usaha</span>
+                    <span class="text-danger">Jika lokasi belum terdaftar harap hubungi admin/staff tata usaha</span>
                   <?php endif; ?>
                 <?php endif; ?>
               </td>
@@ -91,7 +91,7 @@
                 if ($selectedLokasiId) {
                   foreach ($lokasi as $row) {
                     if ($row['id'] == $selectedLokasiId) {
-                      $selectedAlamat = $row['alamat'];
+                      $selectedAlamat = $row['alamat_lokasi'];
                       break;
                     }
                   }
@@ -102,31 +102,21 @@
             </tr>
 
             <tr>
-              <th>Nama Pembimbing</th>
+              <th>Nama Kepala Desa / Pengurus</th>
               <td> <?php if ($is_ketua) : ?>
-                  <input type="text" class="form-control" name="bimbingan_perusahaan" value="<?= $kelompok->bimbingan_perusahaan ?>">
+                  <input type="text" class="form-control" name="nama_kepala_desa" value="<?= $kelompok->nama_kepala_desa ?>">
                 <?php else :; ?>
-                  <?= $kelompok->bimbingan_perusahaan ?>
+                  <?= $kelompok->nama_kepala_desa ?>
                 <?php endif; ?>
               </td>
             </tr>
             <tr>
-              <th>Jabatan</th>
+              <th>Nomor Telpon Kepala Desa / Pengurus</th>
               <td>
                 <?php if ($is_ketua) : ?>
-                  <input type="text" class="form-control" name="jabatan_bimbingan_perusahaan" value="<?= $kelompok->jabatan_bimbingan_perusahaan ?>">
+                  <input type="number" class="form-control" name="no_kepala_desa" value="<?= $kelompok->no_kepala_desa ?>">
                 <?php else :; ?>
-                  <?= $kelompok->jabatan_bimbingan_perusahaan ?>
-                <?php endif; ?>
-              </td>
-            </tr>
-            <tr>
-              <th>Nomor Telpon Pembimbing</th>
-              <td>
-                <?php if ($is_ketua) : ?>
-                  <input type="number" class="form-control" name="no_perusahaan" value="<?= $kelompok->no_perusahaan ?>">
-                <?php else :; ?>
-                  <?= $kelompok->no_perusahaan ?>
+                  <?= $kelompok->no_kepala_desa ?>
                 <?php endif; ?>
               </td>
             </tr>
@@ -161,22 +151,17 @@
 
           <div class="form-group">
             <label for="">Alamat</label>
-            <input type="text" class="form-control" name="alamat_perusahaan" value="<?= $kelompok->alamat_perusahaan ?? '' ?>">
+            <input type="text" class="form-control" name="alamat_lokasi" value="<?= $kelompok->alamat_lokasi ?? '' ?>">
           </div>
 
           <div class="form-group">
-            <label for="">Bimbingan Lokasi</label>
-            <input type="text" class="form-control" name="bimbingan_perusahaan" value="<?= $kelompok->bimbingan_perusahaan ?? '' ?>">
+            <label for="">Nama Kepala Desa</label>
+            <input type="text" class="form-control" name="nama_kepala_desa" value="<?= $kelompok->nama_kepala_desa ?? '' ?>">
           </div>
 
           <div class="form-group">
-            <label for="">Jabatan Bimbingan Lokasi</label>
-            <input type="text" class="form-control" name="jabatan_bimbingan_perusahaan" value="<?= $kelompok->jabatan_bimbingan_perusahaan ?? '' ?>">
-          </div>
-
-          <div class="form-group">
-            <label for="">No Lokasi</label>
-            <input type="text" class="form-control" name="no_perusahaan" value="<?= $kelompok->no_perusahaan ?? '' ?>">
+            <label for="">No Kepala Desa</label>
+            <input type="text" class="form-control" name="no_kepala_desa" value="<?= $kelompok->no_kepala_desa ?? '' ?>">
           </div>
 
         </div>

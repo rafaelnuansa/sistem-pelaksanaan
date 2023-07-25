@@ -16,8 +16,10 @@ class KKNModel extends Model
         'tahun_akademik',
         'dosen_id',
         'prodi_id',
-        'instansi_id',
-        'created_at',
+        'lokasi_id',
+        'nama_kepala_desa',
+        'no_kepala_desa',
+        'created_at', 
         'updated_at',
     ];
     

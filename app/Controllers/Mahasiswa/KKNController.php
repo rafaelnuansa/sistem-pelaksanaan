@@ -24,11 +24,11 @@ class KKNController extends BaseController
         $this->KKNLokasiModel = new KKNLokasiModel();
         $this->KKNModel = new KKNModel();
         $this->MahasiswaModel = new MahasiswaModel();
-        $this->AnggotaModel = new KKNAnggotaModel();
+        $this->KKNAnggotaModel = new KKNAnggotaModel();
         $this->KKNLokasiModel = new KKNLokasiModel();
         $this->mahasiswaId = session()->get('mahasiswa_id');
-        $this->getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
-        if($this->getKelompok){
+        $this->getKelompok = $this->KKNAnggotaModel->getKelompokIdBySessionIdMhs();
+        if ($this->getKelompok) {
             $this->kelompokId = $this->getKelompok->id;
         }
         $this->db = \Config\Database::connect();
@@ -36,24 +36,24 @@ class KKNController extends BaseController
 
     public function index()
     {
-        $getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
+        $getKelompok = $this->KKNAnggotaModel->getKelompokIdBySessionIdMhs();
         // Memeriksa apakah $getKelompok mengembalikan nilai atau tidak
         if ($getKelompok !== null) {
             $is_ketua = $getKelompok->is_ketua;
             $kelompokId = $getKelompok->id;
 
             // Lanjutkan dengan kode Anda yang sudah ada
-            $akun = $this->AnggotaModel
+            $akun = $this->KKNAnggotaModel
                 ->where('mahasiswa_id', $this->mahasiswaId)
                 ->first();
 
-            $anggota = $this->AnggotaModel
+            $anggota = $this->KKNAnggotaModel
                 ->where('kkn_id', $kelompokId)
                 ->join('kkn', 'kkn_anggota.kkn_id = kkn.id')
                 ->join('mahasiswa', 'kkn_anggota.mahasiswa_id = mahasiswa.id')
                 ->get()
-                ->getResultArray(); 
-                
+                ->getResultArray();
+
             $dospem = $this->db->table('dosen')
                 ->select('dosen.*, dosen.nama as dospem')
                 ->join('kkn', 'kkn.dosen_id = dosen.id', 'left')
@@ -81,7 +81,7 @@ class KKNController extends BaseController
                 'title' => 'Kelompok KKN',
                 'anggota' => [],
                 'lokasi' => null,
-                'kelompok' => null,
+                'nama_kelompok' => null,
                 'akun' => null,
             ];
         }
@@ -116,15 +116,14 @@ class KKNController extends BaseController
     {
         $KKNModel = new KKNModel();
         $kelompokId = $this->request->getVar('kelompok_id');
-    
+
         // Jika mengisi form yang freetext
         $data = [
             'lokasi_id' => $this->request->getPost('lokasi_id'),
-            'monitoring_perusahaan' => $this->request->getPost('monitoring_perusahaan'),
-            'no_perusahaan' => $this->request->getPost('no_perusahaan'),
-            'jabatan_monitoring_perusahaan' => $this->request->getPost('jabatan_monitoring_perusahaan'),
+            'nama_kepala_desa' => $this->request->getPost('nama_kepala_desa'),
+            'no_kepala_desa' => $this->request->getPost('no_kepala_desa'),
         ];
-    
+
         if ($KKNModel->update($kelompokId, $data)) {
             // Data updated successfully
             session()->setFlashdata('success', 'Data berhasil diperbarui.');
@@ -132,9 +131,10 @@ class KKNController extends BaseController
             // Failed to update data
             session()->setFlashdata('error', 'Gagal memperbarui data.');
         }
-    
+
         return redirect()->to('/mahasiswa/kkn');
     }
+
     public function approve($id)
     {
         $data = $this->KKNJurnalPelaksanaanModel->find($id);
@@ -230,17 +230,17 @@ class KKNController extends BaseController
         $KKNNilaiModel = new KKNNilaiModel();
 
         // Fetch the data from the database based on the $sidang_id
-        $data = $KKNNilaiModel 
-        ->select('kkn_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, kkn.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, kkn_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, kkn_jadwal_sidang.*')
-        ->join('mahasiswa', 'mahasiswa.id = kkn_nilai_sidang.mahasiswa_id')
-        ->join('dosen', 'dosen.id = kkn_nilai_sidang.dosen_id')
-        ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
-        ->join('fakultas', 'fakultas.id = prodi.fakultas_id')
-        ->join('kkn_anggota', 'kkn_anggota.mahasiswa_id = mahasiswa.id')
-        ->join('kkn', 'kkn.id = kkn_anggota.kkn_id')
-        ->join('kkn_judul_laporan', 'kkn_judul_laporan.mahasiswa_id = mahasiswa.id')
-        ->join('kkn_jadwal_sidang', 'kkn_jadwal_sidang.id_kkn_jadwal_sidang  = kkn_nilai_sidang.sidang_id')
-        ->join('tempat_sidang', 'tempat_sidang.id_tempat  = kkn_jadwal_sidang.tempat_id')
+        $data = $KKNNilaiModel
+            ->select('kkn_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, kkn.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, kkn_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, kkn_jadwal_sidang.*')
+            ->join('mahasiswa', 'mahasiswa.id = kkn_nilai_sidang.mahasiswa_id')
+            ->join('dosen', 'dosen.id = kkn_nilai_sidang.dosen_id')
+            ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
+            ->join('fakultas', 'fakultas.id = prodi.fakultas_id')
+            ->join('kkn_anggota', 'kkn_anggota.mahasiswa_id = mahasiswa.id')
+            ->join('kkn', 'kkn.id = kkn_anggota.kkn_id')
+            ->join('kkn_judul_laporan', 'kkn_judul_laporan.mahasiswa_id = mahasiswa.id')
+            ->join('kkn_jadwal_sidang', 'kkn_jadwal_sidang.id_kkn_jadwal_sidang  = kkn_nilai_sidang.sidang_id')
+            ->join('tempat_sidang', 'tempat_sidang.id_tempat  = kkn_jadwal_sidang.tempat_id')
             ->where('sidang_id', $id)
             ->get()->getRow();
         // dd($data);
@@ -261,19 +261,17 @@ class KKNController extends BaseController
         return $this->pdf->stream('Laporan', array("Attachment" => false));
     }
 
-    
+
     public function surat_izin_observasi()
     {
 
         // dd($this->kelompokId);
         $data = [
-            'title' => 'Jurnal Pelaksanaan',
-            'data' => $this->KKNJurnalPelaksanaanModel->where('mahasiswa_id', $this->mahasiswaId)->findAll(),
-            'kelompokId' => $this->kelompokId,
+            'title' => 'Surat Izin Observasi',
         ];
 
-        return "Surat Izin Observasi";
-        // return view('mahasiswa/kkn/jurnal/pelaksanaan', $data);
+        return view('mahasiswa/kkn/suratizinobservasi', $data);
     }
-
+ 
+    
 }

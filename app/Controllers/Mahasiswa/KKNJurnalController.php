@@ -18,8 +18,8 @@ class KKNJurnalController extends BaseController
         $this->KKNJurnalPelaksanaanModel = new KKNJurnalPelaksanaanModel();
         $this->KKNJurnalMonitoringModel = new KKNJurnalMonitoringModel();
         $this->ProdiModel = new ProdiModel();
-        $this->AnggotaModel = new KKNAnggotaModel();
-        $this->getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
+        $this->KKNAnggotaModel = new KKNAnggotaModel();
+        $this->getKelompok = $this->KKNAnggotaModel->getKelompokIdBySessionIdMhs();
         if ($this->getKelompok) {
             $this->kelompokId = $this->getKelompok->id;
         }
@@ -29,7 +29,7 @@ class KKNJurnalController extends BaseController
 
     public function pelaksanaan()
     {
-        $getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
+        $getKelompok = $this->KKNAnggotaModel->getKelompokIdBySessionIdMhs();
 
         // Memeriksa apakah $getKelompok mengembalikan nilai atau tidak
         if ($getKelompok) {
@@ -56,10 +56,9 @@ class KKNJurnalController extends BaseController
 
     public function pelaksanaan_cetak()
     {
-        $getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
-
+        $getKelompok = $this->KKNAnggotaModel->getKelompokIdBySessionIdMhs();
+        // dd($getKelompok);
         // Memeriksa apakah $getKelompok mengembalikan nilai atau tidak
-
         $this->kelompokId = $getKelompok->id;
         // Lanjutkan dengan kode Anda yang sudah ada
         $jurnal = $this->KKNJurnalPelaksanaanModel->getJurnalPelaksanaanByIdMahasiswa($this->mahasiswaId);
@@ -67,11 +66,9 @@ class KKNJurnalController extends BaseController
         if (!empty($jurnal)) {
             // Get the first row from the $jurnal array
             $firstRow = reset($jurnal);
-
-            // Extract the 'nama_perusahaan' and 'alamat_perusahaan' from the first row
-            $nama_perusahaan = $firstRow['nama_perusahaan'];
-            $alamat_perusahaan = $firstRow['alamat_perusahaan'];
-            
+            // Extract the 'nama_lokasi' and 'alamat_lokasi' from the first row
+            $nama_lokasi = $firstRow['nama_lokasi'];
+            $alamat_lokasi = $firstRow['alamat_lokasi'];
         }
 
         $data = [
@@ -79,8 +76,8 @@ class KKNJurnalController extends BaseController
             'data' => $jurnal,
             'kelompokId' => $this->kelompokId ?? '',
             'mahasiswa' => $this->db->table('mahasiswa')->where('id', $this->mahasiswaId)->get()->getRow(),
-            'nama_perusahaan' => $nama_perusahaan,
-            'alamat_perusahaan' => $alamat_perusahaan,
+            'nama_lokasi' => $nama_lokasi,
+            'alamat_lokasi' => $alamat_lokasi,
         ];
 
         // Load the view file as a string
@@ -182,6 +179,7 @@ class KKNJurnalController extends BaseController
         // dd($data['data']);
         return view('mahasiswa/kkn/jurnal/monitoring', $data);
     }
+
     public function edit_monitoring($id)
     {
         // Validasi data yang diinputkan jika diperlukan

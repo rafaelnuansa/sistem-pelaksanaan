@@ -21,7 +21,7 @@
         <div class="table-responsive">
             
         <table class="table table-bordered datatable" id="mahasiswa">
-            <thead>
+        <thead class="bg-primary">
                 <tr>
                     <th>No</th>
                     <th>NIM</th>
@@ -42,8 +42,8 @@
                         <td><?= $mhs['nama_kelompok'] ?></td>
                         <td><?= $mhs['nama_lokasi'] ?? '' ?></td>
                         <td>
-                            <a href="<?= route_to('admin.kkn.jurnal.pelaksanaan.show', $mhs['id']) ?>" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></a>
-                            <!-- <a href="<?= route_to('admin.kkn.jurnal.pelaksanaan.delete', $mhs['id']) ?>" class="btn btn-xs btn-danger">Hapus</a> -->
+                            <a href="<?= route_to('admin.kkn.jurnal.pelaksanaan.show', $mhs['mhs_id']) ?>" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></a>
+                            <!-- <a href="<?= route_to('admin.kkn.jurnal.pelaksanaan.delete', $mhs['mhs_id']) ?>" class="btn btn-xs btn-danger">Hapus</a> -->
                         </td>
                     </tr>
                 <?php endforeach; ?>

@@ -3,47 +3,47 @@
 namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Models\MahasiswaModel;
-use App\Models\PKLJurnalBimbinganModel;
-class PKLJurnalBimbinganController extends BaseController
+use App\Models\KKNJurnalMonitoringModel;
+class KKNJurnalMonitoringController extends BaseController
 {
     protected $jurnalModel;
     protected $mahasiswaModel;
 
     public function __construct()
     {
-        $this->jurnalModel = new PKLJurnalBimbinganModel();
+        $this->jurnalModel = new KKNJurnalMonitoringModel();
         $this->mahasiswaModel = new MahasiswaModel(); 
         $this->db = \Config\Database::connect();
     }
 
     public function index()
     {
-        $mahasiswa = $this->mahasiswaModel->getMahasiswaHasPKL();
+        $mahasiswa = $this->mahasiswaModel->getMahasiswaHasKKN();
         $data = [
             'mahasiswa' => $mahasiswa
         ];
     
-        return view('admin/pkl/jurnal/bimbingan/index', $data);
+        return view('admin/kkn/jurnal/monitoring/index', $data);
     } 
 
     public function show($id)
     {
-        $jurnal = $this->jurnalModel->getJurnalBimbinganByIdMahasiswa($id);
+        $jurnal = $this->jurnalModel->getJurnalMonitoringByIdMahasiswa($id);
         $mhs = $this->db->table('mahasiswa')->select('*')->where('id', $id)->get()->getRow();
         // dd($mhs);
         $data = [
-            'title' => 'Jurnal Bimbingan',
+            'title' => 'Jurnal Monitoring',
             'mahasiswa' => $mhs,
             'jurnals' => $jurnal
         ];
      
-        return view('admin/pkl/jurnal/bimbingan/show', $data);
+        return view('admin/kkn/jurnal/monitoring/show', $data);
     }
     
 
     public function create()
     {
-        return view('admin/pkl/jurnal/bimbingan/create');
+        return view('admin/kkn/jurnal/monitoring/create');
     }
 
     public function store()
@@ -52,13 +52,13 @@ class PKLJurnalBimbinganController extends BaseController
             'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
             'tanggal' => $this->request->getPost('tanggal'),
             'catatan' => $this->request->getPost('catatan'),
-            'pkl_id' => $this->request->getPost('pkl_id'),
+            'kkn_id' => $this->request->getPost('kkn_id'),
             'status' => $this->request->getPost('status'),
         ];
 
         $this->jurnalModel->insert($data);
 
-        return redirect()->route('admin.jurnal.bimbingan.index')->with('success', 'Data jurnal bimbingan berhasil ditambahkan');
+        return redirect()->route('admin.jurnal.monitoring.index')->with('success', 'Data jurnal monitoring berhasil ditambahkan');
 
     }
 
@@ -68,7 +68,7 @@ class PKLJurnalBimbinganController extends BaseController
             'jurnal' => $this->jurnalModel->find($id),
         ];
 
-        return view('admin/pkl/jurnal/bimbingan/edit', $data);
+        return view('admin/kkn/jurnal/monitoring/edit', $data);
     }
 
     public function update($id)
@@ -77,13 +77,13 @@ class PKLJurnalBimbinganController extends BaseController
             'mahasiswa_id' => $this->request->getPost('mahasiswa_id'),
             'tanggal' => $this->request->getPost('tanggal'),
             'catatan' => $this->request->getPost('catatan'),
-            'pkl_id' => $this->request->getPost('pkl_id'),
+            'kkn_id' => $this->request->getPost('kkn_id'),
             'status' => $this->request->getPost('status'),
         ];
 
         $this->jurnalModel->update($id, $data);
 
-        return redirect()->route('admin.jurnal.bimbingan.index')->with('success', 'Data jurnal bimbingan berhasil diupdate');
+        return redirect()->route('admin.jurnal.monitoring.index')->with('success', 'Data jurnal monitoring berhasil diupdate');
 
     }
 
@@ -91,7 +91,7 @@ class PKLJurnalBimbinganController extends BaseController
     {
         $this->jurnalModel->delete($id);
  
-        return redirect()->route('admin.jurnal.bimbingan.index')->with('success', 'Data jurnal bimbingan berhasil dihapus');
+        return redirect()->route('admin.jurnal.monitoring.index')->with('success', 'Data jurnal monitoring berhasil dihapus');
 
     }
 }

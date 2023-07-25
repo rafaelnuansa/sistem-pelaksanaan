@@ -8,7 +8,7 @@
 <?php if ($anggota) : ?>
   <div class="box">
     <div class="box-header with-border">
-      <h3 class="box-title">Daftar Anggota Kelompok <?php $nama_kelompok; ?></h3>
+      <h3 class="box-title">Kelompok PKL | <?php echo $nama_kelompok; ?></h3>
     </div>
 
     <div class="box-body">

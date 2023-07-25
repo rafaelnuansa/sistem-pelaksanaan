@@ -32,7 +32,7 @@
             <h2>Log Harian</h2>
             <p>Nama Mahasiswa: <?= $mahasiswa->nama; ?></p>
             <p>NIM: <?= $mahasiswa->nim; ?></p>
-            <p>Instansi: <?= $nama_perusahaan;?> </p> 
+            <p>Lokasi: <?= $nama_lokasi;?> </p> 
             <table class="table">
                 <thead>
                     <tr>

@@ -22,6 +22,8 @@ class KKNAnggotaModel extends Model
             ->join('kkn', 'kkn.id = kkn_anggota.kkn_id')
             ->where('kkn_anggota.mahasiswa_id', $mahasiswaId)
             ->get();
+            
+        // dd($query->getRow());
         return $query->getRow();
     }
 }
