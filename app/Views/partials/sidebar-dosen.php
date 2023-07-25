@@ -67,13 +67,13 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li class="<?= (uri_string() == 'pemasukan') ? 'active' : '' ?>">
-            <a href="<?= base_url('pemasukan') ?>">
+          <li class="<?= (uri_string() == 'dosen/skripsi') ? 'active' : '' ?>">
+            <a href="<?= base_url('dosen/skripsi') ?>">
               <i class="fa fa-briefcase"></i> <span>Jurnal Bimbingan</span>
             </a>
           </li>
-          <li class="<?= (uri_string() == 'laporan') ? 'active' : '' ?>">
-            <a href="<?= base_url('laporan') ?>">
+          <li class="<?= (uri_string() == 'dosen/skripsi/jadwal') ? 'active' : '' ?>">
+            <a href="<?= base_url('dosen/skripsi/jadwal') ?>">
               <i class="fa fa-calendar"></i> <span>Jadwal Sidang</span>
             </a>
           </li>

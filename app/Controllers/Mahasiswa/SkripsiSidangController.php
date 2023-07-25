@@ -110,10 +110,8 @@ class SkripsiSidangController extends BaseController
         $persyaratanModel->insert($data);
 
         session()->setFlashdata('success', 'Berhasil melakukan pendaftaran');
-        return redirect()->to('/mahasiswa/skripsi/jadwal');
+        return redirect()->back();
     } 
-
-   
 
     private function generateUniqueFileName($extension)
     {

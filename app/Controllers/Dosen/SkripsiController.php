@@ -11,7 +11,7 @@ use App\Models\ProdiModel;
 use App\Models\TempatModel;
 use Dompdf\Dompdf;
 
-class PKLController extends BaseController
+class SkripsiController extends BaseController
 {
     public function __construct()
     {
@@ -35,7 +35,7 @@ class PKLController extends BaseController
             'title' => 'Validasi Bimbingan',
             'data' => $mahasiswaBimbingan
         ];
-        return view('dosen/pkl/bimbingan', $data);
+        return view('dosen/skripsi/bimbingan', $data);
     }
 
     public function validasi_penguji()
@@ -44,7 +44,7 @@ class PKLController extends BaseController
             'title' => 'Validasi Penguji',
             'data' => $this->PKLJurnalBimbingan->dosenGetJurnalBimbinganByDospengId($this->dosenId),
         ];
-        return view('dosen/pkl/bimbingan', $data);
+        return view('dosen/skripsi/bimbingan', $data);
     }
 
     public function bimbingan_detail($mahasiswa_id)
@@ -58,7 +58,7 @@ class PKLController extends BaseController
             'data' => $dataList
         ];
 
-        return view('dosen/pkl/bimbingan-detail', $data);
+        return view('dosen/skripsi/bimbingan-detail', $data);
     }
 
     public function penilaian()
@@ -73,27 +73,26 @@ class PKLController extends BaseController
 
     public function detail()
     {
-        $result = $this->db->table('pkl_jurnal_binbingan')
+        $result = $this->db->table('skripsi_jurnal_binbingan')
             ->where('id_jurnal', $this->request->getVar('id'))
-            ->join('jurusan', 'pkl_jurnal_binbingan.id_jurusan = jurusan.id_jurusan')
+            ->join('jurusan', 'skripsi_jurnal_binbingan.id_jurusan = jurusan.id_jurusan')
             ->get()
             ->getResultArray();
 
         return $this->response->setJSON($result[0]);
     }
 
-    public function jadwal_pkl()
+    public function jadwal_skripsi()
     {
-        $jadwal_sidang = $this->db->table('pkl_jadwal_sidang')
-            ->select('pkl_jadwal_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospeng.nama as dospeng, dospem.nama as dospem, tempat_sidang.nama_tempat as tempat_nama, pkl.id as pkl_id, pkl_nilai_sidang.*, mahasiswa.id as mahasiswa_id, pkl.id as pkl_id')
-            ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
-            ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
-            ->join('dosen as dospeng', 'dospeng.id = pkl_jadwal_sidang.dospeng_id', 'left')
-            ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id', 'left')
-            ->join('pkl_nilai_sidang', 'pkl_nilai_sidang.mahasiswa_id = mahasiswa.id', 'left')
-            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id', 'left')
-            ->join('dosen as dospem', 'dospem.id = pkl.dosen_id', 'left')
-            ->where('pkl_jadwal_sidang.dospeng_id', $this->dosenId)
+        $jadwal_sidang = $this->db->table('skripsi_sidang')
+            ->select('skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospeng.nama as dospeng, dospem.nama as dospem, tempat_sidang.nama_tempat as tempat_nama, skripsi.id as skripsi_id, skripsi_nilai_sidang.*, mahasiswa.id as mahasiswa_id, skripsi.id as skripsi_id')
+            ->join('mahasiswa', 'mahasiswa.id = skripsi_sidang.mahasiswa_id', 'left')
+            ->join('tempat_sidang', 'tempat_sidang.id_tempat = skripsi_sidang.tempat_id', 'left')
+            ->join('dosen as dospeng', 'dospeng.id = skripsi_sidang.dospeng_id', 'left')
+            ->join('skripsi_nilai_sidang', 'skripsi_nilai_sidang.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('dosen as dospem', 'dospem.id = skripsi.dosen_id', 'left')
+            ->where('skripsi_sidang.dospeng_id', $this->dosenId)
             ->get()
             ->getResultArray();
         // dd($jadwal_sidang);
@@ -106,7 +105,7 @@ class PKLController extends BaseController
 
         // dd($jadwal_sidang);
 
-        return view('dosen/pkl/jadwal-sidang', $data);
+        return view('dosen/skripsi/jadwal-sidang', $data);
     }
 
 
@@ -114,7 +113,7 @@ class PKLController extends BaseController
     {
         $PKLNilaiModel = new PKLNilaiModel();
         $mahasiswa_id = $this->request->getVar('mahasiswa_id');
-        $pkl_id = $this->request->getVar('pkl_id');
+        $skripsi_id = $this->request->getVar('skripsi_id');
         $dosen_id = $this->request->getVar('dosen_id');
         $sidang_id = $this->request->getVar('sidang_id');
         $catatan = $this->request->getVar('catatan');
@@ -177,7 +176,7 @@ class PKLController extends BaseController
         // Prepare data for insert/update
         $data = [
             'mahasiswa_id' => $mahasiswa_id,
-            'pkl_id' => $pkl_id,
+            'skripsi_id' => $skripsi_id,
             'dosen_id' => $dosen_id,
             'sidang_id' => $sidang_id,
             'nilai_sikap' => $nilai_sikap,
@@ -217,16 +216,16 @@ class PKLController extends BaseController
 
         // Fetch the data from the database based on the $sidang_id
         $data = $PKLNilaiModel
-            ->select('pkl_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, pkl.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, pkl_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, pkl_jadwal_sidang.*')
-            ->join('mahasiswa', 'mahasiswa.id = pkl_nilai_sidang.mahasiswa_id')
-            ->join('dosen', 'dosen.id = pkl_nilai_sidang.dosen_id')
+            ->select('skripsi_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, skripsi.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, skripsi_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, skripsi_jadwal_sidang.*')
+            ->join('mahasiswa', 'mahasiswa.id = skripsi_nilai_sidang.mahasiswa_id')
+            ->join('dosen', 'dosen.id = skripsi_nilai_sidang.dosen_id')
             ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
             ->join('fakultas', 'fakultas.id = prodi.fakultas_id')
-            ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
-            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
-            ->join('pkl_judul_laporan', 'pkl_judul_laporan.mahasiswa_id = mahasiswa.id')
-            ->join('pkl_jadwal_sidang', 'pkl_jadwal_sidang.id_pkl_jadwal_sidang  = pkl_nilai_sidang.sidang_id')
-            ->join('tempat_sidang', 'tempat_sidang.id_tempat  = pkl_jadwal_sidang.tempat_id')
+            ->join('skripsi_anggota', 'skripsi_anggota.mahasiswa_id = mahasiswa.id')
+            ->join('skripsi', 'skripsi.id = skripsi_anggota.skripsi_id')
+            ->join('skripsi_judul_laporan', 'skripsi_judul_laporan.mahasiswa_id = mahasiswa.id')
+            ->join('skripsi_jadwal_sidang', 'skripsi_jadwal_sidang.id_skripsi_jadwal_sidang  = skripsi_nilai_sidang.sidang_id')
+            ->join('tempat_sidang', 'tempat_sidang.id_tempat  = skripsi_jadwal_sidang.tempat_id')
             ->where('sidang_id', $sidang_id)
             ->get()->getRow();
         // dd($data);
@@ -235,7 +234,7 @@ class PKLController extends BaseController
             return redirect()->back()->with('error', 'Data not found.');
         }
         // load HTML content
-        $this->pdf->loadHtml(view('pdf/penilaian_pkl', ['data' => $data]));
+        $this->pdf->loadHtml(view('pdf/penilaian_skripsi', ['data' => $data]));
 
         // (optional) setup the paper size and orientation
         $this->pdf->setPaper('A4');
@@ -247,18 +246,18 @@ class PKLController extends BaseController
         return $this->pdf->stream('Laporan', array("Attachment" => false));
     }
 
-    public function jadwal_pkl_bimbingan()
+    public function jadwal_skripsi_bimbingan()
     {
-        $jadwal_sidang = $this->db->table('pkl_jadwal_sidang')
-            ->select('pkl_jadwal_sidang.*, mahasiswa.nim as nim, dosen.nama as nama, mahasiswa.nama as nama_mahasiswa, dosen.nama as dospeng, tempat_sidang.nama_tempat as tempat_nama')
-            ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
-            ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
-            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
-            ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
+        $jadwal_sidang = $this->db->table('skripsi_jadwal_sidang')
+            ->select('skripsi_jadwal_sidang.*, mahasiswa.nim as nim, dosen.nama as nama, mahasiswa.nama as nama_mahasiswa, dosen.nama as dospeng, tempat_sidang.nama_tempat as tempat_nama')
+            ->join('mahasiswa', 'mahasiswa.id = skripsi_jadwal_sidang.mahasiswa_id', 'left')
+            ->join('skripsi_anggota', 'skripsi_anggota.mahasiswa_id = mahasiswa.id')
+            ->join('skripsi', 'skripsi.id = skripsi_anggota.skripsi_id')
+            ->join('tempat_sidang', 'tempat_sidang.id_tempat = skripsi_jadwal_sidang.tempat_id', 'left')
             ->join('dosen_pembimbing', 'dosen_pembimbing.mahasiswa_id = mahasiswa.id', 'left')
             ->join('dosen', 'dosen.id = dosen_pembimbing.dosen_id', 'left')
             ->where('dosen_pembimbing.dosen_id', $this->dosenId)
-            ->where('pkl.dosen_id', $this->dosenId)
+            ->where('skripsi.dosen_id', $this->dosenId)
             ->get()
             ->getResultArray();
         $data = [
@@ -266,7 +265,7 @@ class PKLController extends BaseController
             'data' => $jadwal_sidang
         ];
 
-        return view('dosen/pkl/jadwal-sidang-bim', $data);
+        return view('dosen/skripsi/jadwal-sidang-bim', $data);
     }
 
     public function approve_bimbingan()
@@ -324,10 +323,10 @@ class PKLController extends BaseController
         return $this->pdf->stream('Laporan', array("Attachment" => false));
     }
 
-    public function update_status_jadwal($id_pkl_jadwal_sidang, $status)
+    public function update_status_jadwal($id_skripsi_jadwal_sidang, $status)
     {
         // Contoh menggunakan model
-        $this->PKLJadwal->update($id_pkl_jadwal_sidang, ['status' => $status]);
+        $this->PKLJadwal->update($id_skripsi_jadwal_sidang, ['status' => $status]);
         // Redirect ke halaman sebelumnya
         return redirect()->back();
     }

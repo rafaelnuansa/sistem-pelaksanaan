@@ -353,13 +353,10 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'au
 
 
     $routes->get('kkn', 'KKNController::index');
-
     $routes->get('kkn/pelaksanaan', 'KKNController::pelaksanaan');
     $routes->get('kkn/pelaksanaan/approve', 'KKNController::approve_pelaksanaan', ['as' => 'dosen.kkn.validasi.pelaksanaan']);
     $routes->get('kkn/pelaksanaan/reset', 'KKNController::reset_pelaksanaan', ['as' => 'dosen.kkn.validasi.pelaksanaan.reset']);
-   
     $routes->get('kkn/pelaksanaan/(:segment)', 'KKNController::pelaksanaan_detail/$1');
-
     $routes->get('kkn/approve', 'KKNController::approve_monitoring', ['as' => 'dosen.kkn.validasi.monitoring']);
     $routes->get('kkn/reset', 'KKNController::reset_monitoring', ['as' => 'dosen.kkn.validasi.monitoring.reset']);
     $routes->get('kkn/jurnal/detail/(:segment)', 'KKNController::monitoring_detail/$1');
@@ -373,6 +370,29 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'au
     $routes->post('kkn/revisi/cetak', 'KKNController::cetak_revisi');
     $routes->get('kkn/penilaian/2', 'KKNController::penilaian2');
     $routes->get('kkn/jadwal/update_status/(:num)/(:num)', 'KKNController::update_status_jadwal/$1/$2', ['as' => 'dosen.pkl.jadwal.update_status']);
+
+
+    
+    $routes->get('skripsi', 'SkripsiController::index');
+    $routes->get('skripsi/pelaksanaan', 'SkripsiController::pelaksanaan');
+    $routes->get('skripsi/pelaksanaan/approve', 'SkripsiController::approve_pelaksanaan', ['as' => 'dosen.skripsi.validasi.pelaksanaan']);
+    $routes->get('skripsi/pelaksanaan/reset', 'SkripsiController::reset_pelaksanaan', ['as' => 'dosen.skripsi.validasi.pelaksanaan.reset']);
+    $routes->get('skripsi/pelaksanaan/(:segment)', 'SkripsiController::pelaksanaan_detail/$1');
+    $routes->get('skripsi/approve', 'SkripsiController::approve_monitoring', ['as' => 'dosen.skripsi.validasi.monitoring']);
+    $routes->get('skripsi/reset', 'SkripsiController::reset_monitoring', ['as' => 'dosen.skripsi.validasi.monitoring.reset']);
+    $routes->get('skripsi/jurnal/detail/(:segment)', 'SkripsiController::monitoring_detail/$1');
+    $routes->get('skripsi/detail', 'SkripsiController::detail');
+    $routes->get('skripsi/jadwal', 'SkripsiController::jadwal_skripsi');
+    $routes->get('skripsi/validasi-penguji', 'SkripsiController::validasi_penguji');
+    $routes->get('skripsi/jadwal/monitoring', 'SkripsiController::jadwal_skripsi_monitoring');
+    $routes->get('skripsi/penilaian/1', 'SkripsiController::penilaian');
+    $routes->get('skripsi/penilaian/cetak/(:segment)', 'SkripsiController::cetak/$1');
+    $routes->post('skripsi/penilaian/nilai', 'SkripsiController::nilai');
+    $routes->post('skripsi/revisi/cetak', 'SkripsiController::cetak_revisi');
+    $routes->get('skripsi/penilaian/2', 'SkripsiController::penilaian2');
+    $routes->get('skripsi/jadwal/update_status/(:num)/(:num)', 'SkripsiController::update_status_jadwal/$1/$2', ['as' => 'dosen.pkl.jadwal.update_status']);
+
+
 });
 
 
