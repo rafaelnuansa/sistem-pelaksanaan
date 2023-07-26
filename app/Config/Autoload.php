@@ -45,6 +45,7 @@ class Autoload extends AutoloadConfig
         APP_NAMESPACE => APPPATH, // For custom app namespace
         'Config'      => APPPATH . 'Config',
         'TCPDF' => VENDORPATH . 'tecnickcom/tcpdf',
+        'Helpers'     => APPPATH . 'Helpers',
     ];
 
     /**

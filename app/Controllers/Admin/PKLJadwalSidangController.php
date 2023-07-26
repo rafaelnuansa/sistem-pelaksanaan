@@ -23,27 +23,36 @@ class PKLJadwalSidangController extends BaseController
         $this->tempat = new TempatModel();
         $this->dosen = new DosenModel();
         $this->db = \Config\Database::connect();
-    }
+    } 
 
     public function index()
     {
-        $pending = $this->pkl_ujian->ujianPending();
+        $pending = $this->pkl_ujian->ujianPending()->get()->getResultArray();
+
+        // Extract unique dospem_id values from the pending array
+        $dospemIds = array_unique(array_column($pending, 'dospem_id'));
+
+        // Mengambil daftar dosen kecuali dosen pembimbing (based on dospem_id from pending)
+        $dosens = $this->db->table('dosen')
+            ->whereNotIn('id', $dospemIds) // Exclude dosens with dospem_id present in $pending
+            ->orderBy('nama', 'ASC')
+            ->get()
+            ->getResultArray();
+
         $mahasiswa = $this->mahasiswa->orderBy('nama', 'ASC')->findAll();
-        $dosens = $this->dosen->orderBy('nama', 'ASC')->findAll(); // Fetch all dosens from the database
         $tempats = $this->tempat->orderBy('nama_tempat', 'ASC')->findAll(); // Fetch all dosens from the database
         $jadwal_sidang = $this->db->table('pkl_jadwal_sidang')
-        ->select('pkl_jadwal_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospem.nama as dospem, dospeng.nama as dospeng, tempat_sidang.nama_tempat as tempat_nama, pkl_nilai_sidang.*')
-        ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
-        ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
-        ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id', 'left')
-        ->join('pkl', 'pkl.id = pkl_anggota.pkl_id', 'left')
-        ->join('pkl_nilai_sidang', 'pkl_nilai_sidang.mahasiswa_id = mahasiswa.id', 'left')
-        ->join('dosen as dospem', 'dospem.id = pkl.dosen_id', 'left') // Join to get the supervisor (dosen pembimbing)
-        ->join('dosen as dospeng', 'dospeng.id = pkl_jadwal_sidang.dospeng_id', 'left') // Join to get the examiner (dosen penguji)
-        ->get() 
-        ->getResultArray();
-    
-        
+            ->select('pkl_jadwal_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospem.nama as dospem, dospeng.nama as dospeng, tempat_sidang.nama_tempat as tempat_nama, pkl_nilai_sidang.*')
+            ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
+            ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
+            ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id', 'left')
+            ->join('pkl_nilai_sidang', 'pkl_nilai_sidang.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('dosen as dospem', 'dospem.id = pkl.dosen_id', 'left') // Join to get the supervisor (dosen pembimbing)
+            ->join('dosen as dospeng', 'dospeng.id = pkl_jadwal_sidang.dospeng_id', 'left') // Join to get the examiner (dosen penguji)
+            ->get()
+            ->getResultArray();
+
         $data = [
             'title' => 'Jadwal Sidang',
             'data' => $jadwal_sidang,
@@ -82,6 +91,7 @@ class PKLJadwalSidangController extends BaseController
     {
         $data = [
             'tanggal' => $this->request->getVar('tanggal'),
+            'jam' => $this->request->getVar('jam'),
             'keterangan' => $this->request->getVar('keterangan'),
             'dospeng_id' => $this->request->getVar('dospeng_id'),
             'tempat_id' => $this->request->getVar('tempat_id'),

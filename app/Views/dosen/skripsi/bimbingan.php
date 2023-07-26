@@ -25,7 +25,6 @@
           <th>NIM</th>
           <th>Nama mahasiswa</th>
           <th>Tahun Ajaran</th>
-          <th>Nama Kelompok</th>
           <th>Prodi</th>
           <th></th>
         </tr>
@@ -36,11 +35,10 @@
             <td><?= ++$index ?></td>
             <td><?= $row['nim'] ?></td>
             <td><?= $row['nama_mahasiswa'] ?></td>
-            <td><?= $row['nama_kelompok'] ?></td>
             <td><?= $row['tahun_akademik'] ?></td>
             <td><?= $row['nama_prodi'] ?></td>
             <td>
-            <a href="<?= base_url('dosen/pkl/jurnal/detail/' . $row['mahasiswa_id']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
+            <a href="<?= base_url('dosen/skripsi/bimbingan/' . $row['mahasiswa_id']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
          
             </td>
           </tr>

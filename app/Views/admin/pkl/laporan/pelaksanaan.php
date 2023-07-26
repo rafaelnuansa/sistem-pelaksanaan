@@ -1,103 +1,58 @@
-<!-- Extend the default layout -->
 <?= $this->extend('layouts/default'); ?>
 
-<!-- Specify the page content -->
-<?= $this->section('content') ?>
-<div class="row">
-    <div class="col-md-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Filter Data Laporan Pelaksanaan PKL</h3>
-            </div>
-            <div class="box-body">
-                <form action="<?= route_to('admin.pkl.laporan.pelaksanaan'); ?>" method="get">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="tahun_akademik" class="control-label">Tahun Akademik</label>
-                                <select class="form-control" name="tahun_akademik" id="tahun_akademik">
-                                    <option value="">Semua Tahun Akademik</option>
-                                    <?php
-                                    $currentYear = date('Y');
-                                    $startYear = $currentYear - 5;
-                                    $endYear = $currentYear + 5;
-                                    for ($year = $startYear; $year <= $endYear; $year++) {
-                                        $academicYear = $year . '/' . ($year + 1);
-                                        $selected = ($tahun_akademik == $academicYear) ? 'selected' : '';
-                                        echo "<option value='$academicYear' $selected>$academicYear</option>";
-                                    }
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="prodi_id" class="control-label">Prodi</label>
-                                <select class="form-control" name="prodi_id" id="prodi_id">
-                                    <option value="">Semua Prodi</option>
-                                    <?php foreach ($getProdi as $prodi) : ?>
-                                        <?php $selected = ($prodi['id'] == $prodi_id) ? 'selected' : ''; ?>
-                                        <option value="<?= $prodi['id'] ?>" <?= $selected ?>><?= $prodi['nama_prodi'] ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Filter</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
+<?= $this->section('content'); ?>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header with-border">
+        <a href="<?= base_url('admin/pkl/laporan') ?>" class="btn btn-primary">Kembali</a>
+        <a href="<?= base_url('admin/pkl/laporan/jurnal/pelaksanaan/'.$mahasiswa->id.'/cetak') ?>" class="btn btn-success">Cetak</a>
+            <br>
+            <br>
+        <h3 class="box-title">Jurnal Pelaksanaan <?php echo $mahasiswa->nama ?? '' ;?></h3>
+        </div>
+        <div class="box-body">
+            <table class="table table-bordered" id="datatables">
+                <thead class="bg-primary">
+                    <tr>
+                        <th>No</th>
+                        <th>Hari</th>
+                        <th>Jam</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $no = 1;?>
+                    <?php foreach ($jurnals as $jurnal): ?>
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= $jurnal['hari'] ?></td>
+                        <td><?= $jurnal['jam'] ?></td>
+                        <td><?= $jurnal['keterangan'] ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
+    <!-- /.box -->
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Data Laporan Pelaksanaan PKL</h3>
-                <a href="<?= route_to('admin.pkl.laporan.jurnal.pelaksanaan_cetak') ?>?tahun_akademik=<?= $tahun_akademik ?>&prodi_id=<?= $prodi_id ?>&status=<?= $status ?>" class="btn btn-primary pull-right">
-                    <i class="fa fa-print"></i> Cetak Laporan Pelaksanaan PKL
-                </a>
+</section>
+<!-- /.content -->
 
-            </div>
-            <div class="box-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered datatable">
-                        <thead class="bg-primary">
-                            <tr>
-                                <th>No</th>
-                                <th>NIM</th>
-                                <th>Nama Mahasiswa</th>
-                                <th>Tahun Akademik</th>
-                                <th>Prodi</th>
-                                <th>Nama Perusahaan</th>
-                                <th>Hari</th>
-                                <th>Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($pelaksaan as $i => $pkl) : ?>
-                                <tr>
-                                    <td><?= $i + 1 ?></td>
-                                    <td><?= $pkl['nim'] ?></td>
-                                    <td><?= $pkl['nama_mahasiswa'] ?></td>
-                                    <td><?= $pkl['tahun_akademik'] ?></td>
-                                    <td><?= $pkl['nama_prodi'] ?></td>
-                                    <td><?= $pkl['nama_perusahaan'] ?></td>
-                                    <td><?= $pkl['hari'] ?></td>
-                                    <td><?= $pkl['keterangan'] ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<?= $this->endSection() ?>
+<?= $this->endSection(); ?>
+
+<?= $this->section('script'); ?>
+<script src="<?= base_url('bower_components/datatables.net/js/jquery.dataTables.min.js') ?>"></script>
+<script src="<?= base_url('bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js') ?>"></script>
+<script>
+  $('#datatables').DataTable({
+    "pageLength": 7
+  });
+
+  </script>
+  <?= $this->endSection(); ?>

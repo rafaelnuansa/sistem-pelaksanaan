@@ -99,9 +99,9 @@ class PKLJurnalBimbinganModel extends Model
             ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
             ->where('pkl.dosen_id', $dosen_id)
             ->groupBy('mahasiswa.id')
-            ->get();
+            ->get()->getResultArray();
 
-        return $query->getResultArray();
+        return $query;
     }
 
     public function dosenGetJurnalDanMahasiswaBimbingan($mahasiswa_id)

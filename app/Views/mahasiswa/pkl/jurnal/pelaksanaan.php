@@ -33,7 +33,7 @@
         <thead class="bg-primary">
           <tr>
             <th>No</th>
-            <th>Hari/Tanggal</th>
+            <th>Tanggal</th>
             <th>Jam</th>
             <th>Keterangan Kegiatan PKL</th>
             <th>Aksi</th>

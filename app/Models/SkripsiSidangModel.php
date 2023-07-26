@@ -10,10 +10,12 @@ class SkripsiSidangModel extends Model
     protected $primaryKey       = 'id';
     protected $allowedFields = [
         'tanggal',
+        'jam',
         'keterangan',
         'dospeng_id',
         'tempat_id',
         'status',
+        'tipe_sidang',
         'mahasiswa_id',
     ];
     

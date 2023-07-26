@@ -153,6 +153,7 @@
         <p style="margin-top: 50px;">
             Pembimbing
         </p>
+        <p style="margin-top: 100px;"><?= $data->nama_pl ?? ''; ?></p>
     </div>
 </body>
 

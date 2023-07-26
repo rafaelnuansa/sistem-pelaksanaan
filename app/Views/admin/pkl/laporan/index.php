@@ -8,60 +8,6 @@ Data Laporan PKL
 
 <!-- Specify the page content -->
 <?= $this->section('content') ?>
-<div class="row">
-    <div class="col-md-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Data Laporan PKL</h3>
-            </div>
-            <div class="box-body">
-                <table class="table table-bordered">
-                    <thead class="bg-primary">
-                        <tr>
-                            <th>Laporan</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Laporan Jurnal Pelaksanaan</td>
-                            <td>
-                                <a href="<?= route_to('admin.pkl.laporan.jurnal.pelaksanaan'); ?>" class="btn btn-primary">
-                                    <i class="fa fa-file-text-o"></i> Laporan Jurnal Pelaksanaan
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Laporan Jurnal Bimbingan</td>
-                            <td>
-                                <a href="<?= route_to('admin.pkl.laporan.jurnal.bimbingan'); ?>" class="btn btn-primary">
-                                    <i class="fa fa-file-text-o"></i> Laporan Jurnal Bimbingan
-                                </a>
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Laporan Jadwal</td>
-                            <td>
-                                <a href="<?= route_to('admin.pkl.laporan.jadwal'); ?>" class="btn btn-primary">
-                                    <i class="fa fa-file-text-o"></i> Laporan Jadwal
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Laporan Dospem</td>
-                            <td>
-                                <a href="<?= route_to('admin.pkl.laporan.dospem'); ?>" class="btn btn-primary">
-                                    <i class="fa fa-file-text-o"></i> Laporan Dospem
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="row">
     <div class="col-md-12">
@@ -77,18 +23,20 @@ Data Laporan PKL
                                 <label for="tahun_akademik" class="control-label">Tahun Akademik</label>
 
                                 <select class="form-control" name="tahun_akademik" id="tahun_akademik">
-                                    <option value="" <?= empty($tahun_akademik) ? 'selected' : '' ?>>Semua Tahun Akademik</option>
+                                    <option value="">Semua Tahun Akademik</option>
                                     <?php
                                     $currentYear = date('Y');
-                                    $startYear = $currentYear - 5;
-                                    $endYear = $currentYear + 5;
-                                    for ($year = $startYear; $year <= $endYear; $year++) {
+                                    $endYear = 2015;
+                                    $startYear = $currentYear + 1;
+
+                                    for ($year = $startYear; $year >= $endYear; $year--) {
                                         $academicYear = $year . '/' . ($year + 1);
                                         $selected = (isset($tahun_akademik) && $academicYear === $tahun_akademik) ? 'selected' : '';
                                         echo "<option value='$academicYear' $selected>$academicYear</option>";
                                     }
                                     ?>
                                 </select>
+
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -120,13 +68,10 @@ Data Laporan PKL
     <div class="col-md-12">
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Data Laporan Kelompok</h3>
-
+                <h3 class="box-title">Data Laporan</h3>
                 <a href="<?= route_to('admin.pkl.laporan.cetak') ?>?tahun_akademik=<?= $tahun_akademik ?>&prodi_id=<?= $prodi_id ?>" class="btn btn-primary pull-right">
                     <i class="fa fa-print"></i> Cetak
                 </a>
-
-
             </div>
             <div class="box-body">
                 <div class="table-responsive">
@@ -134,24 +79,44 @@ Data Laporan PKL
                         <thead class="bg-primary">
                             <tr>
                                 <th>No</th>
-                                <th>Nama Kelompok</th>
-                                <th>Tanggal Mulai</th>
-                                <th>Selesai</th>
+                                <th>NIM</th>
+                                <th>Mahasiswa</th>
                                 <th>Program Studi</th>
                                 <th>Dosen</th>
+                                <th>Tgl Mulai</th>
+                                <th>Tgl Selesai</th>
                                 <th>Instansi</th>
+                                <th>Status</th>
+                                <th>Pelaksanaan</th>
+                                <th>Bimbingan</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($data_pkl as $i => $pkl) : ?>
                                 <tr>
                                     <td><?= $i + 1 ?></td>
-                                    <td><?= $pkl['nama_kelompok'] ?></td>
-                                    <td><?= $pkl['tgl_mulai'] ?></td>
-                                    <td><?= $pkl['tgl_selesai'] ?></td>
+                                    <td><?= $pkl['nim'] ?></td>
+                                    <td><?= $pkl['nama'] ?></td>
                                     <td><?= $pkl['nama_prodi'] ?></td>
-                                    <td><?= $pkl['nama_dosen'] ?></td>
-                                    <td><?= $pkl['nama_perusahaan'] ?></td>
+                                    <td><?= $pkl['nama_dosen'] ?? '-' ?></td>
+                                    <td><span class="label label-primary"><?= $pkl['tgl_mulai'] ?? '-' ?></span></td>
+                                    <td><span class="label label-primary"><?= $pkl['tgl_selesai'] ?? '-' ?></span></td>
+                                    <td><?= $pkl['nama_perusahaan'] ?? '-' ?></td>
+                                    <td> <span class="label <?= $pkl['total_nilai'] === null ? 'label-warning' : ($pkl['status_ujian'] ? 'label-primary' : 'label-danger') ?>">
+                                            <?= $pkl['total_nilai'] === null ? 'Belum Melaksanakan' : ($pkl['status_ujian'] ? 'Lulus' : 'Tidak Lulus') ?>
+                                        </span></td>
+                                    <td>   
+                                        <a href="<?= route_to('admin.pkl.laporan.jurnal.pelaksanaan.detail', $pkl['mhs_id']); ?>" class="btn btn-primary">
+                                            <i class="fa fa-file-text-o"></i> Pelaksanaan
+                                        </a>
+                            </td>
+                                        <td>
+                                 
+                                        <a href="<?= route_to('admin.pkl.laporan.jurnal.bimbingan.detail',  $pkl['mhs_id']); ?>" class="btn btn-primary">
+                                            <i class="fa fa-file-text-o"></i> Bimbingan
+                                        </a>       
+
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

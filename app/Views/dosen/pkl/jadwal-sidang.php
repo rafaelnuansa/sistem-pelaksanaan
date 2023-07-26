@@ -19,7 +19,8 @@
             <th>Dosen Penguji</th>
             <th>Dosen Pembimbing</th>
             <th>Tempat</th>
-            <th>Hari/Tanggal</th>
+            <th>Tanggal</th>
+            <th>Jam</th>
             <th>Status</th>
             <th>Penilaian</th>
             <th>Aksi</th>
@@ -34,25 +35,32 @@
               <td><?= $row['nama_mahasiswa'] ?></td>
               <td><span class="label label-primary"><?= $row['dospeng'] ?></span></td>
               <td><span class="label label-danger"><?= $row['dospem'] ?></span></td>
-              <td><?= $row['tempat_nama'] ?></td>
-              <td><?= $row['tanggal'] ?></td>
+              <td><span class="label label-success"><?= $row['tempat_nama'] ?></span></td>
+              <td><span class="label label-primary"><?= $row['tanggal'] ?></span></td>
+              <td><span class="label label-primary"><?= $row['jam'] ?></span></td>
               <td>
-               
-              <span class="label <?= $row['total_nilai'] === null ? 'label-warning' : ($row['status_ujian'] ? 'label-primary' : 'label-danger') ?>">
+
+                <span class="label <?= $row['total_nilai'] === null ? 'label-warning' : ($row['status_ujian'] ? 'label-primary' : 'label-danger') ?>">
                   <?= $row['total_nilai'] === null ? 'Belum Melaksanakan' : ($row['status_ujian'] ? 'Lulus' : 'Tidak Lulus') ?>
                 </span>
               </td>
-              <td> 
-                <button type="button" class="btn btn-primary btn-sm btn-open-modal" data-modal-target="#nilaiModal"  data-id="<?= $row['id_pkl_jadwal_sidang'] ?>" data-mahasiswa-id="<?= $row['mahasiswa_id'] ?>" data-pkl-id="<?= $row['pkl_id'] ?>" data-dosen-id="<?= $dosenId ?>" data-nilai-sikap="<?= $row['nilai_sikap'] ?>" data-nilai-materi="<?= $row['nilai_penyajian_materi'] ?>" data-nilai-pendahuluan="<?= $row['nilai_pendahuluan'] ?>" data-nilai-tinjauan-pustaka="<?= $row['nilai_tinjauan_pustaka'] ?>" data-nilai-pembahasan="<?= $row['nilai_hasil_pembahasan'] ?>" data-nilai-kesimpulan="<?= $row['nilai_kesimpulan_dan_saran'] ?>" data-nilai-daftar-pustaka="<?= $row['nilai_daftar_pustaka'] ?>" data-nilai-argumentasi="<?= $row['nilai_argumentasi_penyaji'] ?>" data-nilai-penguasaan="<?= $row['nilai_penguasaan_materi'] ?>" data-komentar="<?= $row['catatan'] ?>">
-                  Nilai
-                </button>
+              <td>
+                <div class="btn-group">
+
+                  <button type="button" class="btn btn-primary btn-sm btn-open-modal" data-modal-target="#nilaiModal" data-id="<?= $row['id_pkl_jadwal_sidang'] ?>" data-mahasiswa-id="<?= $row['mahasiswa_id'] ?>" data-pkl-id="<?= $row['pkl_id'] ?>" data-dosen-id="<?= $dosenId ?>" data-nilai-sikap="<?= $row['nilai_sikap'] ?>" data-nilai-materi="<?= $row['nilai_penyajian_materi'] ?>" data-nilai-pendahuluan="<?= $row['nilai_pendahuluan'] ?>" data-nilai-tinjauan-pustaka="<?= $row['nilai_tinjauan_pustaka'] ?>" data-nilai-pembahasan="<?= $row['nilai_hasil_pembahasan'] ?>" data-nilai-kesimpulan="<?= $row['nilai_kesimpulan_dan_saran'] ?>" data-nilai-daftar-pustaka="<?= $row['nilai_daftar_pustaka'] ?>" data-nilai-argumentasi="<?= $row['nilai_argumentasi_penyaji'] ?>" data-nilai-penguasaan="<?= $row['nilai_penguasaan_materi'] ?>" data-komentar="<?= $row['catatan'] ?>">
+                    Nilai
+                  </button>
+                  <a href="<?= base_url('dosen/pkl/penilaian/cetak/' . $row['mahasiswa_id']) ?>" class="btn btn-success btn-sm" target="_blank">
+                    Cetak
+                  </a>
+                </div>
               </td>
               <td>
-                <a href="<?= base_url('dosen/pkl/penilaian/cetak/' . $row['mahasiswa_id']) ?>" class="btn btn-success btn-sm" target="_blank">
-                  Cetak
+                <a href="<?= base_url('dosen/pkl/berita_acara/' . $row['mahasiswa_id']) ?>" class="btn btn-success btn-sm" target="_blank">
+                  Berita Acara
                 </a>
               </td>
-        
+
             </tr>
           <?php endforeach; ?>
         </tbody>
@@ -95,7 +103,7 @@
                     <td><b>Sikap/Penampilan Penyaji</b></td>
                     <td>10</td>
                     <td>
-                      <input type="number" required step="0.01" class="form-control"  name="nilai_sikap" id="nilai_sikap">
+                      <input type="number" required step="0.01" class="form-control" name="nilai_sikap" id="nilai_sikap">
                     </td>
                   </tr>
                   <tr>
@@ -197,7 +205,7 @@
   $(document).ready(function() {
     // When the "Nilai" button is clicked, populate the modal form fields with the relevant data from the row
     $('.btn-open-modal').click(function() {
-      
+
       var id_pkl_jadwal_sidang = $(this).data('id');
       var mahasiswa_id = $(this).data('mahasiswa-id');
       var pkl_id = $(this).data('pkl-id');

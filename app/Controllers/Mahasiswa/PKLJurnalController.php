@@ -24,6 +24,7 @@ class PKLJurnalController extends BaseController
         $this->getKelompok = $this->AnggotaModel->getKelompokIdBySessionIdMhs();
         if ($this->getKelompok) {
             $this->kelompokId = $this->getKelompok->id;
+            $this->dospemId = $this->getKelompok->dosen_id;
         }
         $this->mahasiswaId = session()->get('mahasiswa_id');
         $this->db = \Config\Database::connect();
@@ -75,14 +76,15 @@ class PKLJurnalController extends BaseController
             $alamat_perusahaan = $firstRow['alamat_perusahaan'];
             
         }
-
+        $nama_pembimbing = $getKelompok->bimbingan_perusahaan;
         $data = [
             'title' => 'Jurnal Pelaksanaan',
             'data' => $jurnal,
             'kelompokId' => $this->kelompokId ?? '',
             'mahasiswa' => $this->db->table('mahasiswa')->where('id', $this->mahasiswaId)->get()->getRow(),
-            'nama_perusahaan' => $nama_perusahaan,
-            'alamat_perusahaan' => $alamat_perusahaan,
+            'nama_perusahaan' => $nama_perusahaan ?? '-',
+            'alamat_perusahaan' => $alamat_perusahaan ?? '-',
+            'nama_pembimbing' => $nama_pembimbing ?? '-',
         ];
 
         // Load the view file as a string

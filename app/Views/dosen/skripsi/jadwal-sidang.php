@@ -21,6 +21,7 @@
             <th>Tempat</th>
             <th>Hari/Tanggal</th>
             <th>Status</th>
+            <th>Jadwal</th>
             <th>Penilaian</th>
             <th>Aksi</th>
           </tr>
@@ -34,8 +35,9 @@
               <td><?= $row['nama_mahasiswa'] ?></td>
               <td><span class="label label-primary"><?= $row['dospeng'] ?></span></td>
               <td><span class="label label-danger"><?= $row['dospem'] ?></span></td>
-              <td><?= $row['tempat_nama'] ?></td>
-              <td><?= $row['tanggal'] ?></td>
+              <td><span class="label label-success"><?= $row['tempat_nama'] ?></span></td>
+              <td><span class="label label-primary"><?= $row['tanggal'] ?></span></td>
+              <td><span class="label label-primary"><?= $row['jam'] ?></span></td>
               <td>
                
               <span class="label <?= $row['total_nilai'] === null ? 'label-warning' : ($row['status_ujian'] ? 'label-primary' : 'label-danger') ?>">

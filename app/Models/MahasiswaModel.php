@@ -47,6 +47,45 @@ class MahasiswaModel extends Model
         return $query->getResultArray();
     }
 
+    public function getMahasiswaBimbingan($dosen_id)
+    {
+        $query = $this->select('mahasiswa.*, mahasiswa.id as mahasiswa_id,, prodi.nama_prodi as nama_prodi, mahasiswa.*, pkl.*, mahasiswa.nama as nama_mahasiswa')
+            ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
+            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
+            ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
+            ->where('pkl.dosen_id', $dosen_id)
+            ->groupBy('mahasiswa.id')
+            ->get()->getResultArray();
+        // dd($query);
+        return $query;
+    }
+
+    public function getMahasiswaBimbinganKKN($dosen_id)
+    {
+        $query = $this->select('mahasiswa.*, mahasiswa.id as mahasiswa_id, prodi.nama_prodi as nama_prodi, mahasiswa.*, kkn.*, mahasiswa.nama as nama_mahasiswa')
+            ->join('kkn_anggota', 'kkn_anggota.mahasiswa_id = mahasiswa.id')
+            ->join('kkn', 'kkn.id = kkn_anggota.kkn_id')
+            ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
+            ->where('kkn.dosen_id', $dosen_id)
+            ->groupBy('mahasiswa.id')
+            ->get()->getResultArray();
+        // dd($query);
+        return $query;
+    }
+
+    
+    public function getMahasiswaBimbinganSkripsi($dosen_id)
+    {
+        $query = $this->select('mahasiswa.*, mahasiswa.id as mahasiswa_id, prodi.nama_prodi as nama_prodi, mahasiswa.*, skripsi.*, mahasiswa.nama as nama_mahasiswa')
+            ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id')
+            ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
+            ->where('skripsi.dosen_id', $dosen_id)
+            ->groupBy('mahasiswa.id')
+            ->get()->getResultArray();
+        // dd($query);
+        return $query;
+    }
+
     public function getMahasiswaHasKKN()
     {
         $query = $this->select('mahasiswa.*, prodi.nama_prodi, kkn.*, mahasiswa.id as mhs_id, kkn_lokasi.nama_lokasi as nama_lokasi, kkn_lokasi.alamat_lokasi as alamat_lokasi, dospem.nama as dospem')

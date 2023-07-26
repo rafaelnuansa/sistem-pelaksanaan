@@ -93,7 +93,6 @@ class PKLJadwalController extends BaseController
 
             // Save the updated lampiran data
             $ujianModel->save($isRegistered);
-
             session()->setFlashdata('success', 'Berhasil mengupdate lampiran');
             return redirect()->to('/mahasiswa/pkl/jadwal');
         }

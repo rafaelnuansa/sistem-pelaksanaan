@@ -26,23 +26,23 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="tahun_akademik">Tahun Akademik</label>
-                            <select name="tahun_akademik" class="form-control" required>
-                                <option value="">Pilih Tahun Akademik</option>
-                                <?php
-                                // Get the current year
-                                $currentYear = date('Y');
+    <label for="tahun_akademik">Tahun Akademik</label>
+    <select name="tahun_akademik" class="form-control" required>
+        <option value="">Pilih Tahun Akademik</option>
+        <?php
+        // Get the current year
+        $currentYear = date('Y');
 
-                                // Create options for 5 years before and after the current year
-                                for ($i = $currentYear - 5; $i <= $currentYear + 5; $i++) {
-                                    $nextYear = $i + 1;
-                                    $optionValue = $i . '/' . $nextYear;
-                                    $selected = ($kkn['tahun_akademik'] == $optionValue) ? 'selected' : '';
-                                    echo '<option value="' . $optionValue . '" ' . $selected . '>' . $optionValue . '</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
+        // Loop through the years starting from the current year and going back to 2015
+        for ($i = $currentYear; $i >= 2015; $i--) {
+            $nextYear = $i + 1;
+            $optionValue = $i . '/' . $nextYear;
+            $selected = ($pkl['tahun_akademik'] == $optionValue) ? 'selected' : '';
+            echo '<option value="' . $optionValue . '" ' . $selected . '>' . $optionValue . '</option>';
+        }
+        ?>
+    </select>
+</div>
 
                         <div class="form-group">
                             <label for="dosen_id">Dosen</label>

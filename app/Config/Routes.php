@@ -127,10 +127,13 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     // PKL laporan
     $routes->get('pkl/laporan', 'PKLLaporanController::index', ['as' => 'admin.pkl.laporan.index']);
     $routes->get('pkl/laporan/cetak', 'PKLLaporanController::cetak', ['as' => 'admin.pkl.laporan.cetak']);
-    $routes->get('pkl/laporan/jurnal/pelaksanaan', 'PKLLaporanController::pelaksanaan', ['as' => 'admin.pkl.laporan.jurnal.pelaksanaan']);
-    $routes->get('pkl/laporan/jurnal/pelaksanaan/cetak', 'PKLLaporanController::pelaksanaan_cetak', ['as' => 'admin.pkl.laporan.jurnal.pelaksanaan_cetak']);
-    $routes->get('pkl/laporan/jurnal/bimbingan', 'PKLLaporanController::bimbingan', ['as' => 'admin.pkl.laporan.jurnal.bimbingan']);
-    $routes->get('pkl/laporan/jurnal/bimbingan/cetak', 'PKLLaporanController::bimbingan_cetak', ['as' => 'admin.pkl.laporan.jurnal.bimbingan.cetak']);
+   
+    $routes->get('pkl/laporan/jurnal/pelaksanaan/(:num)/cetak', 'PKLLaporanController::pelaksanaan_cetak/$1', ['as' => 'admin.pkl.laporan.jurnal.pelaksanaan_cetak']);
+    $routes->get('pkl/laporan/jurnal/pelaksanaan/(:num)', 'PKLLaporanController::pelaksanaan/$1', ['as' => 'admin.pkl.laporan.jurnal.pelaksanaan.detail']);
+ 
+    $routes->get('pkl/laporan/jurnal/bimbingan/(:num)/cetak', 'PKLLaporanController::bimbingan_cetak/$1', ['as' => 'admin.pkl.laporan.jurnal.bimbingan.cetak']);
+    $routes->get('pkl/laporan/jurnal/bimbingan/(:num)', 'PKLLaporanController::bimbingan/$1', ['as' => 'admin.pkl.laporan.jurnal.bimbingan.detail']);
+   
     $routes->get('pkl/laporan/jadwal', 'PKLLaporanController::jadwal', ['as' => 'admin.pkl.laporan.jadwal']);
     $routes->get('pkl/laporan/jadwal/cetak', 'PKLLaporanController::jadwal_cetak', ['as' => 'admin.pkl.laporan.jadwal.cetak']);
     $routes->get('pkl/laporan/dospem', 'PKLLaporanController::dospem', ['as' => 'admin.pkl.laporan.dospem']);
@@ -308,10 +311,12 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
     $routes->post('skripsi/bimbingan', 'SkripsiBimbinganController::store', ['as' => 'mahasiswa.skripsi.bimbingan.store']);
     
     $routes->post('skripsi/bimbingan/edit/(:num)', 'SkripsiBimbinganController::update/$1', ['as' => 'mahasiswa.skripsi.bimbingan.edit']);
+    
     $routes->get('skripsi/bimbingan/delete/(:num)', 'SkripsiBimbinganController::delete/$1', ['as' => 'mahasiswa.skripsi.bimbingan.delete']);
     $routes->get('skripsi/sidang', 'SkripsiSidangController::index');
-    $routes->post('skripsi/sidang', 'SkripsiSidangController::daftar', ['as' => 'mahasiswa.skripsi.daftar']);
 
+    $routes->post('skripsi/daftar_semhas', 'SkripsiSidangController::daftar_semhas', ['as' => 'mahasiswa.skripsi.daftar_semhas']);
+    $routes->post('skripsi/daftar_sempro', 'SkripsiSidangController::daftar_sempro', ['as' => 'mahasiswa.skripsi.daftar_sempro']);
     // END MHS SKRIPSI
 
 
@@ -346,6 +351,7 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'au
     $routes->get('pkl/jurnal/pelaksanaan/unvalidasi/(:segment)', 'PKLJurnalController::unvalidasiPelaksanaan/$1', ['as' => 'dosen.pkl.jurnal.pelaksanaan.unvalidasi']);
     $routes->get('pkl/penilaian/1', 'PKLController::penilaian');
     $routes->get('pkl/penilaian/cetak/(:segment)', 'PKLController::cetak/$1');
+    $routes->get('pkl/berita_acara/(:segment)', 'PKLController::berita_acara/$1');
     $routes->post('pkl/penilaian/nilai', 'PKLController::nilai');
     $routes->post('pkl/revisi/cetak', 'PKLController::cetak_revisi');
     $routes->get('pkl/penilaian/2', 'PKLController::penilaian2');
@@ -378,8 +384,11 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'au
     $routes->get('skripsi/pelaksanaan/approve', 'SkripsiController::approve_pelaksanaan', ['as' => 'dosen.skripsi.validasi.pelaksanaan']);
     $routes->get('skripsi/pelaksanaan/reset', 'SkripsiController::reset_pelaksanaan', ['as' => 'dosen.skripsi.validasi.pelaksanaan.reset']);
     $routes->get('skripsi/pelaksanaan/(:segment)', 'SkripsiController::pelaksanaan_detail/$1');
-    $routes->get('skripsi/approve', 'SkripsiController::approve_monitoring', ['as' => 'dosen.skripsi.validasi.monitoring']);
-    $routes->get('skripsi/reset', 'SkripsiController::reset_monitoring', ['as' => 'dosen.skripsi.validasi.monitoring.reset']);
+    $routes->get('skripsi/bimbingan/(:segment)', 'SkripsiController::bimbingan_detail/$1');
+   
+    $routes->get('skripsi/approve', 'SkripsiController::approve_bimbingan', ['as' => 'dosen.skripsi.validasi.bimbingan']);
+    $routes->get('skripsi/reset', 'SkripsiController::reset_bimbingan', ['as' => 'dosen.skripsi.validasi.bimbingan.reset']);
+   
     $routes->get('skripsi/jurnal/detail/(:segment)', 'SkripsiController::monitoring_detail/$1');
     $routes->get('skripsi/detail', 'SkripsiController::detail');
     $routes->get('skripsi/jadwal', 'SkripsiController::jadwal_skripsi');

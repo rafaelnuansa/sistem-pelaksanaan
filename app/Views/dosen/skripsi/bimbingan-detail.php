@@ -40,9 +40,9 @@
                             <td><span class="label label-danger"><?= $row['status'] ?></span></td>
                         <?php endif; ?>
                         <td> <?php if ($row['status'] == 'Menunggu Validasi') : ?>
-                                <a href="<?= route_to('dosen.pkl.validasi.bimbingan') ?>?id=<?= $row['id_jurnal_bimbingan'] ?>" class="btn btn-sm btn-primary" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Tervalidasi?')">Validasi</a>
+                                <a href="<?= route_to('dosen.skripsi.validasi.bimbingan') ?>?id=<?= $row['bid'] ?>" class="btn btn-sm btn-primary" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Tervalidasi?')">Validasi</a>
                             <?php else : ?>
-                                <a href="<?= route_to('dosen.pkl.validasi.bimbingan.reset') ?>?id=<?= $row['id_jurnal_bimbingan'] ?>" onclick="return confirm('Apakah Anda yakin ingin mereset status ini?')" class="btn btn-success">Reset</a>
+                                <a href="<?= route_to('dosen.skripsi.validasi.bimbingan.reset') ?>?id=<?= $row['bid'] ?>" onclick="return confirm('Apakah Anda yakin ingin mereset status ini?')" class="btn btn-success">Reset</a>
                             <?php endif; ?>
 
                         </td>

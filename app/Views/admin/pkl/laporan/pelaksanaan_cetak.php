@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,20 +28,24 @@
             padding: 8px;
             border: 1px solid #000;
         }
+
+        th:first-child,
+        td:first-child {
+            width: 40px;
+            text-align: center;
+        }
     </style>
 </head>
+ 
 <body>
-    <?php if (!empty($tahun_akademik) || !empty($prodi_id) || !empty($status)) : ?>
-        <h1>Laporan Pelaksanaan PKL</h1>
-        <?php if (!empty($tahun_akademik)) : ?>
-            <h3>Tahun Akademik: <?= $tahun_akademik ?></h3>
-        <?php endif; ?>
-        <?php if (!empty($prodi_id)) : ?>
-            <h3>Prodi: <?= $prodi_id ?></h3>
-        <?php endif; ?>
-    <?php else : ?>
-        <h1>Laporan Pelaksanaan PKL - Semua Data</h1>
-    <?php endif; ?>
+<h2>Pelaksanaan Praktek Kerja Lapangan</h2>
+    <p>
+        Nama Mahasiswa : <?= $mahasiswa->nama; ?><br>
+        NIM : <?= $mahasiswa->nama; ?><br>
+        Dosen Pembibming : <?= $mahasiswa->nama; ?><br>
+        Program Studi : <?= $prodi->nama_prodi; ?><br>
+        Tahun Akademik: <?= $mahasiswa->tahun_akademik ?><br>
+    </p>
 
     <?php if (!empty($pelaksanaan)) : ?>
         <table>
@@ -49,9 +54,9 @@
                     <th>No</th>
                     <th>NIM</th>
                     <th>Nama Mahasiswa</th>
-                    <th>Prodi</th>
-                    <th>Instansi</th>
-                    <th>Tahun Akademik</th>
+                    <th>Tanggal</th>
+                    <th>Jam</th>
+                    <th>Keterangan</th>
                 </tr>
             </thead>
             <tbody>
@@ -60,9 +65,9 @@
                         <td><?= $i + 1 ?></td>
                         <td><?= $data['nim'] ?></td>
                         <td><?= $data['nama_mahasiswa'] ?></td>
-                        <td><?= $data['nama_prodi'] ?></td>
-                        <td><?= $data['nama_perusahaan'] ?></td>
-                        <td><?= $data['tahun_akademik'] ?></td>
+                        <td><?= $data['hari'] ?></td>
+                        <td><?= $data['jam'] ?></td>
+                        <td><?= $data['keterangan'] ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -71,4 +76,5 @@
         <p>Tidak ada data yang sesuai dengan filter yang diberikan.</p>
     <?php endif; ?>
 </body>
+
 </html>

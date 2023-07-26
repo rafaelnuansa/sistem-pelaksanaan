@@ -34,20 +34,21 @@ class PKLLaporanController extends BaseController
         $tahun_akademik = $this->request->getVar('tahun_akademik');
         $prodi_id = $this->request->getVar('prodi_id');
 
-        $query = $this->PKL->select('pkl.*, prodi.nama_prodi,  dosen.nama as nama_dosen, pkl.prodi_id, instansi.nama_perusahaan as nama_perusahaan')
-            ->join('prodi', 'prodi.id = pkl.prodi_id', 'left')
+        $query = $this->Mahasiswa->select('mahasiswa.*, pkl.*, prodi.nama_prodi,  dosen.nama as nama_dosen, pkl.prodi_id, instansi.nama_perusahaan as nama_perusahaan, pkl_nilai_sidang.*, mahasiswa.id as mhs_id')
+            ->join('pkl_nilai_sidang', 'pkl_nilai_sidang.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id', 'left')
+            ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
             ->join('dosen', 'dosen.id = pkl.dosen_id', 'left')
-            ->join('pkl_anggota', 'pkl_anggota.pkl_id = pkl.id', 'left')
             ->join('instansi', 'instansi.id = pkl.instansi_id', 'left')
             ->groupBy('pkl.id');
-
 
         if (!empty($tahun_akademik)) {
             $query->where('tahun_akademik', $tahun_akademik);
         }
 
         if (!empty($prodi_id)) {
-            $query->where('prodi_id', $prodi_id);
+            $query->where('mahasiswa.prodi_id', $prodi_id);
         }
 
         $list_pkl = $query->findAll(); // Fetch the filtered PKL data
@@ -60,7 +61,7 @@ class PKLLaporanController extends BaseController
             'tahun_akademik' => $tahun_akademik,
             'prodi_id' => $prodi_id,
         ];
-
+ 
         return view('admin/pkl/laporan/index', $data);
     }
 
@@ -69,18 +70,23 @@ class PKLLaporanController extends BaseController
         $tahun_akademik = $this->request->getVar('tahun_akademik');
         $prodi_id = $this->request->getVar('prodi_id');
 
-        $query = $this->PKL->select('pkl.*, prodi.nama_prodi, dosen.nama as nama_dosen')
-            ->join('prodi', 'prodi.id = pkl.prodi_id', 'left')
-            ->join('dosen', 'dosen.id = pkl.dosen_id', 'left');
+    
+        $query = $this->Mahasiswa->select('mahasiswa.*, pkl.*, prodi.nama_prodi,  dosen.nama as nama_dosen, pkl.prodi_id, instansi.nama_perusahaan as nama_perusahaan, pkl_nilai_sidang.*')
+            ->join('pkl_nilai_sidang', 'pkl_nilai_sidang.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id', 'left')
+            ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
+            ->join('dosen', 'dosen.id = pkl.dosen_id', 'left')
+            ->join('instansi', 'instansi.id = pkl.instansi_id', 'left')
+            ->groupBy('pkl.id');
 
         if (!empty($tahun_akademik)) {
             $query->where('tahun_akademik', $tahun_akademik);
         }
 
         if (!empty($prodi_id)) {
-            $query->where('prodi_id', $prodi_id);
+            $query->where('mahasiswa.prodi_id', $prodi_id);
         }
-
         $list_pkl = $query->findAll(); // Fetch the filtered PKL data
         $prodi = $this->Prodi->findAll(); // Fetch the Prodi data
 
@@ -118,52 +124,23 @@ class PKLLaporanController extends BaseController
         $dompdf->stream($filename, ['Attachment' => false]);
     }
 
-
-    public function pelaksanaan()
+    public function pelaksanaan($mahasiswa_id)
     {
-        $tahun_akademik = $this->request->getVar('tahun_akademik');
-        $prodi_id = $this->request->getVar('prodi_id');
-        $status = $this->request->getVar('status');
-
-
-        $query = $this->Pelaksanaan->select('pkl_jurnal_pelaksanaan.*, mahasiswa.nim as nim, instansi.nama_perusahaan as nama_perusahaan, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi,  pkl.tahun_akademik as tahun_akademik, pkl.*')
-            ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_pelaksanaan.mahasiswa_id', 'left')
-            ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
-            ->join('pkl', 'pkl.id = pkl_jurnal_pelaksanaan.pkl_id', 'left')
-            ->join('instansi', 'instansi.id = pkl.instansi_id', 'left')
-            ->orderBy('pkl_jurnal_pelaksanaan.hari', 'asc')
-            ->orderBy('pkl_jurnal_pelaksanaan.jam', 'asc');
-
-        if (!empty($tahun_akademik)) {
-            $query->where('tahun_akademik', $tahun_akademik);
-        }
-        if (!empty($prodi_id)) {
-            $query->where('prodi.id', $prodi_id);
-        }
-        if (!empty($status)) {
-            $query->where('status', $status);
-        }
-        $pelaksaan = $query->findAll(); // Fetch the filtered PKL data
-
-        $getProdi = $this->Prodi->findAll();
+        $jurnal = $this->Pelaksanaan->getJurnalPelaksanaanByIdMahasiswa($mahasiswa_id);
+        $mhs = $this->db->table('mahasiswa')->select('*')->where('id', $mahasiswa_id)->get()->getRow();
         $data = [
-            'title' => 'Laporan Pelaksanaan PKL',
-            'pelaksaan' => $pelaksaan,
-            'getProdi' => $getProdi,
-            'tahun_akademik' => $tahun_akademik,
-            'prodi_id' => $prodi_id,
-            'status' => $status,
+            'title' => 'Jurnal Pelaksanaan',
+            'mahasiswa' => $mhs,
+            'jurnals' => $jurnal
         ];
-
         return view('admin/pkl/laporan/pelaksanaan', $data);
     }
-
-    public function pelaksanaan_cetak()
+ 
+    public function pelaksanaan_cetak($mahasiswa_id)
     {
         $tahun_akademik = $this->request->getVar('tahun_akademik');
         $prodi_id = $this->request->getVar('prodi_id');
         $status = $this->request->getVar('status');
-
         $query = $this->Pelaksanaan->select('pkl_jurnal_pelaksanaan.*, mahasiswa.nim as nim, instansi.nama_perusahaan as nama_perusahaan, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi,  pkl.tahun_akademik as tahun_akademik, pkl.*')
             ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_pelaksanaan.mahasiswa_id', 'left')
             ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
@@ -181,20 +158,31 @@ class PKLLaporanController extends BaseController
 
         if (!empty($status)) {
             $query->where('status', $status);
+        }
+    
+        if (!empty($mahasiswa_id)) {
+            $query->where('mahasiswa.id', $mahasiswa_id);
         }
         $pelaksanaan = $query->findAll(); // Fetch the filtered pelaksanaan data
 
-        $getProdi = $this->Prodi->findAll();
-
+        $mahasiswa = $this->Mahasiswa
+        ->select('mahasiswa.*, pkl.tahun_akademik')
+        ->join('pkl_jurnal_bimbingan', 'pkl_jurnal_bimbingan.mahasiswa_id = mahasiswa.id', 'left')
+        ->join('pkl', 'pkl.id = pkl_jurnal_bimbingan.pkl_id', 'left')
+        ->where('mahasiswa.id', $mahasiswa_id)
+        ->get()->getRow();
+        $prodi = $this->Prodi->where('id', $mahasiswa->prodi_id)->get()->getRow();
         // Pass the filtered data to the view for generating the PDF
         $data = [
             'pelaksanaan' => $pelaksanaan,
             'tahun_akademik' => $tahun_akademik,
-            'getProdi' => $getProdi,
+            'prodi' => $prodi,
             'prodi_id' => $prodi_id,
             'status' => $status,
+            'mahasiswa' => $mahasiswa,
+            'mahasiswa_id' => $mahasiswa_id,
         ];
-
+ 
         // Load the view file as a string
         $html = view('admin/pkl/laporan/pelaksanaan_cetak', $data);
 
@@ -215,58 +203,28 @@ class PKLLaporanController extends BaseController
         $dompdf->stream('laporan_pelaksanaan_pkl.pdf', ['Attachment' => false]);
     }
 
-    public function bimbingan()
+    public function bimbingan($mahasiswa_id)
     {
-        $tahun_akademik = $this->request->getVar('tahun_akademik');
-        $prodi_id = $this->request->getVar('prodi_id');
-        $mahasiswa_id = $this->request->getVar('mahasiswa_id');
-
-        $query = $this->Bimbingan->select('pkl_jurnal_bimbingan.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi,  pkl.tahun_akademik as tahun_akademik, pkl.*, dosen.nama as nama_dosen')
-            ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_bimbingan.mahasiswa_id', 'left')
-            ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
-            ->join('pkl', 'pkl.id = pkl_jurnal_bimbingan.pkl_id', 'left')
-            // ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id', 'left')
-            ->join('dosen', 'dosen.id = pkl.dosen_id', 'left');
-
-        if (!empty($tahun_akademik)) {
-            $query->where('pkl.tahun_akademik', $tahun_akademik);
-        }
-        if (!empty($prodi_id)) {
-            $query->where('prodi.id', $prodi_id);
-        }
-
-        if (!empty($mahasiswa_id)) {
-            $query->where('mahasiswa.id', $mahasiswa_id);
-        }
-
-        $bimbingan = $query->findAll(); // Fetch the filtered bimbingan data
-        $getProdi = $this->Prodi->findAll();
-        $mahasiswaAll = $this->Mahasiswa->findAll();
-
+        $jurnal = $this->Bimbingan->getJurnalBimbinganByIdMahasiswa($mahasiswa_id);
+        $mhs = $this->db->table('mahasiswa')->select('*')->where('id', $mahasiswa_id)->get()->getRow();
         $data = [
-            'title' => 'Laporan Bimbingan PKL',
-            'bimbingan' => $bimbingan,
-            'getProdi' => $getProdi,
-            'mahasiswaAll' => $mahasiswaAll,
-            'tahun_akademik' => $tahun_akademik,
-            'prodi_id' => $prodi_id,
-            'mahasiswa_id' => $mahasiswa_id,
+            'title' => 'Jurnal Bimbingan',
+            'mahasiswa' => $mhs,
+            'jurnals' => $jurnal
         ];
-
         return view('admin/pkl/laporan/bimbingan', $data);
     }
 
-    public function bimbingan_cetak()
+    public function bimbingan_cetak($mahasiswa_id)
     {
         $tahun_akademik = $this->request->getVar('tahun_akademik');
         $prodi_id = $this->request->getVar('prodi_id');
-        $mahasiswa_id = $this->request->getVar('mahasiswa_id');
 
         $query = $this->Bimbingan->select('pkl_jurnal_bimbingan.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, prodi.nama_prodi,  pkl.tahun_akademik as tahun_akademik, pkl.*, dosen.nama as nama_dosen')
             ->join('mahasiswa', 'mahasiswa.id = pkl_jurnal_bimbingan.mahasiswa_id', 'left')
             ->join('prodi', 'prodi.id = mahasiswa.prodi_id', 'left')
             ->join('pkl', 'pkl.id = pkl_jurnal_bimbingan.pkl_id', 'left')
-            ->join('dosen', 'dosen.id = pkl.dosen_id', 'left');
+            ->join('dosen', 'dosen.id = pkl.dosen_id', 'left')->where('mahasiswa.id', $mahasiswa_id);;
 
         if (!empty($tahun_akademik)) {
             $query->where('pkl.tahun_akademik', $tahun_akademik);
@@ -276,21 +234,23 @@ class PKLLaporanController extends BaseController
             $query->where('prodi.id', $prodi_id);
         }
 
-        if (!empty($mahasiswa_id)) {
-            $query->where('mahasiswa.id', $mahasiswa_id);
-        }
 
         $bimbingan = $query->findAll(); // Fetch the filtered bimbingan data
-        $getProdi = $this->Prodi->findAll();
-        $mahasiswaAll = $this->Mahasiswa->findAll();
-
+        $mahasiswa = $this->Mahasiswa
+        ->select('mahasiswa.*, pkl.tahun_akademik')
+        ->join('pkl_jurnal_bimbingan', 'pkl_jurnal_bimbingan.mahasiswa_id = mahasiswa.id', 'left')
+        ->join('pkl', 'pkl.id = pkl_jurnal_bimbingan.pkl_id', 'left')
+        ->where('mahasiswa.id', $mahasiswa_id)
+        ->get()->getRow();
+        $prodi = $this->Prodi->where('id', $mahasiswa->prodi_id)->get()->getRow();
+        
         // Pass the filtered data to the view for generating the PDF
         $data = [
             'bimbingan' => $bimbingan,
             'tahun_akademik' => $tahun_akademik,
-            'getProdi' => $getProdi,
+            'prodi' => $prodi,
             'prodi_id' => $prodi_id,
-            'mahasiswaAll' => $mahasiswaAll,
+            'mahasiswa' => $mahasiswa,
             'mahasiswa_id' => $mahasiswa_id,
         ];
 

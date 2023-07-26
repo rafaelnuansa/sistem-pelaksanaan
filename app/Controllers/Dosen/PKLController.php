@@ -4,6 +4,7 @@ namespace App\Controllers\Dosen;
 
 use App\Controllers\BaseController;
 use App\Models\DosenModel;
+use App\Models\MahasiswaModel;
 use App\Models\PKLJadwalModel;
 use App\Models\PKLJurnalBimbinganModel;
 use App\Models\PKLNilaiModel;
@@ -21,6 +22,7 @@ class PKLController extends BaseController
         $this->PKLJurnalBimbingan = new PKLJurnalBimbinganModel();
         $this->ProdiModel = new ProdiModel();
         $this->PKLJadwal = new PKLJadwalModel();
+        $this->MahasiswaModel = new MahasiswaModel();
         $this->DosenModel = new DosenModel();
         $this->dosenId = session()->get('dosen_id');
         $this->TempatModel = new TempatModel();
@@ -30,7 +32,7 @@ class PKLController extends BaseController
     {
 
         // dd($this->dosenId);
-        $mahasiswaBimbingan = $this->PKLJurnalBimbingan->getMahasiswaBimbingan($this->dosenId);
+        $mahasiswaBimbingan = $this->MahasiswaModel->getMahasiswaBimbingan($this->dosenId);
         $data = [
             'title' => 'Validasi Bimbingan',
             'data' => $mahasiswaBimbingan
@@ -50,14 +52,13 @@ class PKLController extends BaseController
     public function bimbingan_detail($mahasiswa_id)
     {
         $rows = $this->PKLJurnalBimbingan->dosenGetJurnalDanMahasiswaBimbingan($mahasiswa_id);
-        // dd($rows); 
-        $getDetail = $rows->getRow();
+        $mhs = $this->MahasiswaModel->where('id', $mahasiswa_id)->get()->getRow();
+
         $dataList = $rows->getResultArray();
         $data = [
-            'title' => "Jurnal Bimbingan " . $getDetail->nama,
+            'title' => "Jurnal Bimbingan " . $mhs->nama ?? '',
             'data' => $dataList
         ];
-
         return view('dosen/pkl/bimbingan-detail', $data);
     }
 
@@ -94,6 +95,7 @@ class PKLController extends BaseController
             ->join('pkl', 'pkl.id = pkl_anggota.pkl_id', 'left')
             ->join('dosen as dospem', 'dospem.id = pkl.dosen_id', 'left')
             ->where('pkl_jadwal_sidang.dospeng_id', $this->dosenId)
+            ->orWhere('pkl.dosen_id', $this->dosenId)
             ->get()
             ->getResultArray();
         // dd($jadwal_sidang);
@@ -236,6 +238,50 @@ class PKLController extends BaseController
         }
         // load HTML content
         $this->pdf->loadHtml(view('pdf/penilaian_pkl', ['data' => $data]));
+
+        // (optional) setup the paper size and orientation
+        $this->pdf->setPaper('A4');
+
+        // render html as PDF
+        $this->pdf->render();
+
+        // output the generated pdf
+        return $this->pdf->stream('Laporan', array("Attachment" => false));
+    }
+
+
+    public function berita_acara($sidang_id)
+    {
+        $mahasiswaModel = new MahasiswaModel();
+
+        $this->pdf = new Dompdf();
+        // Fetch the data from the database based on the $sidang_id
+        $data = $mahasiswaModel
+            ->select('pkl_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, pkl.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, pkl_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, dospem.id as dospemId, dospem.nama as dospemNama, pkl_jadwal_sidang.*, dospeng.nama as dospengNama')
+            ->join('pkl_nilai_sidang', 'mahasiswa.id = pkl_nilai_sidang.mahasiswa_id')
+            ->join('dosen', 'dosen.id = pkl_nilai_sidang.dosen_id')
+            ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
+            ->join('fakultas', 'fakultas.id = prodi.fakultas_id')
+            ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
+            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
+            ->join('dosen as dospem', 'dospem.id = pkl.dosen_id')
+            ->join('pkl_judul_laporan', 'pkl_judul_laporan.mahasiswa_id = mahasiswa.id')
+            ->join('pkl_jadwal_sidang', 'pkl_jadwal_sidang.id_pkl_jadwal_sidang  = pkl_nilai_sidang.sidang_id')
+            ->join('dosen as dospeng', 'dospeng.id = pkl_jadwal_sidang.dospeng_id')
+            ->join('tempat_sidang', 'tempat_sidang.id_tempat  = pkl_jadwal_sidang.tempat_id')
+            ->where('sidang_id', $sidang_id)
+            ->get()->getRow();
+        // dd($data);
+        if (!$data) {
+            // If data not found, you can show an error message or redirect back
+            return redirect()->back()->with('error', 'Data not found.');
+        }
+        
+        // load HTML content
+        $this->pdf->loadHtml(view('pdf/berita_acara_pkl', ['data' => $data]));
+        // Enable remote file access
+        $this->pdf->getOptions()->set('isRemoteEnabled', true);
+
 
         // (optional) setup the paper size and orientation
         $this->pdf->setPaper('A4');

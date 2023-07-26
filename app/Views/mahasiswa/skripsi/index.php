@@ -52,14 +52,23 @@
               </th>
 
               <td>
-                <input type="text" class="form-control" required name="judul_skripsi" placeholder="Judul Skripsi" value="<?= $skripsi->judul_skripsi ?? ''; ?>">
-              </td>
+                <?php if($skripsi->judul_skripsi):;?>
+                
+                <input type="text" class="form-control" disabled value="<?= $skripsi->judul_skripsi; ?>">
+               
+                 <?php else:?>
+                  <input type="text" class="form-control" required name="judul_skripsi" placeholder="Judul Skripsi" >
+                  <small class="text-warning">Judul skripsi tidak dapat diubah setelah disimpan, pastikan judul sudah diterima oleh pihak kampus.</small>
+
+                <?php endif;?>
+               </td>
             </tr>
           </tbody>
         </table>
-
-
+        
+        <?php if(!$skripsi->judul_skripsi):?>
         <button type="submit" class="btn btn-primary">Simpan</button>
+        <?php endif;?>
       </form>
     </div>
   </div>

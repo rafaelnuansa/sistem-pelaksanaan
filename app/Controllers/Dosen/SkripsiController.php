@@ -4,10 +4,11 @@ namespace App\Controllers\Dosen;
 
 use App\Controllers\BaseController;
 use App\Models\DosenModel;
-use App\Models\PKLJadwalModel;
-use App\Models\PKLJurnalBimbinganModel;
-use App\Models\PKLNilaiModel;
+use App\Models\MahasiswaModel;
+use App\Models\SkripsiJurnalBimbinganModel;
+use App\Models\SkripsiNilaiModel;
 use App\Models\ProdiModel;
+use App\Models\SkripsiSidangModel;
 use App\Models\TempatModel;
 use Dompdf\Dompdf;
 
@@ -16,11 +17,11 @@ class SkripsiController extends BaseController
     public function __construct()
     {
         $this->pdf = new Dompdf();
-        $this->PKLJadwal = new PKLJadwalModel();
         $this->db = \Config\Database::connect();
-        $this->PKLJurnalBimbingan = new PKLJurnalBimbinganModel();
+        $this->SkripsiJurnalBimbingan = new SkripsiJurnalBimbinganModel();
         $this->ProdiModel = new ProdiModel();
-        $this->PKLJadwal = new PKLJadwalModel();
+        $this->MahasiswaModel = new MahasiswaModel();
+        $this->SkripsiJadwal = new SkripsiSidangModel();
         $this->DosenModel = new DosenModel();
         $this->dosenId = session()->get('dosen_id');
         $this->TempatModel = new TempatModel();
@@ -28,9 +29,7 @@ class SkripsiController extends BaseController
 
     public function index()
     {
-
-        // dd($this->dosenId);
-        $mahasiswaBimbingan = $this->PKLJurnalBimbingan->getMahasiswaBimbingan($this->dosenId);
+        $mahasiswaBimbingan = $this->MahasiswaModel->getMahasiswaBimbinganSkripsi($this->dosenId);
         $data = [
             'title' => 'Validasi Bimbingan',
             'data' => $mahasiswaBimbingan
@@ -38,24 +37,13 @@ class SkripsiController extends BaseController
         return view('dosen/skripsi/bimbingan', $data);
     }
 
-    public function validasi_penguji()
-    {
-        $data = [
-            'title' => 'Validasi Penguji',
-            'data' => $this->PKLJurnalBimbingan->dosenGetJurnalBimbinganByDospengId($this->dosenId),
-        ];
-        return view('dosen/skripsi/bimbingan', $data);
-    }
-
     public function bimbingan_detail($mahasiswa_id)
     {
-        $rows = $this->PKLJurnalBimbingan->dosenGetJurnalDanMahasiswaBimbingan($mahasiswa_id);
-        // dd($rows); 
-        $getDetail = $rows->getRow();
-        $dataList = $rows->getResultArray();
+        $rows = $this->SkripsiJurnalBimbingan->getDetailBimbinganSkripsi($mahasiswa_id);
+        $mhs = $this->MahasiswaModel->where('id', $mahasiswa_id)->get()->getRow();
         $data = [
-            'title' => "Jurnal Bimbingan " . $getDetail->nama,
-            'data' => $dataList
+            'title' => "Jurnal Bimbingan " . $mhs->nama,
+            'data' => $rows
         ];
 
         return view('dosen/skripsi/bimbingan-detail', $data);
@@ -69,17 +57,6 @@ class SkripsiController extends BaseController
     public function penilaian2()
     {
         return view('dosen/penilaian_revisi', ['title' => 'Penilaian revisi']);
-    }
-
-    public function detail()
-    {
-        $result = $this->db->table('skripsi_jurnal_binbingan')
-            ->where('id_jurnal', $this->request->getVar('id'))
-            ->join('jurusan', 'skripsi_jurnal_binbingan.id_jurusan = jurusan.id_jurusan')
-            ->get()
-            ->getResultArray();
-
-        return $this->response->setJSON($result[0]);
     }
 
     public function jadwal_skripsi()
@@ -111,7 +88,7 @@ class SkripsiController extends BaseController
 
     public function nilai()
     {
-        $PKLNilaiModel = new PKLNilaiModel();
+        $SkripsiNilaiModel = new SkripsiNilaiModel();
         $mahasiswa_id = $this->request->getVar('mahasiswa_id');
         $skripsi_id = $this->request->getVar('skripsi_id');
         $dosen_id = $this->request->getVar('dosen_id');
@@ -119,7 +96,7 @@ class SkripsiController extends BaseController
         $catatan = $this->request->getVar('catatan');
 
         // Check if the record already exists in the database
-        $existingRecord = $PKLNilaiModel->where('sidang_id', $sidang_id)
+        $existingRecord = $SkripsiNilaiModel->where('sidang_id', $sidang_id)
             ->first();
 
         // Retrieve the values from the request and calculate the total_nilai and other fields
@@ -198,10 +175,10 @@ class SkripsiController extends BaseController
         // Check if the record exists, then perform insert/update accordingly
         if ($existingRecord) {
             // If the record exists, update it
-            $PKLNilaiModel->update($existingRecord['id_nilai'], $data);
+            $SkripsiNilaiModel->update($existingRecord['id_nilai'], $data);
         } else {
             // If the record does not exist, insert it
-            $PKLNilaiModel->insert($data);
+            $SkripsiNilaiModel->insert($data);
         }
 
         session()->setFlashdata('success', 'Berhasil dinilai');
@@ -212,10 +189,10 @@ class SkripsiController extends BaseController
 
     public function cetak($sidang_id)
     {
-        $PKLNilaiModel = new PKLNilaiModel();
+        $SkripsiNilaiModel = new SkripsiNilaiModel();
 
         // Fetch the data from the database based on the $sidang_id
-        $data = $PKLNilaiModel
+        $data = $SkripsiNilaiModel
             ->select('skripsi_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, skripsi.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, skripsi_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, skripsi_jadwal_sidang.*')
             ->join('mahasiswa', 'mahasiswa.id = skripsi_nilai_sidang.mahasiswa_id')
             ->join('dosen', 'dosen.id = skripsi_nilai_sidang.dosen_id')
@@ -270,41 +247,48 @@ class SkripsiController extends BaseController
 
     public function approve_bimbingan()
     {
-        $id_jurnal_bimbingan = $this->request->getVar('id');
-
-        $data = $this->PKLJurnalBimbingan->where('id_jurnal_bimbingan', $id_jurnal_bimbingan)->first();
+        $id = $this->request->getVar('id');
+    
+        // Cari data berdasarkan ID yang diberikan
+        $data = $this->db->table('skripsi_bimbingan')->where('id', $id)->get()->getRow();
+    
         if (!$data) {
             // Data dengan ID yang diberikan tidak ditemukan
             return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
-
-        $data['status'] = 'Telah divalidasi';
-        $this->PKLJurnalBimbingan->save($data);
-
+    
+        $updatedData = [
+            'status' => 'Telah divalidasi'
+        ];
+    
+        $this->db->table('skripsi_bimbingan')->where('id', $id)->update($updatedData);
         session()->setFlashdata('success', 'Jurnal berhasil divalidasi');
         return redirect()->back();
     }
+    
+    
 
     public function reset_bimbingan()
     {
-        $id_jurnal_bimbingan = $this->request->getVar('id');
-
-        $data = $this->PKLJurnalBimbingan->where('id_jurnal_bimbingan', $id_jurnal_bimbingan)->first();
+        $id = $this->request->getVar('id');
+    
+        // Cari data berdasarkan ID yang diberikan
+        $data = $this->db->table('skripsi_bimbingan')->where('id', $id)->get()->getRow();
+    
         if (!$data) {
             // Data dengan ID yang diberikan tidak ditemukan
             return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
-
-        $data['status'] = 'Menunggu Validasi';
-        $this->PKLJurnalBimbingan->save($data);
-
-        session()->setFlashdata('success', 'Jurnal berhasil direset');
+    
+        $updatedData = [
+            'status' => 'Menunggu Validasi'
+        ];
+    
+        $this->db->table('skripsi_bimbingan')->where('id', $id)->update($updatedData);
+        session()->setFlashdata('success', 'Status berhasil direset menjadi "Menunggu Validasi"');
         return redirect()->back();
     }
-
-
-
-
+ 
     public function cetak_revisi()
     {
         $bab = $this->request->getVar('bab[]');
@@ -326,7 +310,7 @@ class SkripsiController extends BaseController
     public function update_status_jadwal($id_skripsi_jadwal_sidang, $status)
     {
         // Contoh menggunakan model
-        $this->PKLJadwal->update($id_skripsi_jadwal_sidang, ['status' => $status]);
+        $this->SkripsiJadwal->update($id_skripsi_jadwal_sidang, ['status' => $status]);
         // Redirect ke halaman sebelumnya
         return redirect()->back();
     }

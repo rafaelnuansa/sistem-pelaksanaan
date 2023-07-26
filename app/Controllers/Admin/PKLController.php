@@ -166,19 +166,38 @@ class PKLController extends BaseController
     public function assignAnggota($kelompok_id)
     {
         $pkl = $this->pkl->find($kelompok_id);
-        $mahasiswa = $this->mahasiswa
-            ->select('mahasiswa.id as id, pkl_anggota.id as pkl_anggota_id, mahasiswa.nim, mahasiswa.nama',)
-            ->join('pkl_anggota', 'mahasiswa.id = pkl_anggota.mahasiswa_id', 'left')
-            ->where('mahasiswa.prodi_id', $pkl['prodi_id'])
-            ->whereNotIn('mahasiswa.id', function ($builder) use ($kelompok_id) {
-                $builder->select('mahasiswa_id')
-                    ->from('pkl_anggota')
-                    ->where('pkl_id', $kelompok_id);
-            })
-            ->get()
-            ->getResultArray();
 
+    // Get the IDs of mahasiswa who are already in the kelompok
+    $mahasiswaIdsInKelompok = $this->anggota
+        ->select('mahasiswa_id')
+        ->where('pkl_id', $kelompok_id)
+        ->get()
+        ->getResultArray();
 
+    // Get the IDs of mahasiswa who are already in other kelompoks
+    $mahasiswaIdsInOtherKelompok = $this->anggota
+        ->select('mahasiswa_id')
+        ->whereNotIn('pkl_id', [$kelompok_id]) // Exclude the current kelompok by passing it as an array
+        ->groupBy('mahasiswa_id')
+        ->get()
+        ->getResultArray();
+
+    // Combine the IDs of mahasiswa in both arrays
+    $combinedMahasiswaIds = array_merge($mahasiswaIdsInKelompok, $mahasiswaIdsInOtherKelompok);
+
+    // Fetch the available mahasiswa who are not in the kelompok or other kelompoks
+    $query = $this->mahasiswa
+        ->select('mahasiswa.id as id, mahasiswa.nim, mahasiswa.nama')
+        ->join('pkl_anggota', 'mahasiswa.id = pkl_anggota.mahasiswa_id', 'left')
+        ->where('mahasiswa.prodi_id', $pkl['prodi_id']);
+
+    // Check if the array of IDs is not empty before using it in the query
+    if (!empty($combinedMahasiswaIds)) {
+        $mahasiswaIds = array_column($combinedMahasiswaIds, 'mahasiswa_id');
+        $query = $query->whereNotIn('mahasiswa.id', $mahasiswaIds);
+    }
+
+    $mahasiswa = $query->get()->getResultArray();
         $rows = $this->anggota
             ->select('pkl_anggota.id as pkl_anggota_id, pkl.id as pkl_id, mahasiswa.id as mahasiswa_id, prodi.id as prodi_id, mahasiswa.*, pkl.*, prodi.*, pkl.*, pkl_anggota.*')
             ->where('pkl_id', $kelompok_id)

@@ -24,7 +24,7 @@
 
         th,
         td {
-            padding: 8px;
+            padding: 5px;
             border: 1px solid #000;
         }
     </style>
@@ -48,15 +48,17 @@
         <h1>Laporan Kelompok PKL - Semua Data</h1>
     <?php endif; ?>
     <table>
-        <thead>
+        <thead class="bg-primary">
             <tr>
                 <th>No</th>
-                <th>Nama Kelompok</th>
-                <th>Tanggal Mulai</th>
-                <th>Tanggal Selesai</th>
-                <th>Program Studi</th>
+                <th>NIM</th>
+                <th>Mahasiswa</th>
                 <th>Dosen</th>
+                <th>Program Studi</th>
+                <th>Tgl Mulai</th>
+                <th>Tgl Selesai</th>
                 <th>Instansi</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -65,19 +67,23 @@
                 <?php foreach ($data_pkl as $i => $pkl) : ?>
                     <tr>
                         <td><?= $i + 1 ?></td>
-                        <td><?= $pkl['nama_kelompok'] ?></td>
-                        <td><?= $pkl['tgl_mulai'] ?></td>
-                        <td><?= $pkl['tgl_selesai'] ?></td>
+                        <td><?= $pkl['nim'] ?></td>
+                        <td><?= $pkl['nama'] ?></td>
                         <td><?= $pkl['nama_prodi'] ?></td>
-                        <td><?= $pkl['nama_dosen'] ?></td>
-                        <td><?= $pkl['nama_perusahaan'] ?></td>
+                        <td><?= $pkl['nama_dosen'] ?? '-' ?></td>
+                        <td><?= $pkl['tgl_mulai'] ?? '-' ?></td>
+                        <td><?= $pkl['tgl_selesai'] ?? '-' ?></td>
+                        <td><?= $pkl['nama_perusahaan'] ?? '-' ?></td>
+                        <td> <span class="label <?= $pkl['total_nilai'] === null ? 'label-warning' : ($pkl['status_ujian'] ? 'label-primary' : 'label-danger') ?>">
+                                <?= $pkl['total_nilai'] === null ? 'Belum Melaksanakan' : ($pkl['status_ujian'] ? 'Lulus' : 'Tidak Lulus') ?>
+                            </span></td>
                     </tr>
                 <?php endforeach; ?>
 
             <?php else :; ?>
-                    <tr>
-                        <td colspan="7" style="text-align: center;">Tidak Ada Data</td>
-                    </tr>
+                <tr>
+                    <td colspan="7" style="text-align: center;">Tidak Ada Data</td>
+                </tr>
             <?php endif; ?>
         </tbody>
     </table>

@@ -9,18 +9,12 @@
 <div class="box">
   <div class="box-header with-border">
     <h3 class="box-title">Jadwal Sidang</h3>
-
     <div class="box-tools pull-right">
       <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
         <i class="fa fa-minus"></i></button>
-      <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-        <i class="fa fa-times"></i></button>
     </div>
   </div>
   <div class="box-body">
-    <!-- <div class="py-2">
-      <a href="<?= base_url('downloads/surat-tugas.pdf') ?>" class="btn btn-primary" target="_blank"><i class="fa fa-print" style="margin-right: 4px;"></i> Cetak Surat Tugas</a>
-    </div> -->
     <div class="table-responsive">
       <table class="table table-hover datatable " style="border: 1px solid #f0f0f0; margin-top: 10px;">
         <thead class="bg-primary">
@@ -31,28 +25,26 @@
             <th>Dosen Penguji</th>
             <th>Dosen Pembimbing</th>
             <th>Tempat</th>
-            <th>Hari/Tanggal</th>
+            <th>Tanggal</th>
+            <th>Jam</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <?php foreach ($data as $i => $row) : ?>
-            <tr> 
+            <tr>
               <td><?= ++$i ?></td>
               <td><?= $row['nim'] ?></td>
               <td><?= $row['nama_mahasiswa'] ?></td>
               <td><span class="label label-primary"><?= $row['dospeng'] ?></span></td>
               <td><span class="label label-danger"><?= $row['dospem'] ?></span></td>
-              <td><?= $row['tempat_nama'] ?></td>
-              <td><?= $row['tanggal'] ?></td>
+              <td><span class="label label-success"><?= $row['tempat_nama'] ?></span></td>
+              <td><span class="label label-success"><?= $row['tanggal'] ?></span></td>
+              <td><span class="label label-success"><?= $row['jam'] ?></span></td>
               <td>
-             
-              <span class="label <?= $row['total_nilai'] === null ? 'label-warning' : ($row['status_ujian'] ? 'label-primary' : 'label-danger') ?>">
+                <span class="label <?= $row['total_nilai'] === null ? 'label-warning' : ($row['status_ujian'] ? 'label-primary' : 'label-danger') ?>">
                   <?= $row['total_nilai'] === null ? 'Belum Melaksanakan' : ($row['status_ujian'] ? 'Lulus' : 'Tidak Lulus') ?>
                 </span>
-                  <!-- <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 1) ?>" class="badge label-warning" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Sudah Melaksanakan?')">Belum Melaksanakan</a> -->
-                  <!-- <a href="<?= route_to('admin.pkl.jadwal.update_status', $row['id_pkl_jadwal_sidang'], 0) ?>" class="badge bg-success" onclick="return confirm('Apakah Anda yakin ingin mengubah status menjadi Belum Melaksanakan?')">Sudah Melaksanakan</a> -->
-           
               </td>
             </tr>
           <?php endforeach; ?>
@@ -71,8 +63,6 @@
     <div class="box-tools pull-right">
       <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
         <i class="fa fa-minus"></i></button>
-      <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-        <i class="fa fa-times"></i></button>
     </div>
   </div>
   <div class="box-body">
@@ -165,7 +155,6 @@
               </div>
             </div>
           </div>
-
           <div class="row mb-2">
             <div class="col-md-12">
               <div class="form-group">
@@ -177,11 +166,20 @@
           <div class="row mb-2">
             <div class="col-md-12">
               <div class="form-group">
-                <label for="">Hari / Tanggal</label>
-                <input type="date" class="form-control" name="tanggal">
+                <label for="">Tanggal</label>
+                <input type="date" required class="form-control" name="tanggal">
               </div>
             </div>
           </div>
+          <div class="row mb-2">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Jam</label>
+                <input type="time" required class="form-control" name="jam">
+              </div>
+            </div>
+          </div>
+
           <div class="row mb-2">
             <div class="col-md-12">
               <div class="form-group">
@@ -227,8 +225,6 @@
   </div>
   <!-- /.modal-dialog -->
 </div>
-
-
 
 <?= $this->endSection(); ?>
 

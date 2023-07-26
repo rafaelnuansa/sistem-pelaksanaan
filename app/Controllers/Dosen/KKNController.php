@@ -8,6 +8,7 @@ use App\Models\DosenPembimbingModel;
 use App\Models\KKNJurnalMonitoringModel;
 use App\Models\KKNJurnalPelaksanaanModel;
 use App\Models\KKNNilaiModel;
+use App\Models\MahasiswaModel;
 use App\Models\ProdiModel;
 use App\Models\TempatModel;
 use Dompdf\Dompdf;
@@ -22,14 +23,14 @@ class KKNController extends BaseController
         $this->KKNJurnalPelaksanaan = new KKNJurnalPelaksanaanModel();
         $this->ProdiModel = new ProdiModel();
         $this->DosenModel = new DosenModel();
+        $this->MahasiswaModel = new MahasiswaModel();
         $this->dosenId = session()->get('dosen_id');
         $this->TempatModel = new TempatModel();
     }
 
     public function index()
     {
-        // dd($this->dosenId);
-        $mahasiswaMonitoring = $this->KKNJurnalMonitoring->getMahasiswaMonitoring($this->dosenId);
+        $mahasiswaMonitoring = $this->MahasiswaModel->getMahasiswaBimbinganKKN($this->dosenId);
         $data = [
             'title' => 'Validasi Monitoring',
             'data' => $mahasiswaMonitoring
@@ -40,8 +41,7 @@ class KKNController extends BaseController
     
     public function pelaksanaan()
     { 
-
-        $mahasiswa = $this->KKNJurnalPelaksanaan->getMahasiswaPelaksanaan($this->dosenId);
+        $mahasiswa = $this->MahasiswaModel->getMahasiswaBimbinganKKN($this->dosenId);
         $data = [
             'title' => 'Validasi Monitoring',
             'data' => $mahasiswa
