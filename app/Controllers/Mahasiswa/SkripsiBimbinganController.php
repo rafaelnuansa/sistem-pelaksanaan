@@ -28,19 +28,19 @@ class SkripsiBimbinganController extends BaseController
 
     public function index()
     {
+        $mahasiswa_id = session()->get('mahasiswa_id');
         $skripsiBimbinganModel = new SkripsiBimbinganModel();
         // Ambil semua data skripsi bimbingan dari database
-        $data = $skripsiBimbinganModel->where('mahasiswa_id', $this->mahasiswaId)
-        ->orderBy('tanggal', 'DESC')
-        ->findAll();
-        
+        $data1 = $skripsiBimbinganModel->getPembimbing1($mahasiswa_id);
+        $data2 = $skripsiBimbinganModel->getPembimbing2($mahasiswa_id);
         
         $getSkripsi = $this->getSkripsi;
         // Tampilkan data skripsi bimbingan ke view index
         return view('mahasiswa/skripsi/bimbingan/index', 
         [
             'title' => 'Bimbingan Skripsi',
-            'data' => $data,
+            'data' => $data1,
+            'data2' => $data2,
             'skripsi' => $getSkripsi,
         ]
         );
@@ -55,6 +55,7 @@ class SkripsiBimbinganController extends BaseController
                 'mahasiswa_id' => $this->mahasiswaId,
                 'tanggal' => $this->request->getPost('tanggal'),
                 'catatan' => $this->request->getPost('catatan'),
+                'is_pembimbing' => $this->request->getPost('is_pembimbing'),
                 'skripsi_id' => $this->skripsiId,
             ];
 

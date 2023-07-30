@@ -65,7 +65,6 @@
   </div>
 </div>
 
-
 <div class="box">
   <div class="box-header with-border">
     <h3 class="box-title">Jurnal Pembimbing 2</h3>
@@ -77,7 +76,7 @@
   </div>
   <div class="box-body">
     <?php if ($skripsi) : ?>
-      <button type="button" class="btn btn-primary mb-2" style="margin-right: 5px;" data-toggle="modal" data-target="#modal-tambah">
+      <button type="button" class="btn btn-primary mb-2" style="margin-right: 5px;" data-toggle="modal" data-target="#modal-tambah2">
         Tambah Jurnal
       </button>
       <div class="table-responsive" style="margin-top:20px">
@@ -93,7 +92,7 @@
           </thead>
           <tbody>
             <?php $no = 1;
-            foreach ($data as $i => $row) : ?>
+            foreach ($data2 as $i => $row) : ?>
               <tr>
                 <td><?= $no++ ?></td>
                 <td><?= $row['tanggal'] ?></td>
@@ -106,7 +105,7 @@
                 <td class="text-center">
                   <?php if ($row['status'] == 'Telah divalidasi') : ?>
                   <?php else : ?>
-                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-edit-<?= $row['id'] ?>"><i class="fa fa-edit"></i></a>
+                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal2-edit-<?= $row['id'] ?>"><i class="fa fa-edit"></i></a>
                     <a href="<?= route_to('mahasiswa.skripsi.bimbingan.delete', $row['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"><i class="fa fa-trash"></i></a>
                   <?php endif; ?>
                 </td>
@@ -161,6 +160,45 @@
   </div>
 <?php endforeach; ?>
 
+<?php foreach ($data2 as $row) : ?>
+  <div class="modal fade" id="modal2-edit-<?= $row['id'] ?>">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Edit Jurnal</h4>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="<?= route_to('mahasiswa.skripsi.bimbingan.edit', $row['id']); ?>">
+            <div class="row mb-2">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="">Hari / Tanggal</label>
+                  <input type="date" class="form-control" required name="tanggal" value="<?= $row['tanggal'] ?>">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="">Catatan</label>
+                  <textarea name="catatan" class="form-control" required cols="30" rows="5"><?= $row['catatan'] ?></textarea>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+        </form>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+<?php endforeach; ?>
 <!-- /.box -->
 
 <div class="modal fade" id="modal-tambah">
@@ -169,7 +207,7 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Tambah Data</h4>
+        <h4 class="modal-title">Tambah Data Bimbingan 1</h4>
       </div>
       <div class="modal-body">
         <form method="POST" action="<?= route_to('mahasiswa.skripsi.bimbingan.store') ?>" enctype="multipart/form-data">
@@ -191,6 +229,8 @@
           </div>
       </div>
       <div class="modal-footer">
+
+        <input type="hidden" name="is_pembimbing" value="1">
         <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
         <button type="submit" class="btn btn-primary">Simpan</button>
       </div>
@@ -201,5 +241,43 @@
   <!-- /.modal-dialog -->
 </div>
 
+<div class="modal fade" id="modal-tambah2">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Tambah Data Bimbingan 2</h4>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="<?= route_to('mahasiswa.skripsi.bimbingan.store') ?>" enctype="multipart/form-data">
+          <div class="row mb-2">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="">Hari / Tanggal</label>
+                <input type="date" class="form-control" required name="tanggal">
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="">Catatan</label>
+                <textarea name="catatan" class="form-control" required cols="30" rows="5"></textarea>
+              </div>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" name="is_pembimbing" value="2">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Tutup</button>
+        <button type="submit" class="btn btn-primary">Simpan</button>
+      </div>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
 
 <?= $this->endSection(); ?>

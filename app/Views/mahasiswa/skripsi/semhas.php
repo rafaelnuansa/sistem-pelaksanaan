@@ -217,54 +217,123 @@
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">Transkrip Nilai</label>
+              <br>
+              <?php if ($row['transkrip_nilai']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['transkrip_nilai']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="transkrip_nilai"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">KRS</label>
+              <br>
+              <?php if ($row['krs']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['krs']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="krs"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">Seritifikat Seminar / Kompetensi</label>
+              <br>
+              <?php if ($row['sertifikat_seminar_kompetensi']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['sertifikat_seminar_kompetensi']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="sertifikat_seminar_kompetensi"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">Nota Dinas Pembimbing</label>
+              <br>
+              <?php if ($row['nota_dinas_pembimbing']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['nota_dinas_pembimbing']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="nota_dinas_pembimbing"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">Kartu Bimbingan Skripsi</label>
+              <br>
+              <?php if ($row['kartu_bimbingan_skripsi']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['kartu_bimbingan_skripsi']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="kartu_bimbingan_skripsi"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">Kartu Peserta Seminar Proposal</label>
+              <br>
+              <?php if ($row['kartu_peserta_seminar_proposal']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['kartu_peserta_seminar_proposal']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="kartu_peserta_seminar_proposal"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
-              <label for="">Sertifikat Mampram Ospek</label>
+              <label for="">Sertifikat Mampram Ospek</label><br>
+              <?php if ($row['sertifikat_mampram_ospek']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['sertifikat_mampram_ospek']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="sertifikat_mampram_ospek"></div>
           </div>   
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
-              <label for="">Sertifikat Outbound</label>
+              <label for="">Sertifikat Outbound</label><br>
+              <?php if ($row['sertifikat_outbound']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['sertifikat_outbound']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="sertifikat_outbound"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
-              <label for="">Sertifikat TOEFL</label>
+              <label for="">Sertifikat TOEFL</label><br>
+              <?php if ($row['sertifikat_toefl']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['sertifikat_toefl']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="sertifikat_toefl"></div>
           </div>

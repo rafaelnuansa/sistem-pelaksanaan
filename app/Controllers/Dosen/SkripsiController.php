@@ -39,13 +39,12 @@ class SkripsiController extends BaseController
 
     public function bimbingan_detail($mahasiswa_id)
     {
-        $rows = $this->SkripsiJurnalBimbingan->getDetailBimbinganSkripsi($mahasiswa_id);
+        $rows = $this->SkripsiJurnalBimbingan->DosenGetDetailBimbinganSkripsi($mahasiswa_id);
         $mhs = $this->MahasiswaModel->where('id', $mahasiswa_id)->get()->getRow();
         $data = [
             'title' => "Jurnal Bimbingan " . $mhs->nama,
             'data' => $rows
         ];
-
         return view('dosen/skripsi/bimbingan-detail', $data);
     }
 
@@ -88,7 +87,7 @@ class SkripsiController extends BaseController
     public function sempro()
     {
         $jadwal_sidang = $this->db->table('skripsi_sidang')
-        ->select('skripsi_sidang.id as idz, skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, 
+            ->select('skripsi_sidang.id as idz, skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, 
                   penguji1.nama as nama_penguji_1, penguji2.nama as nama_penguji_2, pembimbing1.nama as nama_pembimbing_1, pembimbing2.nama as nama_pembimbing_2,
                   tempat_sidang.nama_tempat as tempat_nama, skripsi.id as skripsi_id, 
                   skripsi_nilai_penilai_1.n1a as n1a_penilai_1, skripsi_nilai_penilai_1.n1b as n1b_penilai_1, skripsi_nilai_penilai_1.n1c as n1c_penilai_1,
@@ -104,25 +103,25 @@ class SkripsiController extends BaseController
                   skripsi_nilai_penilai_4.n1d as n1d_penilai_4, skripsi_nilai_penilai_4.n1e as n1e_penilai_4, skripsi_nilai_penilai_4.n1f as n1f_penilai_4,
                   skripsi_nilai_penilai_4.n2a as n2a_penilai_4, skripsi_nilai_penilai_4.n2b as n2b_penilai_4, skripsi_nilai_penilai_4.total as total_penilai_4,
                   mahasiswa.id as mahasiswa_id, skripsi.id as skripsi_id')
-        ->join('mahasiswa', 'mahasiswa.id = skripsi_sidang.mahasiswa_id', 'left')
-        ->join('tempat_sidang', 'tempat_sidang.id_tempat = skripsi_sidang.tempat_id', 'left')
-        ->join('dosen as penguji1', 'penguji1.id = skripsi_sidang.penguji_1_id', 'left')
-        ->join('dosen as penguji2', 'penguji2.id = skripsi_sidang.penguji_2_id', 'left')
-        ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
-        ->join('dosen as pembimbing1', 'pembimbing1.id = skripsi.pembimbing_1_id', 'left')
-        ->join('dosen as pembimbing2', 'pembimbing2.id = skripsi.pembimbing_2_id', 'left')
-        // Join for penilai 1
-        ->join('skripsi_nilai as skripsi_nilai_penilai_1', 'skripsi_nilai_penilai_1.penilai_id = skripsi_sidang.penguji_1_id', 'left')
-        // Join for penilai 2
-        ->join('skripsi_nilai as skripsi_nilai_penilai_2', 'skripsi_nilai_penilai_2.penilai_id = skripsi_sidang.penguji_2_id', 'left')
-        // Join for penilai 3 (assuming you have a column for penilai 3's ID)
-        ->join('skripsi_nilai as skripsi_nilai_penilai_3', 'skripsi_nilai_penilai_3.penilai_id = skripsi.pembimbing_1_id', 'left')
-        // Join for penilai 4 (assuming you have a column for penilai 4's ID)
-        ->join('skripsi_nilai as skripsi_nilai_penilai_4', 'skripsi_nilai_penilai_4.penilai_id = skripsi.pembimbing_2_id', 'left')
-        ->where('skripsi_sidang.tipe_sidang', 'seminar_proposal')
-        ->get()
-        ->getResultArray();
-    
+            ->join('mahasiswa', 'mahasiswa.id = skripsi_sidang.mahasiswa_id', 'left')
+            ->join('tempat_sidang', 'tempat_sidang.id_tempat = skripsi_sidang.tempat_id', 'left')
+            ->join('dosen as penguji1', 'penguji1.id = skripsi_sidang.penguji_1_id', 'left')
+            ->join('dosen as penguji2', 'penguji2.id = skripsi_sidang.penguji_2_id', 'left')
+            ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('dosen as pembimbing1', 'pembimbing1.id = skripsi.pembimbing_1_id', 'left')
+            ->join('dosen as pembimbing2', 'pembimbing2.id = skripsi.pembimbing_2_id', 'left')
+            // Join for penilai 1
+            ->join('skripsi_nilai as skripsi_nilai_penilai_1', 'skripsi_nilai_penilai_1.penilai_id = skripsi_sidang.penguji_1_id', 'left')
+            // Join for penilai 2
+            ->join('skripsi_nilai as skripsi_nilai_penilai_2', 'skripsi_nilai_penilai_2.penilai_id = skripsi_sidang.penguji_2_id', 'left')
+            // Join for penilai 3 (assuming you have a column for penilai 3's ID)
+            ->join('skripsi_nilai as skripsi_nilai_penilai_3', 'skripsi_nilai_penilai_3.penilai_id = skripsi.pembimbing_1_id', 'left')
+            // Join for penilai 4 (assuming you have a column for penilai 4's ID)
+            ->join('skripsi_nilai as skripsi_nilai_penilai_4', 'skripsi_nilai_penilai_4.penilai_id = skripsi.pembimbing_2_id', 'left')
+            ->where('skripsi_sidang.tipe_sidang', 'seminar_proposal')
+            ->get()
+            ->getResultArray();
+
         $nilai = $this->db->table('skripsi_nilai')
             ->select('*')
             // ->join('dosen', 'dosen.id = skripsi_nilai.penilai_id')
@@ -132,7 +131,7 @@ class SkripsiController extends BaseController
             ->get()
             ->getRow();
 
-            // dd($nilai);
+        // dd($nilai);
         $data = [
             'title' => 'Seminar Proposal',
             'data' => $jadwal_sidang,
@@ -145,7 +144,7 @@ class SkripsiController extends BaseController
     public function semhas()
     {
         $jadwal_sidang = $this->db->table('skripsi_sidang')
-        ->select('skripsi_sidang.id as idz, skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, 
+            ->select('skripsi_sidang.id as idz, skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, 
                   penguji1.nama as nama_penguji_1, penguji2.nama as nama_penguji_2, pembimbing1.nama as nama_pembimbing_1, pembimbing2.nama as nama_pembimbing_2,
                   tempat_sidang.nama_tempat as tempat_nama, skripsi.id as skripsi_id, 
                   skripsi_nilai_penilai_1.n1a as n1a_penilai_1, skripsi_nilai_penilai_1.n1b as n1b_penilai_1, skripsi_nilai_penilai_1.n1c as n1c_penilai_1,
@@ -161,25 +160,25 @@ class SkripsiController extends BaseController
                   skripsi_nilai_penilai_4.n1d as n1d_penilai_4, skripsi_nilai_penilai_4.n1e as n1e_penilai_4, skripsi_nilai_penilai_4.n1f as n1f_penilai_4,
                   skripsi_nilai_penilai_4.n2a as n2a_penilai_4, skripsi_nilai_penilai_4.n2b as n2b_penilai_4, skripsi_nilai_penilai_4.total as total_penilai_4,
                   mahasiswa.id as mahasiswa_id, skripsi.id as skripsi_id')
-        ->join('mahasiswa', 'mahasiswa.id = skripsi_sidang.mahasiswa_id', 'left')
-        ->join('tempat_sidang', 'tempat_sidang.id_tempat = skripsi_sidang.tempat_id', 'left')
-        ->join('dosen as penguji1', 'penguji1.id = skripsi_sidang.penguji_1_id', 'left')
-        ->join('dosen as penguji2', 'penguji2.id = skripsi_sidang.penguji_2_id', 'left')
-        ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
-        ->join('dosen as pembimbing1', 'pembimbing1.id = skripsi.pembimbing_1_id', 'left')
-        ->join('dosen as pembimbing2', 'pembimbing2.id = skripsi.pembimbing_2_id', 'left')
-        // Join for penilai 1
-        ->join('skripsi_nilai as skripsi_nilai_penilai_1', 'skripsi_nilai_penilai_1.penilai_id = skripsi_sidang.penguji_1_id', 'left')
-        // Join for penilai 2
-        ->join('skripsi_nilai as skripsi_nilai_penilai_2', 'skripsi_nilai_penilai_2.penilai_id = skripsi_sidang.penguji_2_id', 'left')
-        // Join for penilai 3 (assuming you have a column for penilai 3's ID)
-        ->join('skripsi_nilai as skripsi_nilai_penilai_3', 'skripsi_nilai_penilai_3.penilai_id = skripsi.pembimbing_1_id', 'left')
-        // Join for penilai 4 (assuming you have a column for penilai 4's ID)
-        ->join('skripsi_nilai as skripsi_nilai_penilai_4', 'skripsi_nilai_penilai_4.penilai_id = skripsi.pembimbing_2_id', 'left')
-        ->where('skripsi_sidang.tipe_sidang', 'seminar_hasil')
-        ->get()
-        ->getResultArray();
-    
+            ->join('mahasiswa', 'mahasiswa.id = skripsi_sidang.mahasiswa_id', 'left')
+            ->join('tempat_sidang', 'tempat_sidang.id_tempat = skripsi_sidang.tempat_id', 'left')
+            ->join('dosen as penguji1', 'penguji1.id = skripsi_sidang.penguji_1_id', 'left')
+            ->join('dosen as penguji2', 'penguji2.id = skripsi_sidang.penguji_2_id', 'left')
+            ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('dosen as pembimbing1', 'pembimbing1.id = skripsi.pembimbing_1_id', 'left')
+            ->join('dosen as pembimbing2', 'pembimbing2.id = skripsi.pembimbing_2_id', 'left')
+            // Join for penilai 1
+            ->join('skripsi_nilai as skripsi_nilai_penilai_1', 'skripsi_nilai_penilai_1.penilai_id = skripsi_sidang.penguji_1_id', 'left')
+            // Join for penilai 2
+            ->join('skripsi_nilai as skripsi_nilai_penilai_2', 'skripsi_nilai_penilai_2.penilai_id = skripsi_sidang.penguji_2_id', 'left')
+            // Join for penilai 3 (assuming you have a column for penilai 3's ID)
+            ->join('skripsi_nilai as skripsi_nilai_penilai_3', 'skripsi_nilai_penilai_3.penilai_id = skripsi.pembimbing_1_id', 'left')
+            // Join for penilai 4 (assuming you have a column for penilai 4's ID)
+            ->join('skripsi_nilai as skripsi_nilai_penilai_4', 'skripsi_nilai_penilai_4.penilai_id = skripsi.pembimbing_2_id', 'left')
+            ->where('skripsi_sidang.tipe_sidang', 'seminar_hasil')
+            ->get()
+            ->getResultArray();
+
         // dd($jadwal_sidang);
         $nilai = $this->db->table('skripsi_nilai')
             ->select('*')
@@ -190,7 +189,7 @@ class SkripsiController extends BaseController
             ->get()
             ->getRow();
 
-            // dd($nilai);
+        // dd($nilai);
         $data = [
             'title' => 'Seminar Proposal',
             'data' => $jadwal_sidang,
@@ -212,7 +211,7 @@ class SkripsiController extends BaseController
         // Check if the record already exists in the database
         $existingRecord = $SkripsiNilaiModel->where('sidang_id', $sidang_id)
             ->first();
-   
+
         // Retrieve the values from the request and calculate the total_nilai and other fields
         $n1a = $this->request->getVar('n1a');
         $n1b = $this->request->getVar('n1b');
@@ -225,15 +224,14 @@ class SkripsiController extends BaseController
         $total = $this->request->getVar('total');
 
         // Calculate the total_nilai based on the provided values
-        $total = (
-            $n1a +
+        $total = ($n1a +
             $n1b +
             $n1c +
             $n1d +
             $n1e +
             $n1f +
             $n2a +
-            $n2b 
+            $n2b
         );
 
         // Prepare data for insert/update

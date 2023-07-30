@@ -22,4 +22,20 @@ class SkripsiJurnalBimbinganModel extends Model
 
         return $query;
     }
+    public function DosenGetDetailBimbinganSkripsi($mahasiswa_id)
+    {
+        $dosen_id = session()->get('dosen_id');
+        $query = $this->select('skripsi_bimbingan.*, skripsi_bimbingan.id as bid, mahasiswa.*, skripsi.*')
+            ->join('mahasiswa', 'mahasiswa.id = skripsi_bimbingan.mahasiswa_id')
+            ->join('skripsi', 'skripsi.id = skripsi_bimbingan.skripsi_id')
+            ->where('skripsi.mahasiswa_id', $mahasiswa_id)
+            ->where('skripsi_bimbingan.is_pembimbing', 1)
+            ->where('skripsi.pembimbing_1_id', $dosen_id)
+            ->orWhere('skripsi_bimbingan.is_pembimbing', 2)
+            ->where('skripsi.pembimbing_2_id', $dosen_id);
+    
+        $query->orderBy('tanggal', 'asc');
+    
+        return $query->get()->getResultArray();
+    }
 }

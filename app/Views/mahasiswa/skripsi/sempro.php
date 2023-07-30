@@ -52,7 +52,7 @@
                 <td><span class="label label-danger"><?= $row['nama_penguji_2'] ?></span></td>
                 <td><?= $row['tempat_nama'] ?></td>
                 <td>
-                  <?php if ($row['total_nilai']) :; ?>
+                  <?php if ($row['total']) :; ?>
                     <a href="<?= base_url('mahasiswa/skripsi/penilaian/cetak/' . $row['sidang_id']) ?>" class="btn btn-success btn-sm" target="_blank">
                       Cetak
                     </a>
@@ -61,8 +61,8 @@
                   <?php endif; ?>
                 </td>
                 <td>
-                  <span class="label <?= $row['total_nilai'] === null ? 'label-warning' : ($row['status_ujian'] ? 'label-primary' : 'label-danger') ?>">
-                    <?= $row['total_nilai'] === null ? 'Belum Melaksanakan' : ($row['status_ujian'] ? 'Lulus' : 'Tidak Lulus') ?>
+                  <span class="label <?= $row['total'] === null ? 'label-warning' : ($row['total'] ? 'label-primary' : 'label-danger') ?>">
+                    <?= $row['total'] === null ? 'Belum Melaksanakan' : ($row['total'] ? 'Lulus' : 'Tidak Lulus') ?>
                   </span>
                 </td>
               </tr>
@@ -185,6 +185,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title">Pendaftaran Sempro</h4>
+        <span>Jika sudah melengkapi/tidak ingin mengganti file maka kosongkan bagian filenya</span>
       </div>
       <div class="modal-body">
         <form action="<?= route_to('mahasiswa.skripsi.daftar_sempro') ?>" method="POST" enctype="multipart/form-data">
@@ -192,36 +193,84 @@
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">Transkrip Nilai</label>
+              <br>
+              <?php if ($row['transkrip_nilai']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['transkrip_nilai']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="transkrip_nilai"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">KRS</label>
+              <br>
+              <?php if ($row['krs']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['krs']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="krs"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">Sertifikat Seminar / Kompetensi</label>
+              <br>
+              <?php if ($row['sertifikat_seminar_kompetensi']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['sertifikat_seminar_kompetensi']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="sertifikat_seminar_kompetensi"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">Nota Dinas Pembimbing</label>
+              <br>
+              <?php if ($row['nota_dinas_pembimbing']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['nota_dinas_pembimbing']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="nota_dinas_pembimbing"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">Kartu Bimbingan Skripsi</label>
+              <br>
+              <?php if ($row['kartu_bimbingan_skripsi']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['kartu_bimbingan_skripsi']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="kartu_bimbingan_skripsi"></div>
           </div>
           <div class="row" style="margin-bottom: 10px;">
             <div class="col-md-7">
               <label for="">Kartu Peserta Seminar Proposal</label>
+              <br>
+              <?php if ($row['kartu_peserta_seminar_proposal']) : ?>
+                <span class="label label-primary">
+                  <a target="_blank" style="color:white" href="<?= base_url('uploads/skripsi/' . $row['kartu_peserta_seminar_proposal']) ?>">
+                <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+              <?php else : ?>
+                <span class="label label-danger"> Belum dilengkapi</span>
+              <?php endif; ?>
             </div>
             <div class="col-md-5"><input type="file" class="form-control" name="kartu_peserta_seminar_proposal"></div>
           </div>

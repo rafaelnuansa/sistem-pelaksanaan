@@ -76,9 +76,11 @@ class MahasiswaModel extends Model
     
     public function getMahasiswaBimbinganSkripsi($dosen_id)
     {
-        $query = $this->select('mahasiswa.*, mahasiswa.id as mahasiswa_id, prodi.nama_prodi as nama_prodi, mahasiswa.*, skripsi.*, mahasiswa.nama as nama_mahasiswa')
+        $query = $this->select('mahasiswa.*, mahasiswa.id as mahasiswa_id, prodi.nama_prodi as nama_prodi, mahasiswa.*, skripsi.*, mahasiswa.nama as nama_mahasiswa, pembimbing1.nama as nama_p1, pembimbing2.nama as nama_p2')
             ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id')
             ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
+            ->join('dosen as pembimbing1', 'pembimbing1.id = skripsi.pembimbing_1_id')
+            ->join('dosen as pembimbing2', 'pembimbing2.id = skripsi.pembimbing_2_id')
             ->where('skripsi.pembimbing_1_id', $dosen_id)
             ->orWhere('skripsi.pembimbing_2_id', $dosen_id)
             ->groupBy('mahasiswa.id')

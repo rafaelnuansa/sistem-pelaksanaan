@@ -33,8 +33,16 @@ class SkripsiBimbinganController extends BaseController
     {
         $jurnal = $this->SkripsiBimbinganModel->getPembimbing1($id);
         $jurnal2 = $this->SkripsiBimbinganModel->getPembimbing2($id);
-        $mhs = $this->db->table('mahasiswa')->select('*')->where('id', $id)->get()->getRow();
-        // dd($mhs);
+        $mhs = $this->db->table('mahasiswa')
+        ->select('mahasiswa.*, p1.nama as nama_p1, p2.nama as nama_p2')
+        ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
+        ->join('dosen as p1', 'p1.id = skripsi.pembimbing_1_id', 'left')
+        ->join('dosen as p2', 'p2.id = skripsi.pembimbing_2_id', 'left')
+        ->where('mahasiswa.id', $id)
+        ->get()
+        ->getRow();
+    
+        
         $data = [
             'title' => 'Jurnal Bimbingan',
             'mahasiswa' => $mhs,

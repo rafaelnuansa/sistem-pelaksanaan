@@ -55,7 +55,6 @@
 <!-- /.box -->
 
 <?= $this->endSection(); ?>
-
 <?= $this->section('script'); ?>
 <script>
     $('.delete').click(function() {

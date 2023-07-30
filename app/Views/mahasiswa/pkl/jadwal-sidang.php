@@ -166,25 +166,53 @@
           <form action="<?= route_to('mahasiswa.pkl.jadwal.daftar') ?>" method="POST" enctype="multipart/form-data">
             <div class="row" style="margin-bottom: 10px;">
               <div class="col-md-7">
-                <label for="">Kwitansi</label>
+                <label for="">Kwitansi</label><br>
+                <?php if ($row['kwitansi']) : ?>
+                  <span class="label label-primary">
+                    <a target="_blank" style="color:white" href="<?= base_url('uploads/pkl/' . $row['kwitansi']) ?>">
+                      <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+                <?php else : ?>
+                  <span class="label label-danger"> Belum dilengkapi</span>
+                <?php endif; ?>
               </div>
               <div class="col-md-5"><input type="file" class="form-control" name="kwitansi"></div>
             </div>
             <div class="row" style="margin-bottom: 10px;">
               <div class="col-md-7">
-                <label for="">KRS</label>
+                <label for="">KRS</label><br>
+                <?php if ($row['krs']) : ?>
+                  <span class="label label-primary">
+                    <a target="_blank" style="color:white" href="<?= base_url('uploads/pkl/' . $row['krs']) ?>">
+                      <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+                <?php else : ?>
+                  <span class="label label-danger"> Belum dilengkapi</span>
+                <?php endif; ?>
               </div>
               <div class="col-md-5"><input type="file" class="form-control" name="krs"></div>
             </div>
             <div class="row" style="margin-bottom: 10px;">
               <div class="col-md-7">
-                <label for="">Laporan</label>
+                <label for="">Laporan</label><br>
+                <?php if ($row['laporan']) : ?>
+                  <span class="label label-primary">
+                    <a target="_blank" style="color:white" href="<?= base_url('uploads/pkl/' . $row['laporan']) ?>">
+                      <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+                <?php else : ?>
+                  <span class="label label-danger"> Belum dilengkapi</span>
+                <?php endif; ?>
               </div>
               <div class="col-md-5"><input type="file" class="form-control" name="laporan"></div>
             </div>
             <div class="row" style="margin-bottom: 10px;">
               <div class="col-md-7">
-                <label for="">SK PKL</label>
+                <label for="">SK PKL</label><br>
+                <?php if ($row['sk_pkl']) : ?>
+                  <span class="label label-primary">
+                    <a target="_blank" style="color:white" href="<?= base_url('uploads/pkl/' . $row['sk_pkl']) ?>">
+                      <i class="fa fa-file"></i> Telah dilengkapi</a></span>
+                <?php else : ?>
+                  <span class="label label-danger"> Belum dilengkapi</span>
+                <?php endif; ?>
               </div>
               <div class="col-md-5"><input type="file" class="form-control" name="sk_pkl"></div>
             </div>

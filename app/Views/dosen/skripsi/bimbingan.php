@@ -23,7 +23,9 @@
         <tr>
           <th>No</th>
           <th>NIM</th>
-          <th>Nama mahasiswa</th>
+          <th>Mahasiswa</th>
+          <th>Pembimbing 1</th>
+          <th>Pembimbing 2</th>
           <th>Tahun Ajaran</th>
           <th>Prodi</th>
           <th></th>
@@ -35,6 +37,8 @@
             <td><?= ++$index ?></td>
             <td><?= $row['nim'] ?></td>
             <td><?= $row['nama_mahasiswa'] ?></td>
+            <td><?= $row['nama_p1'] ?? '' ?></td>
+            <td><?= $row['nama_p2'] ?? '' ?></td>
             <td><?= $row['tahun_akademik'] ?></td>
             <td><?= $row['nama_prodi'] ?></td>
             <td>

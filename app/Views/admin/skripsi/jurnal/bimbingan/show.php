@@ -9,7 +9,8 @@
     <div class="box">
         <div class="box-header with-border">
             <h3 class="box-title">SKRIPSI : Jurnal Pembimbing 1</h3>
-            <p>Mahasiswa :  <?php echo $mahasiswa->nama ?? ''; ?></p>
+            <p>Mahasiswa :  <?php echo $mahasiswa->nama ?? ''; ?>
+            <br>Dosen Pembimbing 1 :  <?php echo $mahasiswa->nama_p1 ?? ''; ?></p>
         </div>
         <div class="box-body">
             <table class="table table-bordered" id="datatables">
@@ -48,7 +49,8 @@
         <div class="box-header with-border">
             <h3 class="box-title">SKRIPSI : Jurnal Pembimbing 2</h3>
             
-            <p>Mahasiswa :  <?php echo $mahasiswa->nama ?? ''; ?></p>
+            <p>Mahasiswa :  <?php echo $mahasiswa->nama ?? ''; ?>
+            <br>Dosen Pembimbing 2 :  <?php echo $mahasiswa->nama_p2 ?? ''; ?></p>
         </div>
         <div class="box-body">
             <table class="table table-bordered" id="datatables">
