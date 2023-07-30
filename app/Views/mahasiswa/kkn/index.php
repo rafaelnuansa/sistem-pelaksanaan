@@ -23,6 +23,7 @@
             <th>No</th>
             <th>NIM</th>
             <th>Nama Mahasiswa</th>
+            <th>Program Studi</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -33,6 +34,7 @@
               <td><?= $nomor++ ?></td>
               <td><?= $row['nim'] ?></td>
               <td><?= $row['nama'] ?></td>
+              <td><?= $row['nama_prodi'] ?></td>
               <td><?= $row['is_ketua'] == true ? 'Ketua' : 'Anggota' ?></td>
             </tr>
           <?php endforeach; ?>
@@ -44,7 +46,7 @@
   <div class="alert alert-info">Anda belum memiliki Kelompok KKN Hubungi Administrasi/Staff Tata Usaha.</div>
 <?php endif; ?>
 <!-- /.box -->
-<?php if ($kelompok) : ?>
+<?php if ($kelompok ?? '') : ?>
   <div class="box">
     <div class="box-header with-border">
       <h3 class="box-title">Informasi Lokasi</h3>
@@ -58,7 +60,7 @@
               <th>Nama Lokasi</th>
               <td>
                 <?php if ($is_ketua) : ?>
-                  <select class="form-control" name="lokasi_id">
+                  <select disabled class="form-control" name="lokasi_id">
                     <option value="">Pilih Lokasi</option>
                     <?php foreach ($lokasi as $row) : ?>
                       <option value="<?= $row['id'] ?>" <?= ($kelompok->lokasi_id == $row['id']) ? 'selected' : '' ?>><?= $row['nama_lokasi'] ?></option>
@@ -129,8 +131,6 @@
     </div>
   </div>
 <?php endif; ?>
-
-
 
 <div class="modal fade" id="modal-tambah">
   <div class="modal-dialog">

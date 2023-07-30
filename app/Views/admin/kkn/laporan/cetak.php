@@ -51,26 +51,28 @@
         <thead>
             <tr>
                 <th>No</th>
-                <th>Nama Kelompok</th>
+                <th>NIM</th>
+                <th>Nama</th>
                 <th>Tanggal Mulai</th>
                 <th>Tanggal Selesai</th>
                 <th>Program Studi</th>
                 <th>Dosen</th>
-                <th>Instansi</th>
+                <th>Lokasi</th>
             </tr>
         </thead>
         <tbody>
 
-            <?php if ($data_pkl) : ?>
-                <?php foreach ($data_pkl as $i => $pkl) : ?>
+            <?php if ($data_kkn) : ?>
+                <?php foreach ($data_kkn as $i => $kkn) : ?>
                     <tr>
                         <td><?= $i + 1 ?></td>
-                        <td><?= $pkl['nama_kelompok'] ?></td>
-                        <td><?= $pkl['tgl_mulai'] ?></td>
-                        <td><?= $pkl['tgl_selesai'] ?></td>
-                        <td><?= $pkl['nama_prodi'] ?></td>
-                        <td><?= $pkl['nama_dosen'] ?></td>
-                        <td><?= $pkl['nama_perusahaan'] ?></td>
+                        <td><?= $kkn['nim'] ?></td>
+                        <td><?= $kkn['nama'] ?></td>
+                        <td><?= $kkn['tgl_mulai'] ?? '-' ?></td>
+                        <td><?= $kkn['tgl_selesai'] ?? '-' ?></td>
+                        <td><?= $kkn['nama_prodi'] ?></td>
+                        <td><?= $kkn['nama_dosen'] ?? '-' ?></td>
+                        <td><?= $kkn['nama_lokasi'] ?? '-' ?></td>
                     </tr>
                 <?php endforeach; ?>
 

@@ -41,6 +41,8 @@
     </table>
   </div>
 </div>
+
+
 <!-- /.box -->
 
 <?= $this->endSection(); ?>

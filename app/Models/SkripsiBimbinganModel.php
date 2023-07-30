@@ -9,7 +9,7 @@ class SkripsiBimbinganModel extends Model
 
     protected $table = 'skripsi_bimbingan';
     protected $primaryKey = 'id';
-    protected $allowedFields = ['mahasiswa_id', 'tanggal', 'catatan', 'skripsi_id', 'status'];
+    protected $allowedFields = ['mahasiswa_id', 'tanggal', 'catatan', 'skripsi_id', 'status', 'is_pembimbing'];
 
     public function getJurnalBimbinganByIdMahasiswa($id_mahasiswa)
     {
@@ -18,6 +18,31 @@ class SkripsiBimbinganModel extends Model
             ->join('skripsi', 'skripsi.id = skripsi_bimbingan.skripsi_id')
             ->orderBy('skripsi_bimbingan.tanggal', 'asc')
             ->where('skripsi.mahasiswa_id', $id_mahasiswa)
+            ->get();
+ 
+        return $query->getResultArray();
+    }
+
+    public function getPembimbing1($id_mahasiswa)
+    {
+        $query = $this->select('skripsi_bimbingan.*, mahasiswa.*, skripsi.*')
+            ->join('mahasiswa', 'mahasiswa.id = skripsi_bimbingan.mahasiswa_id')
+            ->join('skripsi', 'skripsi.id = skripsi_bimbingan.skripsi_id')
+            ->orderBy('skripsi_bimbingan.tanggal', 'asc')
+            ->where('skripsi.mahasiswa_id', $id_mahasiswa)
+            ->where('is_pembimbing', 1)
+            ->get();
+ 
+        return $query->getResultArray();
+    }
+    public function getPembimbing2($id_mahasiswa)
+    {
+        $query = $this->select('skripsi_bimbingan.*, mahasiswa.*, skripsi.*')
+            ->join('mahasiswa', 'mahasiswa.id = skripsi_bimbingan.mahasiswa_id')
+            ->join('skripsi', 'skripsi.id = skripsi_bimbingan.skripsi_id')
+            ->orderBy('skripsi_bimbingan.tanggal', 'asc')
+            ->where('skripsi.mahasiswa_id', $id_mahasiswa)
+            ->where('is_pembimbing', 2)
             ->get();
  
         return $query->getResultArray();

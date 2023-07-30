@@ -27,75 +27,137 @@ class SkripsiSidangController extends BaseController
 
     public function index()
     {
-        $pendingSemhas = $this->SkripsiSemhasModel->pending();
         $pendingSempro = $this->SkripsiSemproModel->pending();
         $mahasiswa = $this->MahasiswaModel->orderBy('nama', 'ASC')->findAll();
 
-
         // Extract unique dospem_id values from the pending array
-        $dospemIdsSemhas = array_unique(array_column($pendingSemhas, 'dospem_id'));
         $dospemIdsSempro = array_unique(array_column($pendingSempro, 'dospem_id'));
-        // Mengambil daftar dosen kecuali dosen pembimbing (based on dospem_id from pending)
-        $dosensSemhas = $this->db->table('dosen')
-            ->whereNotIn('id', $dospemIdsSemhas)
-            ->orderBy('nama', 'ASC')
-            ->get()
-            ->getResultArray();
 
-        $dosensSempro = $this->db->table('dosen')
-            ->whereNotIn('id', $dospemIdsSempro)
-            ->orderBy('nama', 'ASC')
-            ->get()
-            ->getResultArray();
+        // Check if there are any dospemIdsSempro
+        if (!empty($dospemIdsSempro)) {
+            $dosensSempro = $this->db->table('dosen')
+                ->whereNotIn('id', $dospemIdsSempro)
+                ->orderBy('nama', 'ASC')
+                ->get()
+                ->getResultArray();
+        } else {
+            $dosensSempro = $this->db->table('dosen')
+                ->orderBy('nama', 'ASC')
+                ->get()
+                ->getResultArray();
+        }
 
         $tempats = $this->TempatModel->orderBy('nama_tempat', 'ASC')->findAll(); // Fetch all dosens from the database
-        $jadwal_sidang = $this->db->table('skripsi_sidang')
-            ->select('skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospem.nama as dospem, dospeng.nama as dospeng, tempat_sidang.nama_tempat as tempat_nama, skripsi_nilai_sidang.*')
+        $jadwalSempro = $this->db->table('skripsi_sidang')
+            ->select('skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospem1.nama as nama_pembimbing_1, dospem2.nama as nama_pembimbing_2, dospeng1.nama as nama_penguji_1, dospeng2.nama as nama_penguji_2, tempat_sidang.nama_tempat as tempat_nama, skripsi_nilai.*')
             ->join('mahasiswa', 'mahasiswa.id = skripsi_sidang.mahasiswa_id', 'left')
             ->join('tempat_sidang', 'tempat_sidang.id_tempat = skripsi_sidang.tempat_id', 'left')
             ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
-            ->join('skripsi_nilai_sidang', 'skripsi_nilai_sidang.mahasiswa_id = mahasiswa.id', 'left')
-            ->join('dosen as dospem', 'dospem.id = skripsi.dosen_id', 'left') // Join to get the supervisor (dosen pembimbing)
-            ->join('dosen as dospeng', 'dospeng.id = skripsi_sidang.dospeng_id', 'left') // Join to get the examiner (dosen penguji)
+            ->join('skripsi_nilai', 'skripsi_nilai.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('dosen as dospem1', 'dospem1.id = skripsi.pembimbing_1_id', 'left') // Join to get the supervisor (dosen pembimbing)
+            ->join('dosen as dospem2', 'dospem2.id = skripsi.pembimbing_2_id', 'left') // Join to get the supervisor (dosen pembimbing)
+            ->join('dosen as dospeng1', 'dospeng1.id = skripsi_sidang.penguji_1_id', 'left') // Join to get the examiner (dosen penguji)
+            ->join('dosen as dospeng2', 'dospeng2.id = skripsi_sidang.penguji_2_id', 'left') // Join to get the examiner (dosen penguji)
+            ->where('skripsi_sidang.tipe_sidang', 'seminar_proposal')
             ->get()
             ->getResultArray();
 
         $data = [
-            'title' => 'Jadwal Sidang Skripsi',
-            'data' => $jadwal_sidang,
-            'pending_semhas' => $pendingSemhas,
+            'title' => 'Seminar Proposal',
+            'jadwal_sempro' => $jadwalSempro,
             'pending_sempro' => $pendingSempro,
-            'dosensSemhas' => $dosensSemhas,
             'dosensSempro' => $dosensSempro,
             'tempats' => $tempats,
             'mahasiswas' => $mahasiswa,
             'jurusan' => $this->ProdiModel->findAll()
         ];
-        return view('admin/skripsi/sidang', $data);
+        return view('admin/skripsi/sempro', $data);
+    }
+
+    public function semhas()
+    {
+        $pendingSemhas = $this->SkripsiSemhasModel->pending();
+        $mahasiswa = $this->MahasiswaModel->orderBy('nama', 'ASC')->findAll();
+
+        // Extract unique dospem_id values from the pending array
+        $dospemIdsSemhas = array_unique(array_column($pendingSemhas, 'dospem_id'));
+
+        // Check if there are any dospem$dospemIdsSemhas
+        if (!empty($dospemIdsSemhas)) {
+            $dosensSemhas = $this->db->table('dosen')
+                ->whereNotIn('id', $dospemIdsSemhas)
+                ->orderBy('nama', 'ASC')
+                ->get()
+                ->getResultArray();
+        } else {
+            $dosensSemhas = $this->db->table('dosen')
+                ->orderBy('nama', 'ASC')
+                ->get()
+                ->getResultArray();
+        }
+
+        $tempats = $this->TempatModel->orderBy('nama_tempat', 'ASC')->findAll(); // Fetch all dosens from the database
+        $jadwalSemhas = $this->db->table('skripsi_sidang')
+            ->select('skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospem1.nama as nama_pembimbing_1, dospem2.nama as nama_pembimbing_2, dospeng1.nama as nama_penguji_1, dospeng2.nama as nama_penguji_2, tempat_sidang.nama_tempat as tempat_nama, skripsi_nilai.*')
+            ->join('mahasiswa', 'mahasiswa.id = skripsi_sidang.mahasiswa_id', 'left')
+            ->join('tempat_sidang', 'tempat_sidang.id_tempat = skripsi_sidang.tempat_id', 'left')
+            ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('skripsi_nilai', 'skripsi_nilai.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('dosen as dospem1', 'dospem1.id = skripsi.pembimbing_1_id', 'left') // Join to get the examiner (dosen penguji)
+            ->join('dosen as dospem2', 'dospem2.id = skripsi.pembimbing_2_id', 'left') // Join to get the examiner (dosen penguji)
+            ->join('dosen as dospeng1', 'dospeng1.id = skripsi_sidang.penguji_1_id', 'left') // Join to get the examiner (dosen penguji)
+            ->join('dosen as dospeng2', 'dospeng2.id = skripsi_sidang.penguji_2_id', 'left') // Join to get the examiner (dosen penguji)
+            ->where('skripsi_sidang.tipe_sidang', 'seminar_hasil')
+            ->get()
+            ->getResultArray();
+
+        $data = [
+            'title' => 'Sidang Skripsi',
+            'jadwal_semhas' => $jadwalSemhas,
+            'pending_semhas' => $pendingSemhas,
+            'dosensSemhas' => $dosensSemhas,
+            'tempats' => $tempats,
+            'mahasiswas' => $mahasiswa,
+            'jurusan' => $this->ProdiModel->findAll()
+        ];
+        return view('admin/skripsi/semhas', $data);
     }
 
     public function simpan_sempro()
     {
         try {
+            $mahasiswa_id = $this->request->getVar('mahasiswa_id');
+
+            // Check if the Mahasiswa is already registered in the "seminar proposal" schedule
+            $existingSeminar = $this->SkripsiSidangModel->where('mahasiswa_id', $mahasiswa_id)->where('tipe_sidang', 'seminar_proposal')->first();
+            if ($existingSeminar) {
+                throw new \Exception('Mahasiswa ini telah terdaftar dalam jadwal sidang seminar proposal.');
+            }
+
             $data = [
                 'tanggal' => $this->request->getVar('tanggal'),
                 'jam' => $this->request->getVar('jam'),
                 'keterangan' => $this->request->getVar('keterangan'),
-                'dospeng_id' => $this->request->getVar('dospeng_id'),
+                'penguji_1_id' => $this->request->getVar('penguji_1_id'),
+                'penguji_2_id' => $this->request->getVar('penguji_2_id'),
                 'tempat_id' => $this->request->getVar('tempat_id'),
                 'tipe_sidang' => 'seminar_proposal',
-                'mahasiswa_id' => $this->request->getVar('mahasiswa_id')
+                'mahasiswa_id' => $mahasiswa_id
             ];
-
+            // Check if Penguji 1 and Penguji 2 are the same
+            if ($data['penguji_1_id'] == $data['penguji_2_id']) {
+                throw new \Exception('Penguji 1 dan Penguji 2 tidak boleh sama.');
+            }
             $this->SkripsiSidangModel->insert($data);
-            $seminarProposal = $this->SkripsiSemproModel->find($this->request->getVar('id_daftar'));
 
+            $seminarProposal = $this->SkripsiSemproModel->find($this->request->getVar('id_daftar'));
             if ($seminarProposal) {
                 $seminarProposal['status'] = 'Approved';
                 $this->SkripsiSemproModel->save($seminarProposal);
             } else {
                 throw new \Exception('Persyaratan tidak ditemukan.');
             }
+
             session()->setFlashdata('success', 'Jadwal Sidang Skripsi berhasil ditambahkan!');
         } catch (\Exception $e) {
             session()->setFlashdata('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
@@ -104,28 +166,42 @@ class SkripsiSidangController extends BaseController
         return redirect()->back();
     }
 
+
     public function simpan_semhas()
     {
         try {
+            $mahasiswa_id = $this->request->getVar('mahasiswa_id');
+
+            // Check if the Mahasiswa is already registered in the "seminar hasil" schedule
+            $existingSeminar = $this->SkripsiSidangModel->where('mahasiswa_id', $mahasiswa_id)->where('tipe_sidang', 'seminar_hasil')->first();
+            if ($existingSeminar) {
+                throw new \Exception('Mahasiswa ini telah terdaftar dalam jadwal sidang seminar hasil.');
+            }
+
             $data = [
                 'tanggal' => $this->request->getVar('tanggal'),
                 'jam' => $this->request->getVar('jam'),
                 'keterangan' => $this->request->getVar('keterangan'),
-                'dospeng_id' => $this->request->getVar('dospeng_id'),
+                'penguji_1_id' => $this->request->getVar('penguji_1_id'),
+                'penguji_2_id' => $this->request->getVar('penguji_2_id'),
                 'tempat_id' => $this->request->getVar('tempat_id'),
-                'tipe_sidang' => 'seminar_proposal',
-                'mahasiswa_id' => $this->request->getVar('mahasiswa_id')
+                'tipe_sidang' => 'seminar_hasil',
+                'mahasiswa_id' => $mahasiswa_id
             ];
-
+            // Check if Penguji 1 and Penguji 2 are the same
+            if ($data['penguji_1_id'] == $data['penguji_2_id']) {
+                throw new \Exception('Penguji 1 dan Penguji 2 tidak boleh sama.');
+            }
             $this->SkripsiSidangModel->insert($data);
-            $seminarProposal = $this->SkripsiSemproModel->find($this->request->getVar('id_daftar'));
 
-            if ($seminarProposal) {
-                $seminarProposal['status'] = 'Approved';
-                $this->SkripsiSemproModel->save($seminarProposal);
+            $seminarHasil = $this->SkripsiSemhasModel->find($this->request->getVar('id_daftar'));
+            if ($seminarHasil) {
+                $seminarHasil['status'] = 'Approved';
+                $this->SkripsiSemhasModel->save($seminarHasil);
             } else {
                 throw new \Exception('Persyaratan tidak ditemukan.');
             }
+
             session()->setFlashdata('success', 'Jadwal Sidang Skripsi berhasil ditambahkan!');
         } catch (\Exception $e) {
             session()->setFlashdata('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());

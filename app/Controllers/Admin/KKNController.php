@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\DosenModel;
 use App\Models\MahasiswaModel;
 use App\Models\KKNAnggotaModel;
+use App\Models\KKNLokasiModel;
 use App\Models\KKNModel;
 use App\Models\ProdiModel;
 use App\Models\PembimbingModel;
@@ -26,17 +27,15 @@ class KKNController extends BaseController
     {
         $kknModel = new KKNModel();
         $kknsWithInstansi = $kknModel
-            ->select('kkn.*, dosen.nama AS nama_dosen, prodi.nama_prodi, kkn_lokasi.nama_lokasi as nama_lokasi, kkn_lokasi.alamat_lokasi as alamat_lokasi')
+            ->select('kkn.*, dosen.nama AS nama_dosen, kkn_lokasi.nama_lokasi as nama_lokasi, kkn_lokasi.alamat_lokasi as alamat_lokasi')
             ->join('dosen', 'dosen.id = kkn.dosen_id')
-            ->join('prodi', 'prodi.id = kkn.prodi_id')
             ->join('kkn_lokasi', 'kkn.lokasi_id = kkn_lokasi.id', 'left')
             ->where('kkn.lokasi_id >', 0)
             ->findAll();
 
         $kknsWithoutInstansi = $kknModel
-            ->select('kkn.*, dosen.nama AS nama_dosen, prodi.nama_prodi, "Belum ada lokasi" as nama_lokasi, "Belum tersedia" as alamat_lokasi', false)
+            ->select('kkn.*, dosen.nama AS nama_dosen, "Belum ada lokasi" as nama_lokasi, "Belum tersedia" as alamat_lokasi', false)
             ->join('dosen', 'dosen.id = kkn.dosen_id')
-            ->join('prodi', 'prodi.id = kkn.prodi_id')
             ->where('kkn.lokasi_id', 0)
             ->findAll();
 
@@ -58,13 +57,12 @@ class KKNController extends BaseController
                 'tahun_akademik' => $row['tahun_akademik'],
                 'tgl_mulai' => $row['tgl_mulai'],
                 'tgl_selesai' => $row['tgl_selesai'],
-                'nama_prodi' => $row['nama_prodi'],
                 'nama_dosen' => $row['nama_dosen'],
                 'nama_lokasi' => $row['nama_lokasi'],
                 'alamat_lokasi' => $row['alamat_lokasi'],
                 'nama_kepala_desa' => $row['nama_kepala_desa'],
                 'no_kepala_desa' => $row['no_kepala_desa'],
-                'ketua_kelompok' => ($ketua_kelompok) ? $ketua_kelompok['nama'] : 'Belum ada ketua',
+                'ketua_kelompok' => ($ketua_kelompok) ? $ketua_kelompok['nama'] : '',
             ];
         }
         $data = [
@@ -85,11 +83,13 @@ class KKNController extends BaseController
         $prodiModel = new ProdiModel();
         $prodis = $prodiModel->findAll();
 
-
+        $lokasiModel = new KKNLokasiModel();
+        $lokasi = $lokasiModel->findAll();
         $data = [
             'title' => 'Tambah KKN',
             'dosens' => $dosens,
             'prodis' => $prodis,
+            'lokasi' => $lokasi,
         ];
 
         return view('admin/kkn/create', $data);
@@ -98,21 +98,35 @@ class KKNController extends BaseController
     public function store()
     {
         $kknModel = new KKNModel();
-
+    
         $data = [
             'nama_kelompok' => $this->request->getPost('nama_kelompok'),
             'tgl_mulai' => $this->request->getPost('tgl_mulai'),
             'tgl_selesai' => $this->request->getPost('tgl_selesai'),
             'tahun_akademik' => $this->request->getPost('tahun_akademik'),
             'dosen_id' => $this->request->getPost('dosen_id'),
-            'prodi_id' => $this->request->getPost('prodi_id'),
+            'lokasi_id' => $this->request->getPost('lokasi_id'),
         ];
-
-        $kknModel->insert($data);
-
-        return redirect()->to('/admin/kkn')->with('success', 'Data KKN berhasil ditambahkan.');
+    
+        try {
+            // Lakukan validasi atau pemeriksaan lainnya sebelum menyimpan data
+    
+            // Check if tgl_mulai is before tgl_selesai
+            if ($data['tgl_mulai'] >= $data['tgl_selesai']) {
+                return redirect()->back()->withInput()->with('error', 'Tanggal mulai harus sebelum tanggal selesai.');
+            }
+    
+            // Lakukan penyimpanan data ke database
+            $kknModel->insert($data);
+    
+            // Jika berhasil, arahkan pengguna ke halaman /admin/kkn dengan pesan success
+            return redirect()->to('/admin/kkn')->with('success', 'Data KKN berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            // Tangani pengecualian jika terjadi kesalahan dalam proses penyimpanan
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
     }
-
+    
     public function edit($id)
     {
         $kknModel = new KKNModel();
@@ -121,14 +135,13 @@ class KKNController extends BaseController
         $dosenModel = new DosenModel();
         $dosens = $dosenModel->findAll();
 
-        $prodiModel = new ProdiModel();
-        $prodis = $prodiModel->findAll();
-
+        $lokasiModel = new KKNLokasiModel();
+        $lokasi = $lokasiModel->findAll();
         $data = [
             'title' => 'Edit KKN',
             'kkn' => $kkn,
             'dosens' => $dosens,
-            'prodis' => $prodis,
+            'lokasi' => $lokasi,
         ];
 
         return view('admin/kkn/edit', $data);
@@ -145,7 +158,7 @@ class KKNController extends BaseController
             'tgl_selesai' => $this->request->getPost('tgl_selesai'),
             'tahun_akademik' => $this->request->getPost('tahun_akademik'),
             'dosen_id' => $this->request->getPost('dosen_id'),
-            'prodi_id' => $this->request->getPost('prodi_id'),
+            'lokasi_id' => $this->request->getPost('lokasi_id'),
         ];
 
         $kknModel->update($id, $data);
@@ -166,9 +179,9 @@ class KKNController extends BaseController
     {
         $kkn = $this->kkn->find($kelompok_id);
         $mahasiswa = $this->mahasiswa
-            ->select('mahasiswa.id as id, kkn_anggota.id as kkn_anggota_id, mahasiswa.nim, mahasiswa.nama',)
+            ->select('mahasiswa.id as mhs_id, kkn_anggota.id as kkn_anggota_id, mahasiswa.nim, mahasiswa.nama, prodi.*',)
+            ->join('prodi', 'mahasiswa.prodi_id = prodi.id', 'left')
             ->join('kkn_anggota', 'mahasiswa.id = kkn_anggota.mahasiswa_id', 'left')
-            // ->where('mahasiswa.prodi_id', $kkn['prodi_id'])
             ->whereNotIn('mahasiswa.id', function ($builder) use ($kelompok_id) {
                 $builder->select('mahasiswa_id')
                     ->from('kkn_anggota')
@@ -177,6 +190,7 @@ class KKNController extends BaseController
             ->get()
             ->getResultArray();
 
+        // dd($mahasiswa);
 
         $rows = $this->anggota
             ->select('kkn_anggota.id as kkn_anggota_id, kkn.id as kkn_id, mahasiswa.id as mahasiswa_id, prodi.id as prodi_id, mahasiswa.*, kkn.*, prodi.*, kkn.*, kkn_anggota.*')
@@ -187,7 +201,7 @@ class KKNController extends BaseController
             ->get()
             ->getResultArray();
 
-        $prodi = $this->prodi->find($kkn['prodi_id']);
+        $prodi = $this->prodi->findAll();
         $dosen = $this->dosen->find($kkn['dosen_id']);
 
         $data = [

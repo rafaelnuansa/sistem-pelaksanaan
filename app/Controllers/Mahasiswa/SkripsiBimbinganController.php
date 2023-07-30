@@ -34,6 +34,7 @@ class SkripsiBimbinganController extends BaseController
         ->orderBy('tanggal', 'DESC')
         ->findAll();
         
+        
         $getSkripsi = $this->getSkripsi;
         // Tampilkan data skripsi bimbingan ke view index
         return view('mahasiswa/skripsi/bimbingan/index', 

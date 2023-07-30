@@ -28,10 +28,11 @@ class SkripsiSemhasModel extends Model
 
     public function pending()
     {
-        return $this->select('mahasiswa.*, skripsi.*, skripsi_semhas.*, dospem.nama as dospem_nama, dospem.id as dospem_id')
+        return $this->select('mahasiswa.*, skripsi.*, skripsi_semhas.*, dospem1.nama as nama_pembimbing_1, dospem1.id as dospem1_id, dospem2.nama as nama_pembimbing_2')
             ->join('mahasiswa', 'mahasiswa.id = skripsi_semhas.mahasiswa_id', 'left')
             ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
-            ->join('dosen as dospem', 'dospem.id = skripsi.dosen_id', 'left')
+            ->join('dosen as dospem1', 'dospem1.id = skripsi.pembimbing_1_id', 'left')
+            ->join('dosen as dospem2', 'dospem2.id = skripsi.pembimbing_2_id', 'left')
             ->where('skripsi_semhas.status', 'pending')
             ->findAll();
     }

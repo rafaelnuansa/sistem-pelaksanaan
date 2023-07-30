@@ -198,8 +198,9 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
 
     // Admin Skripsi 
     $routes->get('skripsi', 'SkripsiController::index', ['as' => 'admin.skripsi.index']);
+    $routes->post('skripsi/skripsi_ajax', 'SkripsiController::skripsi_ajax', ['as' => 'admin.skripsi.ajax']);
     $routes->get('skripsi/create', 'SkripsiController::create', ['as' => 'admin.skripsi.create']);
-    $routes->post('skripsi', 'SkripsiController::store', ['as' => 'admin.skripsi.store']);
+    $routes->post('skripsi/store', 'SkripsiController::store', ['as' => 'admin.skripsi.store']);
     $routes->get('skripsi/edit/(:num)', 'SkripsiController::edit/$1', ['as' => 'admin.skripsi.edit']);
     $routes->post('skripsi/update/(:num)', 'SkripsiController::update/$1', ['as' => 'admin.skripsi.update']);
     $routes->get('skripsi/delete/(:num)', 'SkripsiController::delete/$1', ['as' => 'admin.skripsi.delete']);
@@ -209,13 +210,32 @@ $routes->group('admin', ['namespace' => 'App\Controllers\Admin', 'filter' => 'au
     $routes->get('skripsi/bimbingan/(:num)', 'SkripsiBimbinganController::show/$1', ['as' => 'admin.skripsi.bimbingan.show']);
 
     // Admin Skripsi Sidang 
-    $routes->get('skripsi/sidang', 'SkripsiSidangController::index', ['as' => 'admin.skripsi.sidang.index']);
-    $routes->post('skripsi/sidang/simpan', 'SkripsiSidangController::simpan', ['as' => 'admin.skripsi.sidang.simpan']);
+    $routes->get('skripsi/sempro', 'SkripsiSidangController::index', ['as' => 'admin.skripsi.sidang.index']);
+    $routes->get('skripsi/semhas', 'SkripsiSidangController::semhas', ['as' => 'admin.skripsi.sidang.semhas']);
+    $routes->post('skripsi/simpan_sempro', 'SkripsiSidangController::simpan_sempro', ['as' => 'admin.skripsi.sidang.simpan_sempro']);
+    $routes->post('skripsi/simpan_semhas', 'SkripsiSidangController::simpan_semhas', ['as' => 'admin.skripsi.sidang.simpan_semhas']);
 
     // Rute untuk assign mahasiswa dosbing
     $routes->get('skripsi/(:num)', 'SkripsiController::assignMhs/$1', ['as' => 'admin.skripsi.assign']);
     $routes->get('skripsi/assign', 'SkripsiController::store');
     $routes->post('skripsi/delete', 'SkripsiController::delete');
+
+    
+    // KKN laporan
+    $routes->get('kkn/laporan', 'KKNLaporanController::index', ['as' => 'admin.kkn.laporan.index']);
+    $routes->get('kkn/laporan/cetak', 'KKNLaporanController::cetak', ['as' => 'admin.kkn.laporan.cetak']);
+   
+    $routes->get('kkn/laporan/jurnal/pelaksanaan/(:num)/cetak', 'KKNLaporanController::pelaksanaan_cetak/$1', ['as' => 'admin.kkn.laporan.jurnal.pelaksanaan_cetak']);
+    $routes->get('kkn/laporan/jurnal/pelaksanaan/(:num)', 'KKNLaporanController::pelaksanaan/$1', ['as' => 'admin.kkn.laporan.jurnal.pelaksanaan.detail']);
+ 
+    $routes->get('kkn/laporan/jurnal/monitoring/(:num)/cetak', 'KKNLaporanController::monitoring_cetak/$1', ['as' => 'admin.kkn.laporan.jurnal.monitoring.cetak']);
+    $routes->get('kkn/laporan/jurnal/monitoring/(:num)', 'KKNLaporanController::monitoring/$1', ['as' => 'admin.kkn.laporan.jurnal.monitoring.detail']);
+   
+    $routes->get('kkn/laporan/jadwal', 'KKNLaporanController::jadwal', ['as' => 'admin.kkn.laporan.jadwal']);
+    $routes->get('kkn/laporan/jadwal/cetak', 'KKNLaporanController::jadwal_cetak', ['as' => 'admin.kkn.laporan.jadwal.cetak']);
+    $routes->get('kkn/laporan/dospem', 'KKNLaporanController::dospem', ['as' => 'admin.kkn.laporan.dospem']);
+    $routes->get('kkn/laporan/dospem/cetak', 'KKNLaporanController::dospem_cetak', ['as' => 'admin.kkn.laporan.dospem.cetak']);
+
 });
 
 
@@ -303,7 +323,7 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
     //  KKN END 
 
     // MHS SKRIPSI 
-    // Menu KKN Mahasiswa 
+    // Menu SKRIPSI Mahasiswa 
     $routes->get('skripsi', 'SkripsiController::index');
     $routes->post('skripsi', 'SkripsiController::edit_judul', ['as' => 'mahasiswa.skripsi.edit_judul']);
     // Bimbingan Skripsi 
@@ -313,7 +333,8 @@ $routes->group('mahasiswa', ['namespace' => 'App\Controllers\Mahasiswa', 'filter
     $routes->post('skripsi/bimbingan/edit/(:num)', 'SkripsiBimbinganController::update/$1', ['as' => 'mahasiswa.skripsi.bimbingan.edit']);
     
     $routes->get('skripsi/bimbingan/delete/(:num)', 'SkripsiBimbinganController::delete/$1', ['as' => 'mahasiswa.skripsi.bimbingan.delete']);
-    $routes->get('skripsi/sidang', 'SkripsiSidangController::index');
+    $routes->get('skripsi/sempro', 'SkripsiSidangController::index');
+    $routes->get('skripsi/semhas', 'SkripsiSidangController::semhas');
 
     $routes->post('skripsi/daftar_semhas', 'SkripsiSidangController::daftar_semhas', ['as' => 'mahasiswa.skripsi.daftar_semhas']);
     $routes->post('skripsi/daftar_sempro', 'SkripsiSidangController::daftar_sempro', ['as' => 'mahasiswa.skripsi.daftar_sempro']);
@@ -380,10 +401,6 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'au
 
     
     $routes->get('skripsi', 'SkripsiController::index');
-    $routes->get('skripsi/pelaksanaan', 'SkripsiController::pelaksanaan');
-    $routes->get('skripsi/pelaksanaan/approve', 'SkripsiController::approve_pelaksanaan', ['as' => 'dosen.skripsi.validasi.pelaksanaan']);
-    $routes->get('skripsi/pelaksanaan/reset', 'SkripsiController::reset_pelaksanaan', ['as' => 'dosen.skripsi.validasi.pelaksanaan.reset']);
-    $routes->get('skripsi/pelaksanaan/(:segment)', 'SkripsiController::pelaksanaan_detail/$1');
     $routes->get('skripsi/bimbingan/(:segment)', 'SkripsiController::bimbingan_detail/$1');
    
     $routes->get('skripsi/approve', 'SkripsiController::approve_bimbingan', ['as' => 'dosen.skripsi.validasi.bimbingan']);
@@ -392,6 +409,8 @@ $routes->group('dosen', ['namespace' => 'App\Controllers\Dosen', 'filter' => 'au
     $routes->get('skripsi/jurnal/detail/(:segment)', 'SkripsiController::monitoring_detail/$1');
     $routes->get('skripsi/detail', 'SkripsiController::detail');
     $routes->get('skripsi/jadwal', 'SkripsiController::jadwal_skripsi');
+    $routes->get('skripsi/sempro', 'SkripsiController::sempro');
+    $routes->get('skripsi/semhas', 'SkripsiController::semhas');
     $routes->get('skripsi/validasi-penguji', 'SkripsiController::validasi_penguji');
     $routes->get('skripsi/jadwal/monitoring', 'SkripsiController::jadwal_skripsi_monitoring');
     $routes->get('skripsi/penilaian/1', 'SkripsiController::penilaian');

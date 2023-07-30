@@ -33,11 +33,20 @@ class PKLJadwalSidangController extends BaseController
         $dospemIds = array_unique(array_column($pending, 'dospem_id'));
 
         // Mengambil daftar dosen kecuali dosen pembimbing (based on dospem_id from pending)
-        $dosens = $this->db->table('dosen')
-            ->whereNotIn('id', $dospemIds) // Exclude dosens with dospem_id present in $pending
-            ->orderBy('nama', 'ASC')
-            ->get()
-            ->getResultArray();
+      
+            // Check if there are any dospemIds
+            if (!empty($dospemIds)) {
+                $dosens = $this->db->table('dosen')
+                ->whereNotIn('id', $dospemIds) // Exclude dosens with dospem_id present in $pending
+                ->orderBy('nama', 'ASC')
+                ->get()
+                ->getResultArray();
+            } else {
+                $dosens = $this->db->table('dosen')
+                ->orderBy('nama', 'ASC')
+                ->get()
+                ->getResultArray();
+            }
 
         $mahasiswa = $this->mahasiswa->orderBy('nama', 'ASC')->findAll();
         $tempats = $this->tempat->orderBy('nama_tempat', 'ASC')->findAll(); // Fetch all dosens from the database

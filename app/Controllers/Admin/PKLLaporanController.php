@@ -166,9 +166,10 @@ class PKLLaporanController extends BaseController
         $pelaksanaan = $query->findAll(); // Fetch the filtered pelaksanaan data
 
         $mahasiswa = $this->Mahasiswa
-        ->select('mahasiswa.*, pkl.tahun_akademik')
-        ->join('pkl_jurnal_bimbingan', 'pkl_jurnal_bimbingan.mahasiswa_id = mahasiswa.id', 'left')
-        ->join('pkl', 'pkl.id = pkl_jurnal_bimbingan.pkl_id', 'left')
+        ->select('mahasiswa.*, pkl.tahun_akademik, pembimbing.nama as nama_pembimbing')
+        ->join('pkl_jurnal_pelaksanaan', 'pkl_jurnal_pelaksanaan.mahasiswa_id = mahasiswa.id', 'left')
+        ->join('pkl', 'pkl.id = pkl_jurnal_pelaksanaan.pkl_id', 'left')
+        ->join('dosen as pembimbing', 'pembimbing.id = pkl.dosen_id', 'left')
         ->where('mahasiswa.id', $mahasiswa_id)
         ->get()->getRow();
         $prodi = $this->Prodi->where('id', $mahasiswa->prodi_id)->get()->getRow();
@@ -237,9 +238,10 @@ class PKLLaporanController extends BaseController
 
         $bimbingan = $query->findAll(); // Fetch the filtered bimbingan data
         $mahasiswa = $this->Mahasiswa
-        ->select('mahasiswa.*, pkl.tahun_akademik')
+        ->select('mahasiswa.*, pkl.tahun_akademik, pembimbing.nama as nama_pembimbing')
         ->join('pkl_jurnal_bimbingan', 'pkl_jurnal_bimbingan.mahasiswa_id = mahasiswa.id', 'left')
         ->join('pkl', 'pkl.id = pkl_jurnal_bimbingan.pkl_id', 'left')
+        ->join('dosen as pembimbing', 'pembimbing.id = pkl.dosen_id', 'left')
         ->where('mahasiswa.id', $mahasiswa_id)
         ->get()->getRow();
         $prodi = $this->Prodi->where('id', $mahasiswa->prodi_id)->get()->getRow();

@@ -36,18 +36,26 @@ class SkripsiController extends BaseController
         // Memeriksa apakah $getSkripsi mengembalikan nilai atau tidak
         if ($getSkripsi !== null) {
             $skripsiId = $getSkripsi->id;
-            $dospem = $this->db->table('dosen')
+            $pembimbing1 = $this->db->table('dosen')
                 ->select('dosen.*, dosen.nama as dospem')
-                ->join('skripsi', 'skripsi.dosen_id = dosen.id', 'left')
+                ->join('skripsi', 'skripsi.pembimbing_1_id = dosen.id', 'left')
                 ->join('mahasiswa', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
-          
+                ->where('mahasiswa.id', $this->mahasiswaId)
+                ->get()
+                ->getRow();
+
+            $pembimbing2 = $this->db->table('dosen')
+                ->select('dosen.*, dosen.nama as dospem')
+                ->join('skripsi', 'skripsi.pembimbing_2_id = dosen.id', 'left')
+                ->join('mahasiswa', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
                 ->where('mahasiswa.id', $this->mahasiswaId)
                 ->get()
                 ->getRow();
 
             $data = [
                 'title' => 'Skripsi ',
-                'dospem' => $dospem,
+                'pembimbing1' => $pembimbing1,
+                'pembimbing2' => $pembimbing2,
                 'skripsi' => $getSkripsi,
                 'judul_laporan' => $getSkripsi->judul_skripsi,
             ];
@@ -67,14 +75,14 @@ class SkripsiController extends BaseController
     public function edit_judul()
     {
         $judul_skripsi = $this->request->getVar('judul_skripsi');
-        
+
         try {
             $existingData = $this->db->table('skripsi_judul')
                 ->where('mahasiswa_id', $this->mahasiswaId)
                 ->where('skripsi_id', $this->skripsiId)
                 ->get()
                 ->getRow();
-            
+
             if ($existingData) {
                 // Jika data sudah ada, lakukan update
                 $data = [
@@ -92,13 +100,12 @@ class SkripsiController extends BaseController
                 ];
                 $this->db->table('skripsi_judul')->insert($data);
             }
-    
+
             session()->setFlashdata('success', 'Judul berhasil disimpan!');
         } catch (\Exception $e) {
             session()->setFlashdata('error', 'Terjadi kesalahan saat menyimpan judul: ' . $e->getMessage());
         }
-    
+
         return redirect()->back();
     }
-    
 }

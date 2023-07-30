@@ -158,7 +158,7 @@
 
         <li class="<?= (uri_string() == 'admin/skripsi') ? 'active' : '' ?>">
             <a href="<?= base_url('admin/skripsi') ?>">
-              <i class="fa fa-users"></i> <span>Data Skripsi</span>
+              <i class="fa fa-users"></i> <span>Ajuan Skripsi</span>
             </a>
           </li>
           <li class="<?= (uri_string() == 'admin/skripsi/bimbingan') ? 'active' : '' ?>">
@@ -166,19 +166,19 @@
               <i class="fa fa-briefcase"></i> <span>Jurnal Bimbingan</span>
             </a>
           </li>
-          <li class="<?= (uri_string() == 'admin/skripsi/sidang') ? 'active' : '' ?>">
-            <a href="<?= base_url('admin/skripsi/sidang') ?>">
-              <i class="fa fa-calendar"></i> <span>Jadwal Sidang</span>
+          <li class="<?= (uri_string() == 'admin/skripsi/sempro') ? 'active' : '' ?>">
+            <a href="<?= base_url('admin/skripsi/sempro') ?>">
+              <i class="fa fa-calendar"></i> <span>Seminar Proposal</span>
+            </a>
+          </li>
+
+          
+          <li class="<?= (uri_string() == 'admin/skripsi/semhas') ? 'active' : '' ?>">
+            <a href="<?= base_url('admin/skripsi/semhas') ?>">
+              <i class="fa fa-calendar"></i> <span>Sidang Skripsi</span>
             </a>
           </li>
         </ul>
-      </li>
-
-
-      <li class="<?= (uri_string() == 'admin/berkas') ? 'active' : '' ?>">
-        <a href="<?= base_url('admin/berkas') ?>">
-          <i class="fa fa-file"></i> <span>Berkas</span>
-        </a>
       </li>
     </ul>
   </section>

@@ -86,7 +86,7 @@ class PKLController extends BaseController
     public function jadwal_pkl()
     {
         $jadwal_sidang = $this->db->table('pkl_jadwal_sidang')
-            ->select('pkl_jadwal_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospeng.nama as dospeng, dospem.nama as dospem, tempat_sidang.nama_tempat as tempat_nama, pkl.id as pkl_id, pkl_nilai_sidang.*, mahasiswa.id as mahasiswa_id, pkl.id as pkl_id')
+            ->select('pkl_jadwal_sidang.*, mahasiswa.id as mahasiswa_id, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospeng.nama as dospeng, dospem.nama as dospem, tempat_sidang.nama_tempat as tempat_nama, pkl.id as pkl_id, pkl_nilai_sidang.*, mahasiswa.id as mahasiswa_id, pkl.id as pkl_id')
             ->join('mahasiswa', 'mahasiswa.id = pkl_jadwal_sidang.mahasiswa_id', 'left')
             ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id', 'left')
             ->join('dosen as dospeng', 'dospeng.id = pkl_jadwal_sidang.dospeng_id', 'left')
@@ -213,42 +213,48 @@ class PKLController extends BaseController
     }
 
 
-    public function cetak($sidang_id)
+    public function cetak($mahasiswa_id)
     {
         $PKLNilaiModel = new PKLNilaiModel();
-
-        // Fetch the data from the database based on the $sidang_id
-        $data = $PKLNilaiModel
-            ->select('pkl_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, pkl.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, pkl_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, pkl_jadwal_sidang.*')
-            ->join('mahasiswa', 'mahasiswa.id = pkl_nilai_sidang.mahasiswa_id')
-            ->join('dosen', 'dosen.id = pkl_nilai_sidang.dosen_id')
-            ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
-            ->join('fakultas', 'fakultas.id = prodi.fakultas_id')
-            ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
-            ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
-            ->join('pkl_judul_laporan', 'pkl_judul_laporan.mahasiswa_id = mahasiswa.id')
-            ->join('pkl_jadwal_sidang', 'pkl_jadwal_sidang.id_pkl_jadwal_sidang  = pkl_nilai_sidang.sidang_id')
-            ->join('tempat_sidang', 'tempat_sidang.id_tempat  = pkl_jadwal_sidang.tempat_id')
-            ->where('sidang_id', $sidang_id)
-            ->get()->getRow();
-        // dd($data);
-        if (!$data) {
-            // If data not found, you can show an error message or redirect back
-            return redirect()->back()->with('error', 'Data not found.');
+    
+        try {
+            // Fetch the data from the database based on the $mahasiswa_id
+            $data = $PKLNilaiModel
+                ->select('pkl_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, pkl.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, pkl_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, pkl_jadwal_sidang.*')
+                ->join('mahasiswa', 'mahasiswa.id = pkl_nilai_sidang.mahasiswa_id')
+                ->join('dosen', 'dosen.id = pkl_nilai_sidang.dosen_id')
+                ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
+                ->join('fakultas', 'fakultas.id = prodi.fakultas_id')
+                ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
+                ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
+                ->join('pkl_judul_laporan', 'pkl_judul_laporan.mahasiswa_id = mahasiswa.id')
+                ->join('pkl_jadwal_sidang', 'pkl_jadwal_sidang.id_pkl_jadwal_sidang  = pkl_nilai_sidang.sidang_id')
+                ->join('tempat_sidang', 'tempat_sidang.id_tempat  = pkl_jadwal_sidang.tempat_id')
+                ->where('pkl_nilai_sidang.mahasiswa_id', $mahasiswa_id)
+                ->get()->getRow();
+    
+            if (!$data) {
+                // If data not found, you can show an error message or redirect back
+                return redirect()->back()->with('error', 'Data Nilai belum di input.');
+            }
+    
+            // load HTML content
+            $this->pdf->loadHtml(view('pdf/penilaian_pkl', ['data' => $data]));
+    
+            // (optional) setup the paper size and orientation
+            $this->pdf->setPaper('A4');
+    
+            // render html as PDF
+            $this->pdf->render();
+    
+            // output the generated pdf
+            return $this->pdf->stream('Laporan', array("Attachment" => false));
+        } catch (\Exception $e) {
+            // Handle the exception if it occurs during the database query or rendering PDF
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat mencetak laporan: ' . $e->getMessage());
         }
-        // load HTML content
-        $this->pdf->loadHtml(view('pdf/penilaian_pkl', ['data' => $data]));
-
-        // (optional) setup the paper size and orientation
-        $this->pdf->setPaper('A4');
-
-        // render html as PDF
-        $this->pdf->render();
-
-        // output the generated pdf
-        return $this->pdf->stream('Laporan', array("Attachment" => false));
     }
-
+    
 
     public function berita_acara($sidang_id)
     {
@@ -348,9 +354,6 @@ class PKLController extends BaseController
         session()->setFlashdata('success', 'Jurnal berhasil direset');
         return redirect()->back();
     }
-
-
-
 
     public function cetak_revisi()
     {

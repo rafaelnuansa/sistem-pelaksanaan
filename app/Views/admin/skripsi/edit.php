@@ -28,25 +28,24 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="dosen_id">Dosen</label>
-                            <select name="dosen_id" class="form-control" required>
+                            <label for="pembimbing_1_id">Pembimbing 1</label>
+                            <select name="pembimbing_1_id" class="form-control" required>
                                 <option value="">Pilih Dosen</option>
                                 <?php foreach ($dosens as $dosen) : ?>
-                                    <option value="<?= $dosen['id']; ?>" <?= $dosen['id'] == $skripsi['dosen_id'] ? 'selected' : ''; ?>><?= $dosen['nama']; ?></option>
+                                    <option value="<?= $dosen['id']; ?>" <?= $dosen['id'] == $skripsi['pembimbing_1_id'] ? 'selected' : ''; ?>><?= $dosen['nama']; ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
-
                         <div class="form-group">
-                            <label for="tgl_mulai">Tanggal Mulai</label>
-                            <input type="date" name="tgl_mulai" class="form-control" value="<?= $skripsi['tgl_mulai']; ?>" required>
+                            <label for="pembimbing_2_id">Pembimbing 2</label>
+                            <select name="pembimbing_2_id" class="form-control" required>
+                                <option value="">Pilih Dosen</option>
+                                <?php foreach ($dosens as $dosen) : ?>
+                                    <option value="<?= $dosen['id']; ?>" <?= $dosen['id'] == $skripsi['pembimbing_1_id'] ? 'selected' : ''; ?>><?= $dosen['nama']; ?></option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
-
-                        <div class="form-group">
-                            <label for="tgl_selesai">Tanggal Selesai</label>
-                            <input type="date" name="tgl_selesai" class="form-control" value="<?= $skripsi['tgl_selesai']; ?>" required>
-                        </div>
-
+                        
                         <div class="form-group">
                             <label for="tahun_akademik">Tahun Akademik</label>
                             <select name="tahun_akademik" class="form-control" required>
@@ -55,8 +54,8 @@
                                 // Get the current year
                                 $currentYear = date('Y');
 
-                                // Create options for 5 years before and after the current year
-                                for ($i = $currentYear - 5; $i <= $currentYear + 5; $i++) {
+                                // Loop through the years starting from the current year and going back to 2015
+                                for ($i = $currentYear; $i >= 2015; $i--) {
                                     $nextYear = $i + 1;
                                     $optionValue = $i . '/' . $nextYear;
                                     $selected = ($skripsi['tahun_akademik'] == $optionValue) ? 'selected' : '';

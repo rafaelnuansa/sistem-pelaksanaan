@@ -51,6 +51,9 @@ class KKNController extends BaseController
                 ->where('kkn_id', $kelompokId)
                 ->join('kkn', 'kkn_anggota.kkn_id = kkn.id')
                 ->join('mahasiswa', 'kkn_anggota.mahasiswa_id = mahasiswa.id')
+                ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
+                ->orderBy('kkn_anggota.is_ketua', 'DESC')
+                ->orderBy('mahasiswa.nama', 'ASC')
                 ->get()
                 ->getResultArray();
 
@@ -119,7 +122,6 @@ class KKNController extends BaseController
 
         // Jika mengisi form yang freetext
         $data = [
-            'lokasi_id' => $this->request->getPost('lokasi_id'),
             'nama_kepala_desa' => $this->request->getPost('nama_kepala_desa'),
             'no_kepala_desa' => $this->request->getPost('no_kepala_desa'),
         ];

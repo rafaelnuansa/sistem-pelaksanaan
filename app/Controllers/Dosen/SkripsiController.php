@@ -62,11 +62,11 @@ class SkripsiController extends BaseController
     public function jadwal_skripsi()
     {
         $jadwal_sidang = $this->db->table('skripsi_sidang')
-            ->select('skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospeng.nama as dospeng, dospem.nama as dospem, tempat_sidang.nama_tempat as tempat_nama, skripsi.id as skripsi_id, skripsi_nilai_sidang.*, mahasiswa.id as mahasiswa_id, skripsi.id as skripsi_id')
+            ->select('skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, dospeng.nama as dospeng, dospem.nama as dospem, tempat_sidang.nama_tempat as tempat_nama, skripsi.id as skripsi_id, skripsi_nilai.*, mahasiswa.id as mahasiswa_id, skripsi.id as skripsi_id')
             ->join('mahasiswa', 'mahasiswa.id = skripsi_sidang.mahasiswa_id', 'left')
             ->join('tempat_sidang', 'tempat_sidang.id_tempat = skripsi_sidang.tempat_id', 'left')
             ->join('dosen as dospeng', 'dospeng.id = skripsi_sidang.dospeng_id', 'left')
-            ->join('skripsi_nilai_sidang', 'skripsi_nilai_sidang.mahasiswa_id = mahasiswa.id', 'left')
+            ->join('skripsi_nilai', 'skripsi_nilai.mahasiswa_id = mahasiswa.id', 'left')
             ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
             ->join('dosen as dospem', 'dospem.id = skripsi.dosen_id', 'left')
             ->where('skripsi_sidang.dospeng_id', $this->dosenId)
@@ -85,104 +85,182 @@ class SkripsiController extends BaseController
         return view('dosen/skripsi/jadwal-sidang', $data);
     }
 
+    public function sempro()
+    {
+        $jadwal_sidang = $this->db->table('skripsi_sidang')
+        ->select('skripsi_sidang.id as idz, skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, 
+                  penguji1.nama as nama_penguji_1, penguji2.nama as nama_penguji_2, pembimbing1.nama as nama_pembimbing_1, pembimbing2.nama as nama_pembimbing_2,
+                  tempat_sidang.nama_tempat as tempat_nama, skripsi.id as skripsi_id, 
+                  skripsi_nilai_penilai_1.n1a as n1a_penilai_1, skripsi_nilai_penilai_1.n1b as n1b_penilai_1, skripsi_nilai_penilai_1.n1c as n1c_penilai_1,
+                  skripsi_nilai_penilai_1.n1d as n1d_penilai_1, skripsi_nilai_penilai_1.n1e as n1e_penilai_1, skripsi_nilai_penilai_1.n1f as n1f_penilai_1,
+                  skripsi_nilai_penilai_1.n2a as n2a_penilai_1, skripsi_nilai_penilai_1.n2b as n2b_penilai_1, skripsi_nilai_penilai_1.total as total_penilai_1,
+                  skripsi_nilai_penilai_2.n1a as n1a_penilai_2, skripsi_nilai_penilai_2.n1b as n1b_penilai_2, skripsi_nilai_penilai_2.n1c as n1c_penilai_2,
+                  skripsi_nilai_penilai_2.n1d as n1d_penilai_2, skripsi_nilai_penilai_2.n1e as n1e_penilai_2, skripsi_nilai_penilai_2.n1f as n1f_penilai_2,
+                  skripsi_nilai_penilai_2.n2a as n2a_penilai_2, skripsi_nilai_penilai_2.n2b as n2b_penilai_2, skripsi_nilai_penilai_2.total as total_penilai_2,
+                  skripsi_nilai_penilai_3.n1a as n1a_penilai_3, skripsi_nilai_penilai_3.n1b as n1b_penilai_3, skripsi_nilai_penilai_3.n1c as n1c_penilai_3,
+                  skripsi_nilai_penilai_3.n1d as n1d_penilai_3, skripsi_nilai_penilai_3.n1e as n1e_penilai_3, skripsi_nilai_penilai_3.n1f as n1f_penilai_3,
+                  skripsi_nilai_penilai_3.n2a as n2a_penilai_3, skripsi_nilai_penilai_3.n2b as n2b_penilai_3, skripsi_nilai_penilai_3.total as total_penilai_3,
+                  skripsi_nilai_penilai_4.n1a as n1a_penilai_4, skripsi_nilai_penilai_4.n1b as n1b_penilai_4, skripsi_nilai_penilai_4.n1c as n1c_penilai_4,
+                  skripsi_nilai_penilai_4.n1d as n1d_penilai_4, skripsi_nilai_penilai_4.n1e as n1e_penilai_4, skripsi_nilai_penilai_4.n1f as n1f_penilai_4,
+                  skripsi_nilai_penilai_4.n2a as n2a_penilai_4, skripsi_nilai_penilai_4.n2b as n2b_penilai_4, skripsi_nilai_penilai_4.total as total_penilai_4,
+                  mahasiswa.id as mahasiswa_id, skripsi.id as skripsi_id')
+        ->join('mahasiswa', 'mahasiswa.id = skripsi_sidang.mahasiswa_id', 'left')
+        ->join('tempat_sidang', 'tempat_sidang.id_tempat = skripsi_sidang.tempat_id', 'left')
+        ->join('dosen as penguji1', 'penguji1.id = skripsi_sidang.penguji_1_id', 'left')
+        ->join('dosen as penguji2', 'penguji2.id = skripsi_sidang.penguji_2_id', 'left')
+        ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
+        ->join('dosen as pembimbing1', 'pembimbing1.id = skripsi.pembimbing_1_id', 'left')
+        ->join('dosen as pembimbing2', 'pembimbing2.id = skripsi.pembimbing_2_id', 'left')
+        // Join for penilai 1
+        ->join('skripsi_nilai as skripsi_nilai_penilai_1', 'skripsi_nilai_penilai_1.penilai_id = skripsi_sidang.penguji_1_id', 'left')
+        // Join for penilai 2
+        ->join('skripsi_nilai as skripsi_nilai_penilai_2', 'skripsi_nilai_penilai_2.penilai_id = skripsi_sidang.penguji_2_id', 'left')
+        // Join for penilai 3 (assuming you have a column for penilai 3's ID)
+        ->join('skripsi_nilai as skripsi_nilai_penilai_3', 'skripsi_nilai_penilai_3.penilai_id = skripsi.pembimbing_1_id', 'left')
+        // Join for penilai 4 (assuming you have a column for penilai 4's ID)
+        ->join('skripsi_nilai as skripsi_nilai_penilai_4', 'skripsi_nilai_penilai_4.penilai_id = skripsi.pembimbing_2_id', 'left')
+        ->where('skripsi_sidang.tipe_sidang', 'seminar_proposal')
+        ->get()
+        ->getResultArray();
+    
+        $nilai = $this->db->table('skripsi_nilai')
+            ->select('*')
+            // ->join('dosen', 'dosen.id = skripsi_nilai.penilai_id')
+            ->join('skripsi_sidang', 'skripsi_sidang.id = skripsi_nilai.sidang_id')
+            ->where('skripsi_nilai.penilai_id', $this->dosenId)
+            ->where('skripsi_sidang.tipe_sidang', 'seminar_proposal')
+            ->get()
+            ->getRow();
+
+            // dd($nilai);
+        $data = [
+            'title' => 'Seminar Proposal',
+            'data' => $jadwal_sidang,
+            'dosenId' => $this->dosenId,
+            'nilai' => $nilai,
+        ];
+        return view('dosen/skripsi/jadwal-sidang', $data);
+    }
+
+    public function semhas()
+    {
+        $jadwal_sidang = $this->db->table('skripsi_sidang')
+        ->select('skripsi_sidang.id as idz, skripsi_sidang.*, mahasiswa.nim as nim, mahasiswa.nama as nama_mahasiswa, 
+                  penguji1.nama as nama_penguji_1, penguji2.nama as nama_penguji_2, pembimbing1.nama as nama_pembimbing_1, pembimbing2.nama as nama_pembimbing_2,
+                  tempat_sidang.nama_tempat as tempat_nama, skripsi.id as skripsi_id, 
+                  skripsi_nilai_penilai_1.n1a as n1a_penilai_1, skripsi_nilai_penilai_1.n1b as n1b_penilai_1, skripsi_nilai_penilai_1.n1c as n1c_penilai_1,
+                  skripsi_nilai_penilai_1.n1d as n1d_penilai_1, skripsi_nilai_penilai_1.n1e as n1e_penilai_1, skripsi_nilai_penilai_1.n1f as n1f_penilai_1,
+                  skripsi_nilai_penilai_1.n2a as n2a_penilai_1, skripsi_nilai_penilai_1.n2b as n2b_penilai_1, skripsi_nilai_penilai_1.total as total_penilai_1,
+                  skripsi_nilai_penilai_2.n1a as n1a_penilai_2, skripsi_nilai_penilai_2.n1b as n1b_penilai_2, skripsi_nilai_penilai_2.n1c as n1c_penilai_2,
+                  skripsi_nilai_penilai_2.n1d as n1d_penilai_2, skripsi_nilai_penilai_2.n1e as n1e_penilai_2, skripsi_nilai_penilai_2.n1f as n1f_penilai_2,
+                  skripsi_nilai_penilai_2.n2a as n2a_penilai_2, skripsi_nilai_penilai_2.n2b as n2b_penilai_2, skripsi_nilai_penilai_2.total as total_penilai_2,
+                  skripsi_nilai_penilai_3.n1a as n1a_penilai_3, skripsi_nilai_penilai_3.n1b as n1b_penilai_3, skripsi_nilai_penilai_3.n1c as n1c_penilai_3,
+                  skripsi_nilai_penilai_3.n1d as n1d_penilai_3, skripsi_nilai_penilai_3.n1e as n1e_penilai_3, skripsi_nilai_penilai_3.n1f as n1f_penilai_3,
+                  skripsi_nilai_penilai_3.n2a as n2a_penilai_3, skripsi_nilai_penilai_3.n2b as n2b_penilai_3, skripsi_nilai_penilai_3.total as total_penilai_3,
+                  skripsi_nilai_penilai_4.n1a as n1a_penilai_4, skripsi_nilai_penilai_4.n1b as n1b_penilai_4, skripsi_nilai_penilai_4.n1c as n1c_penilai_4,
+                  skripsi_nilai_penilai_4.n1d as n1d_penilai_4, skripsi_nilai_penilai_4.n1e as n1e_penilai_4, skripsi_nilai_penilai_4.n1f as n1f_penilai_4,
+                  skripsi_nilai_penilai_4.n2a as n2a_penilai_4, skripsi_nilai_penilai_4.n2b as n2b_penilai_4, skripsi_nilai_penilai_4.total as total_penilai_4,
+                  mahasiswa.id as mahasiswa_id, skripsi.id as skripsi_id')
+        ->join('mahasiswa', 'mahasiswa.id = skripsi_sidang.mahasiswa_id', 'left')
+        ->join('tempat_sidang', 'tempat_sidang.id_tempat = skripsi_sidang.tempat_id', 'left')
+        ->join('dosen as penguji1', 'penguji1.id = skripsi_sidang.penguji_1_id', 'left')
+        ->join('dosen as penguji2', 'penguji2.id = skripsi_sidang.penguji_2_id', 'left')
+        ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
+        ->join('dosen as pembimbing1', 'pembimbing1.id = skripsi.pembimbing_1_id', 'left')
+        ->join('dosen as pembimbing2', 'pembimbing2.id = skripsi.pembimbing_2_id', 'left')
+        // Join for penilai 1
+        ->join('skripsi_nilai as skripsi_nilai_penilai_1', 'skripsi_nilai_penilai_1.penilai_id = skripsi_sidang.penguji_1_id', 'left')
+        // Join for penilai 2
+        ->join('skripsi_nilai as skripsi_nilai_penilai_2', 'skripsi_nilai_penilai_2.penilai_id = skripsi_sidang.penguji_2_id', 'left')
+        // Join for penilai 3 (assuming you have a column for penilai 3's ID)
+        ->join('skripsi_nilai as skripsi_nilai_penilai_3', 'skripsi_nilai_penilai_3.penilai_id = skripsi.pembimbing_1_id', 'left')
+        // Join for penilai 4 (assuming you have a column for penilai 4's ID)
+        ->join('skripsi_nilai as skripsi_nilai_penilai_4', 'skripsi_nilai_penilai_4.penilai_id = skripsi.pembimbing_2_id', 'left')
+        ->where('skripsi_sidang.tipe_sidang', 'seminar_hasil')
+        ->get()
+        ->getResultArray();
+    
+        // dd($jadwal_sidang);
+        $nilai = $this->db->table('skripsi_nilai')
+            ->select('*')
+            // ->join('dosen', 'dosen.id = skripsi_nilai.penilai_id')
+            ->join('skripsi_sidang', 'skripsi_sidang.id = skripsi_nilai.sidang_id')
+            ->where('skripsi_nilai.penilai_id', $this->dosenId)
+            ->where('skripsi_sidang.tipe_sidang', 'seminar_hasil')
+            ->get()
+            ->getRow();
+
+            // dd($nilai);
+        $data = [
+            'title' => 'Seminar Proposal',
+            'data' => $jadwal_sidang,
+            'dosenId' => $this->dosenId,
+            'nilai' => $nilai,
+        ];
+        return view('dosen/skripsi/jadwal-sidang', $data);
+    }
+
 
     public function nilai()
     {
         $SkripsiNilaiModel = new SkripsiNilaiModel();
         $mahasiswa_id = $this->request->getVar('mahasiswa_id');
         $skripsi_id = $this->request->getVar('skripsi_id');
-        $dosen_id = $this->request->getVar('dosen_id');
+        $penilai_id = $this->dosenId;
         $sidang_id = $this->request->getVar('sidang_id');
-        $catatan = $this->request->getVar('catatan');
 
         // Check if the record already exists in the database
         $existingRecord = $SkripsiNilaiModel->where('sidang_id', $sidang_id)
             ->first();
-
+   
         // Retrieve the values from the request and calculate the total_nilai and other fields
-        $nilai_sikap = $this->request->getVar('nilai_sikap');
-        $nilai_penyajian_materi = $this->request->getVar('nilai_penyajian_materi');
-        $nilai_pendahuluan = $this->request->getVar('nilai_pendahuluan');
-        $nilai_tinjauan_pustaka = $this->request->getVar('nilai_tinjauan_pustaka');
-        $nilai_hasil_pembahasan = $this->request->getVar('nilai_hasil_pembahasan');
-        $nilai_kesimpulan_dan_saran = $this->request->getVar('nilai_kesimpulan_dan_saran');
-        $nilai_daftar_pustaka = $this->request->getVar('nilai_daftar_pustaka');
-        $nilai_argumentasi_penyaji = $this->request->getVar('nilai_argumentasi_penyaji');
-        $nilai_penguasaan_materi = $this->request->getVar('nilai_penguasaan_materi');
-        $status_ujian = $this->request->getVar('status_ujian');
+        $n1a = $this->request->getVar('n1a');
+        $n1b = $this->request->getVar('n1b');
+        $n1c = $this->request->getVar('n1c');
+        $n1d = $this->request->getVar('n1d');
+        $n1e = $this->request->getVar('n1e');
+        $n1f = $this->request->getVar('n1f');
+        $n2a = $this->request->getVar('n2a');
+        $n2b = $this->request->getVar('n2b');
+        $total = $this->request->getVar('total');
 
         // Calculate the total_nilai based on the provided values
-        $total_nilai = ($nilai_sikap +
-            $nilai_penyajian_materi +
-            $nilai_pendahuluan +
-            $nilai_tinjauan_pustaka +
-            $nilai_hasil_pembahasan +
-            $nilai_kesimpulan_dan_saran +
-            $nilai_daftar_pustaka +
-            $nilai_argumentasi_penyaji +
-            $nilai_penguasaan_materi
+        $total = (
+            $n1a +
+            $n1b +
+            $n1c +
+            $n1d +
+            $n1e +
+            $n1f +
+            $n2a +
+            $n2b 
         );
-
-        // Determine the nilai_mutu based on the total_nilai
-        if ($total_nilai >= 80.00) {
-            $nilai_mutu = 'A';
-            $status_ujian = true; // Set status ujian to "Lulus"
-        } elseif ($total_nilai >= 75.00) {
-            $nilai_mutu = 'AB';
-            $status_ujian = true; // Set status ujian to "Lulus"
-        } elseif ($total_nilai >= 70.00) {
-            $nilai_mutu = 'B';
-            $status_ujian = true; // Set status ujian to "Lulus"
-        } elseif ($total_nilai >= 65.00) {
-            $nilai_mutu = 'BC';
-            $status_ujian = true; // Set status ujian to "Lulus"
-        } elseif ($total_nilai >= 60.00) {
-            $nilai_mutu = 'C';
-            $status_ujian = true; // Set status ujian to "Lulus"
-        } elseif ($total_nilai >= 56.00) {
-            $nilai_mutu = 'CD';
-            $status_ujian = false; // Set status ujian to "Tidak Lulus"
-        } elseif ($total_nilai >= 46.00) {
-            $nilai_mutu = 'D';
-            $status_ujian = false; // Set status ujian to "Tidak Lulus"
-        } else {
-            $nilai_mutu = 'E';
-            $status_ujian = false; // Set status ujian to "Tidak Lulus"
-        }
 
         // Prepare data for insert/update
         $data = [
             'mahasiswa_id' => $mahasiswa_id,
             'skripsi_id' => $skripsi_id,
-            'dosen_id' => $dosen_id,
+            'penilai_id' => $penilai_id,
             'sidang_id' => $sidang_id,
-            'nilai_sikap' => $nilai_sikap,
-            'nilai_penyajian_materi' => $nilai_penyajian_materi,
-            'nilai_pendahuluan' => $nilai_pendahuluan,
-            'nilai_tinjauan_pustaka' => $nilai_tinjauan_pustaka,
-            'nilai_hasil_pembahasan' => $nilai_hasil_pembahasan,
-            'nilai_kesimpulan_dan_saran' => $nilai_kesimpulan_dan_saran,
-            'nilai_daftar_pustaka' => $nilai_daftar_pustaka,
-            'nilai_argumentasi_penyaji' => $nilai_argumentasi_penyaji,
-            'nilai_penguasaan_materi' => $nilai_penguasaan_materi,
-            'catatan' => $catatan,
-            'total_nilai' => $total_nilai,
-            'nilai_mutu' => $nilai_mutu,
-            'status_ujian' => $status_ujian,
+            'n1a' => $n1a,
+            'n1b' => $n1b,
+            'n1c' => $n1c,
+            'n1d' => $n1d,
+            'n1e' => $n1e,
+            'n1f' => $n1f,
+            'n2a' => $n2a,
+            'n2b' => $n2b,
+            'total' => $total,
         ];
 
-        // dd($data);
         // Check if the record exists, then perform insert/update accordingly
         if ($existingRecord) {
-            // If the record exists, update it
-            $SkripsiNilaiModel->update($existingRecord['id_nilai'], $data);
+            $SkripsiNilaiModel->update($existingRecord['id'], $data);
         } else {
-            // If the record does not exist, insert it
             $SkripsiNilaiModel->insert($data);
         }
 
         session()->setFlashdata('success', 'Berhasil dinilai');
-
         return redirect()->back();
     }
 
@@ -193,15 +271,15 @@ class SkripsiController extends BaseController
 
         // Fetch the data from the database based on the $sidang_id
         $data = $SkripsiNilaiModel
-            ->select('skripsi_nilai_sidang.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, skripsi.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, skripsi_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, skripsi_jadwal_sidang.*')
-            ->join('mahasiswa', 'mahasiswa.id = skripsi_nilai_sidang.mahasiswa_id')
-            ->join('dosen', 'dosen.id = skripsi_nilai_sidang.dosen_id')
+            ->select('skripsi_nilai.*, fakultas.nama as fakultas, prodi.nama_prodi as prodi, dosen.nama as nama_dosen, skripsi.*, mahasiswa.nama as nama_mahasiswa, mahasiswa.nim as nim, mahasiswa.angkatan as angkatan, skripsi_judul_laporan.judul_laporan as judul_laporan, tempat_sidang.nama_tempat as tempat_nama, dosen.nama as dospeng, dosen.nidn as nidn, skripsi_jadwal_sidang.*')
+            ->join('mahasiswa', 'mahasiswa.id = skripsi_nilai.mahasiswa_id')
+            ->join('dosen', 'dosen.id = skripsi_nilai.dosen_id')
             ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
             ->join('fakultas', 'fakultas.id = prodi.fakultas_id')
             ->join('skripsi_anggota', 'skripsi_anggota.mahasiswa_id = mahasiswa.id')
             ->join('skripsi', 'skripsi.id = skripsi_anggota.skripsi_id')
             ->join('skripsi_judul_laporan', 'skripsi_judul_laporan.mahasiswa_id = mahasiswa.id')
-            ->join('skripsi_jadwal_sidang', 'skripsi_jadwal_sidang.id_skripsi_jadwal_sidang  = skripsi_nilai_sidang.sidang_id')
+            ->join('skripsi_jadwal_sidang', 'skripsi_jadwal_sidang.id_skripsi_jadwal_sidang  = skripsi_nilai.sidang_id')
             ->join('tempat_sidang', 'tempat_sidang.id_tempat  = skripsi_jadwal_sidang.tempat_id')
             ->where('sidang_id', $sidang_id)
             ->get()->getRow();
@@ -248,47 +326,47 @@ class SkripsiController extends BaseController
     public function approve_bimbingan()
     {
         $id = $this->request->getVar('id');
-    
+
         // Cari data berdasarkan ID yang diberikan
         $data = $this->db->table('skripsi_bimbingan')->where('id', $id)->get()->getRow();
-    
+
         if (!$data) {
             // Data dengan ID yang diberikan tidak ditemukan
             return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
-    
+
         $updatedData = [
             'status' => 'Telah divalidasi'
         ];
-    
+
         $this->db->table('skripsi_bimbingan')->where('id', $id)->update($updatedData);
         session()->setFlashdata('success', 'Jurnal berhasil divalidasi');
         return redirect()->back();
     }
-    
-    
+
+
 
     public function reset_bimbingan()
     {
         $id = $this->request->getVar('id');
-    
+
         // Cari data berdasarkan ID yang diberikan
         $data = $this->db->table('skripsi_bimbingan')->where('id', $id)->get()->getRow();
-    
+
         if (!$data) {
             // Data dengan ID yang diberikan tidak ditemukan
             return redirect()->back()->with('error', 'Data tidak ditemukan');
         }
-    
+
         $updatedData = [
             'status' => 'Menunggu Validasi'
         ];
-    
+
         $this->db->table('skripsi_bimbingan')->where('id', $id)->update($updatedData);
         session()->setFlashdata('success', 'Status berhasil direset menjadi "Menunggu Validasi"');
         return redirect()->back();
     }
- 
+
     public function cetak_revisi()
     {
         $bab = $this->request->getVar('bab[]');

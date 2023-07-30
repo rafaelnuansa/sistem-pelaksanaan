@@ -12,7 +12,63 @@
 <?php endif; ?>
 <div class="box">
   <div class="box-header with-border">
-    <h3 class="box-title">Jurnal Bimbingan</h3>
+    <h3 class="box-title">Jurnal Pembimbing 1</h3>
+
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body">
+    <?php if ($skripsi) : ?>
+      <button type="button" class="btn btn-primary mb-2" style="margin-right: 5px;" data-toggle="modal" data-target="#modal-tambah">
+        Tambah Jurnal
+      </button>
+      <div class="table-responsive" style="margin-top:20px">
+        <table class="table table-hover table-bordered datatable" style="margin-top: 10px;">
+          <thead class="bg-primary">
+            <tr>
+              <th>No</th>
+              <th>Hari/Tanggal</th>
+              <th>Catatan</th>
+              <th>Status</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php $no = 1;
+            foreach ($data as $i => $row) : ?>
+              <tr>
+                <td><?= $no++ ?></td>
+                <td><?= $row['tanggal'] ?></td>
+                <td><?= $row['catatan'] ?></td>
+                <?php if ($row['status'] == 'Telah divalidasi') : ?>
+                  <td><span class="label label-primary"><?= $row['status'] ?></span></td>
+                <?php else : ?>
+                  <td><span class="label label-danger"><?= $row['status'] ?></span></td>
+                <?php endif; ?>
+                <td class="text-center">
+                  <?php if ($row['status'] == 'Telah divalidasi') : ?>
+                  <?php else : ?>
+                    <a href="#" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modal-edit-<?= $row['id'] ?>"><i class="fa fa-edit"></i></a>
+                    <a href="<?= route_to('mahasiswa.skripsi.bimbingan.delete', $row['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"><i class="fa fa-trash"></i></a>
+                  <?php endif; ?>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          </tbody>
+        </table>
+      </div>
+    <?php else : ?>
+      <div class="alert alert-info">Skripsi Bimbingan Belum tersedia.</div>
+    <?php endif; ?>
+  </div>
+</div>
+
+
+<div class="box">
+  <div class="box-header with-border">
+    <h3 class="box-title">Jurnal Pembimbing 2</h3>
 
     <div class="box-tools pull-right">
       <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">

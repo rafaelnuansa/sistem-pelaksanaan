@@ -92,19 +92,21 @@
             </a>
           </li>
           
-          <li class="<?= (uri_string() == 'mahasiswa/skripsi/sidang') ? 'active' : '' ?>">
-            <a href="<?= base_url('mahasiswa/skripsi/sidang') ?>">
-              <i class="fa fa-calendar"></i> <span>Persyaratan Sidang</span>
+          <li class="<?= (uri_string() == 'mahasiswa/skripsi/sempro') ? 'active' : '' ?>">
+            <a href="<?= base_url('mahasiswa/skripsi/sempro') ?>">
+              <i class="fa fa-calendar"></i> <span>Seminar Proposal</span>
             </a>
           </li>
+          
+          <li class="<?= (uri_string() == 'mahasiswa/skripsi/semhas') ? 'active' : '' ?>">
+            <a href="<?= base_url('mahasiswa/skripsi/semhas') ?>">
+              <i class="fa fa-calendar"></i> <span>Sidang Skripsi</span>
+            </a>
+          </li>
+          
         </ul>
       </li>
 
-      <li class="<?= (uri_string() == 'mahasiswa/berkas') ? 'active' : '' ?>">
-        <a href="<?= base_url('mahasiswa/berkas') ?>">
-          <i class="fa fa-briefcase"></i> <span>Upload Berkas</span>
-        </a>
-      </li>
     </ul>
   </section>
   <!-- /.sidebar -->

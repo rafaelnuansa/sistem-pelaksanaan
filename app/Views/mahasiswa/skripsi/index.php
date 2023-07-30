@@ -36,14 +36,24 @@
               <td><?= $skripsi->nama_mahasiswa ?></td>
             </tr>
             <tr>
-              <th>NIDN Dosen</th>
+              <th>NIDN Pembimbing 1</th>
               <td>
-                <?php echo $dospem->nidn ?? 'Belum Ada Pembimbing'; ?>
+                <?php echo $pembimbing1->nidn ?? 'Belum Ada Pembimbing'; ?>
             </tr>
             <tr>
-              <th>Dosen Pembimbing</th>
+              <th>Nama Pembimbing 1</th>
               <td>
-                <?php echo $dospem->dospem ?? 'Belum Ada Pembimbing'; ?></td>
+                <?php echo $pembimbing1->dospem ?? 'Belum Ada Pembimbing'; ?></td>
+            </tr>
+            <tr>
+              <th>NIDN Pembimbing 2</th>
+              <td>
+                <?php echo $pembimbing2->nidn ?? 'Belum Ada Pembimbing'; ?>
+            </tr>
+            <tr>
+              <th>Nama Pembimbing 2</th>
+              <td>
+                <?php echo $pembimbing2->dospem ?? 'Belum Ada Pembimbing'; ?></td>
             </tr>
             <tr>
 

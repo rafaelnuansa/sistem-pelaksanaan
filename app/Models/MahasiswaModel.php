@@ -79,7 +79,8 @@ class MahasiswaModel extends Model
         $query = $this->select('mahasiswa.*, mahasiswa.id as mahasiswa_id, prodi.nama_prodi as nama_prodi, mahasiswa.*, skripsi.*, mahasiswa.nama as nama_mahasiswa')
             ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id')
             ->join('prodi', 'mahasiswa.prodi_id = prodi.id')
-            ->where('skripsi.dosen_id', $dosen_id)
+            ->where('skripsi.pembimbing_1_id', $dosen_id)
+            ->orWhere('skripsi.pembimbing_2_id', $dosen_id)
             ->groupBy('mahasiswa.id')
             ->get()->getResultArray();
         // dd($query);
@@ -94,6 +95,17 @@ class MahasiswaModel extends Model
             ->join('kkn', 'kkn.id = kkn_anggota.kkn_id')
             ->join('dosen as dospem', 'dospem.id = kkn.dosen_id')
             ->join('kkn_lokasi', 'kkn_lokasi.id = kkn.lokasi_id', 'left')
+            ->get();
+        return $query->getResultArray();
+    }
+
+    public function getMahasiswaHasSkripsi()
+    {
+        $query = $this->select('mahasiswa.*, prodi.nama_prodi, skripsi.*, mahasiswa.id as mhs_id, pembimbing1.nama as nama_pembimbing_1, pembimbing2.nama as nama_pembimbing_2')
+            ->join('prodi', 'prodi.id = mahasiswa.prodi_id')
+            ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id')
+            ->join('dosen as pembimbing1', 'pembimbing1.id = skripsi.pembimbing_1_id')
+            ->join('dosen as pembimbing2', 'pembimbing2.id = skripsi.pembimbing_2_id')
             ->get();
         return $query->getResultArray();
     }

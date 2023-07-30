@@ -27,7 +27,6 @@
                                     <th>Tanggal Selesai</th>
                                     <th>Tahun Akademik</th>
                                     <th>Dosen</th>
-                                    <th>Prodi</th>
                                     <th>Desa</th>
                                     <th>Ketua</th>
                                     <th>Aksi</th>
@@ -42,9 +41,14 @@
                                         <td><?= $kkn['tgl_selesai']; ?></td>
                                         <td><?= $kkn['tahun_akademik']; ?></td>
                                         <td><?= $kkn['nama_dosen']; ?></td>
-                                        <td><?= $kkn['nama_prodi']; ?></td>
                                         <td><?= $kkn['nama_lokasi'] ?? ''; ?></td>
-                                        <td> <span class="label label-primary"> <?= $kkn['ketua_kelompok'] ?></span>
+                                        <td>
+                                            <?php if ($kkn['ketua_kelompok'] !== null && $kkn['ketua_kelompok'] !== "") : ?>
+                                                <span class="label label-primary"><?= $kkn['ketua_kelompok'] ?></span>
+                                            <?php else : ?>
+                                                <span class="label label-danger">Belum ada ketua</span>
+                                            <?php endif; ?>
+                                        </td>
 
                                         </td>
                                         <td>

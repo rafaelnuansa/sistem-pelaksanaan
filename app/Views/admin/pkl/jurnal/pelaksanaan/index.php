@@ -40,7 +40,7 @@
                         <td><?= $mhs['nama'] ?></td>
                         <td><?= $mhs['nama_prodi'] ?></td>
                         <td><?= $mhs['nama_kelompok'] ?></td>
-                        <td><?= $mhs['nama_perusahaan'] ?></td>
+                        <td><?= $mhs['nama_perusahaan'] ?? 'Belum Ada Instansi' ?></td>
                         <td> 
                             <a href="<?= route_to('admin.jurnal.pelaksanaan.show', $mhs['mhs_id']) ?>" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></a>
                             <!-- <a href="<?= route_to('admin.jurnal.pelaksanaan.delete', $mhs['id']) ?>" class="btn btn-xs btn-danger">Hapus</a> -->

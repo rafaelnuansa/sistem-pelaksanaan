@@ -14,6 +14,96 @@
 
 <div class="box">
   <div class="box-header with-border">
+    <h3 class="box-title">Seminar Proposal - Menunggu Persetujuan</h3>
+    <div class="box-tools pull-right">
+      <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+        <i class="fa fa-minus"></i></button>
+    </div>
+  </div>
+  <div class="box-body">
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped datatable" style=" margin-top: 10px;">
+        <thead class="bg-primary">
+          <tr>
+            <th>No</th>
+            <th>NIM</th>
+            <th>Mahasiswa</th>
+            <th>Transkrip
+              <br>Nilai
+            </th>
+            <th>KRS</th>
+            <th>Sertifikat<br>
+              Seminar Kompetensi
+            </th>
+            <th>Nota Dinas Pemb</th>
+            <th>Kartu Bimb</th>
+            <th>Kartu Peserta</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($pending_sempro as $i => $row) : ?>
+            <tr>
+              <td><?= ++$i ?></td>
+              <td><?= $row['nim'] ?></td>
+              <td><?= $row['nama'] ?></td>
+              <td>
+                <?php if ($row['transkrip_nilai']) : ?>
+                  <a target="_blank" href="<?= base_url('uploads/skripsi/' . $row['transkrip_nilai']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-file"></i></a>
+                <?php else : ?>
+                  -
+                <?php endif; ?>
+              </td>
+              <td>
+                <?php if ($row['krs']) : ?>
+                  <a target="_blank" href="<?= base_url('uploads/skripsi/' . $row['krs']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-file"></i></a>
+                <?php else : ?>
+                  -
+                <?php endif; ?>
+              </td>
+              <td>
+                <?php if ($row['sertifikat_seminar_kompetensi']) : ?>
+                  <a target="_blank" href="<?= base_url('uploads/skripsi/' . $row['sertifikat_seminar_kompetensi']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-file"></i></a>
+                <?php else : ?>
+                  -
+                <?php endif; ?>
+              </td>
+              <td>
+                <?php if ($row['nota_dinas_pembimbing']) : ?>
+                  <a target="_blank" href="<?= base_url('uploads/skripsi/' . $row['nota_dinas_pembimbing']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-file"></i></a>
+                <?php else : ?>
+                  -
+                <?php endif; ?>
+              </td>
+              <td>
+                <?php if ($row['kartu_bimbingan_skripsi']) : ?>
+                  <a target="_blank" href="<?= base_url('uploads/skripsi/' . $row['kartu_bimbingan_skripsi']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-file"></i></a>
+                <?php else : ?>
+                  -
+                <?php endif; ?>
+              </td>
+              <td>
+                <?php if ($row['kartu_peserta_seminar_proposal']) : ?>
+                  <a target="_blank" href="<?= base_url('uploads/skripsi/' . $row['kartu_peserta_seminar_proposal']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-file"></i></a>
+                <?php else : ?>
+                  -
+                <?php endif; ?>
+              </td>
+              <td><span class="label label-primary"><?= $row['status'] ?? '' ?></span></td>
+              <td class="text-center">
+                <button class="btn btn-success approve-sempro btn-sm" data-id="<?= $row['id'] ?>" data-mahasiswa-id="<?= $row['mahasiswa_id'] ?>" data-mahasiswa-nama="<?= $row['nama'] ?>" data-nama-dospem="<?= $row['dospem_nama'] ?>"><i class="fa fa-check"></i></button>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="box">
+  <div class="box-header with-border">
     <h3 class="box-title">Seminar Hasil - Menunggu Persetujuan</h3>
     <div class="box-tools pull-right">
       <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
@@ -116,7 +206,7 @@
               </td>
               <td><span class="label label-primary"><?= $row['status'] ?? '' ?></span></td>
               <td class="text-center">
-                <button class="btn btn-success approve btn-sm" data-id="<?= $row['id'] ?>" data-mahasiswa-id="<?= $row['mahasiswa_id'] ?>" data-mahasiswa-nama="<?= $row['nama'] ?>" data-nama-dospem="<?= $row['dospem_nama'] ?>"><i class="fa fa-check"></i></button>
+                <button class="btn btn-success approve-semhas btn-sm" data-id="<?= $row['id'] ?>" data-mahasiswa-id="<?= $row['mahasiswa_id'] ?>" data-mahasiswa-nama="<?= $row['nama'] ?>" data-nama-dospem="<?= $row['dospem_nama'] ?>"><i class="fa fa-check"></i></button>
               </td>
             </tr>
           <?php endforeach; ?>
@@ -137,9 +227,6 @@
     </div>
   </div>
   <div class="box-body">
-    <!-- <div class="py-2">
-      <a href="<?= base_url('downloads/surat-tugas.pdf') ?>" class="btn btn-primary" target="_blank"><i class="fa fa-print" style="margin-right: 4px;"></i> Cetak Surat Tugas</a>
-    </div> -->
     <div class="table-responsive">
       <table class="table table-hover datatable " style="border: 1px solid #f0f0f0; margin-top: 10px;">
         <thead class="bg-primary">
@@ -156,7 +243,7 @@
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($data as $i => $row) : ?>
+          <?php foreach ($jadwal_sempro as $i => $row) : ?>
             <tr>
               <td><?= ++$i ?></td>
               <td><?= $row['nim'] ?></td>
@@ -180,8 +267,6 @@
     </div>
   </div>
 </div>
-
-
 
 <div class="box">
   <div class="box-header with-border">
@@ -195,7 +280,7 @@
   </div>
   <div class="box-body">
     <div class="table-responsive">
-      <table class="table table-hover datatable " style="border: 1px solid #f0f0f0; margin-top: 10px;">
+      <table class="table table-hover datatable" style="border: 1px solid #f0f0f0; margin-top: 10px;">
         <thead class="bg-primary">
           <tr>
             <th>No</th>
@@ -210,7 +295,7 @@
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($data as $i => $row) : ?>
+          <?php foreach ($jadwal_semhas as $i => $row) : ?>
             <tr>
               <td><?= ++$i ?></td>
               <td><?= $row['nim'] ?></td>
@@ -235,9 +320,11 @@
   </div>
 </div>
 
+
+
 <!-- /.box -->
 
-<div class="modal fade" id="modal-approve">
+<div class="modal fade" id="modal-approve-semhas">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -246,7 +333,7 @@
         <h4 class="modal-title">Tambahkan Jadwal Seminar Hasil</h4>
       </div>
       <div class="modal-body">
-        <form method="POST" action="<?= route_to('admin.skripsi.sidang.simpan') ?>">
+        <form method="POST" action="<?= route_to('admin.skripsi.sidang.simpan_semhas') ?>">
           <input type="hidden" name="id_daftar">
           <input type="hidden" name="mahasiswa_id">
           <div class="row mb-2">
@@ -330,7 +417,7 @@
         <h4 class="modal-title">Tambahkan Jadwal Seminar Proposal</h4>
       </div>
       <div class="modal-body">
-        <form method="POST" action="<?= route_to('admin.skripsi.sidang.simpan') ?>">
+        <form method="POST" action="<?= route_to('admin.skripsi.sidang.simpan_sempro') ?>">
           <input type="hidden" name="id_daftar">
           <input type="hidden" name="mahasiswa_id">
           <div class="row mb-2">
@@ -410,13 +497,22 @@
 
 <?= $this->section('script'); ?>
 <script>
-  $('.approve').click(function() {
-    $('#modal-approve [name="id_daftar"]').val($(this).attr('data-id'));
-    $('#modal-approve [name="mahasiswa_id"]').val($(this).attr('data-mahasiswa-id'));
-    $('#modal-approve [name="mahasiswa_nama"]').val($(this).attr('data-mahasiswa-nama'));
-    $('#modal-approve [name="nama_kelompok"]').val($(this).attr('data-nama-kelompok'));
-    $('#modal-approve [name="nama_dospem"]').val($(this).attr('data-nama-dospem'));
-    $('#modal-approve').modal('show');
+  $('.approve-semhas').click(function() {
+    $('#modal-approve-semhas [name="id_daftar"]').val($(this).attr('data-id'));
+    $('#modal-approve-semhas [name="mahasiswa_id"]').val($(this).attr('data-mahasiswa-id'));
+    $('#modal-approve-semhas [name="mahasiswa_nama"]').val($(this).attr('data-mahasiswa-nama'));
+    $('#modal-approve-semhas [name="nama_kelompok"]').val($(this).attr('data-nama-kelompok'));
+    $('#modal-approve-semhas [name="nama_dospem"]').val($(this).attr('data-nama-dospem'));
+    $('#modal-approve-semhas').modal('show');
+  });
+
+  $('.approve-sempro').click(function() {
+    $('#modal-approve-sempro [name="id_daftar"]').val($(this).attr('data-id'));
+    $('#modal-approve-sempro [name="mahasiswa_id"]').val($(this).attr('data-mahasiswa-id'));
+    $('#modal-approve-sempro [name="mahasiswa_nama"]').val($(this).attr('data-mahasiswa-nama'));
+    $('#modal-approve-sempro [name="nama_kelompok"]').val($(this).attr('data-nama-kelompok'));
+    $('#modal-approve-sempro [name="nama_dospem"]').val($(this).attr('data-nama-dospem'));
+    $('#modal-approve-sempro').modal('show');
   });
 
   $('.edit').click(function() {

@@ -15,7 +15,6 @@ class KKNModel extends Model
         'tgl_selesai',
         'tahun_akademik',
         'dosen_id',
-        'prodi_id',
         'lokasi_id',
         'nama_kepala_desa',
         'no_kepala_desa',

@@ -29,25 +29,39 @@ class SkripsiSidangController extends BaseController
 
     public function index()
     {
-        
-        $jadwalSidangSemhas = $this->SkripsiModel->getSidangSemhasSessionMhs();
-        $jadwalSidangSempro= $this->SkripsiModel->getSidangSemproSessionMhs();
+         
+        $jadwalSidangSempro = $this->SkripsiModel->getSidangSemproSessionMhs();
         // Check if the student has registered before
         $mahasiswaId = session()->get('mahasiswa_id');
-        $isRegisteredSemhas = $this->db->table('skripsi_semhas')->where('mahasiswa_id', $mahasiswaId)->get()->getResultArray();
         $isRegisteredSempro = $this->db->table('skripsi_sempro')->where('mahasiswa_id', $mahasiswaId)->get()->getResultArray();
-        // dd($isRegisteredSempro);
+    
         $data = [
-            'title' => 'Jadwal Sidang Skripsi',
-            'seminar_hasil' =>  $jadwalSidangSemhas,
+            'title' => 'Seminar Proposal',
             'seminar_proposal' =>  $jadwalSidangSempro,
-            'register_semhas' => $isRegisteredSemhas,
             'register_sempro' => $isRegisteredSempro,
             'jurusan' => $this->ProdiModel->findAll(),
             'skripsiId' => $this->skripsiId ?? null,
         ];
 
-        return view('mahasiswa/skripsi/sidang', $data);
+        return view('mahasiswa/skripsi/sempro', $data);
+    }  
+
+    public function semhas()
+    {
+        
+        $jadwalSidangSemhas = $this->SkripsiModel->getSidangSemhasSessionMhs();
+        // Check if the student has registered before
+        $mahasiswaId = session()->get('mahasiswa_id');
+        $isRegisteredSemhas = $this->db->table('skripsi_semhas')->where('mahasiswa_id', $mahasiswaId)->get()->getResultArray();
+        $data = [
+            'title' => 'Seminar hasil',
+            'seminar_hasil' =>  $jadwalSidangSemhas,
+            'register_semhas' => $isRegisteredSemhas,
+            'jurusan' => $this->ProdiModel->findAll(),
+            'skripsiId' => $this->skripsiId ?? null,
+        ];
+
+        return view('mahasiswa/skripsi/semhas', $data);
     }  
 
     public function daftar_semhas()
@@ -127,7 +141,6 @@ class SkripsiSidangController extends BaseController
         return redirect()->back();
     }
      
- 
     public function daftar_sempro()
     {
         $skripsiSemproModel = new SkripsiSemproModel();

@@ -38,11 +38,11 @@
 </head>
  
 <body>
-<h2>Pelaksanaan Praktek Kerja Lapangan</h2>
+<h2>Pelaksanaan Praktek Kerja Lapangan</h2> 
     <p>
+        NIM : <?= $mahasiswa->nim; ?><br>
         Nama Mahasiswa : <?= $mahasiswa->nama; ?><br>
-        NIM : <?= $mahasiswa->nama; ?><br>
-        Dosen Pembibming : <?= $mahasiswa->nama; ?><br>
+        Dosen Pembibming : <?= $mahasiswa->nama_pembimbing; ?><br>
         Program Studi : <?= $prodi->nama_prodi; ?><br>
         Tahun Akademik: <?= $mahasiswa->tahun_akademik ?><br>
     </p>
@@ -73,7 +73,7 @@
             </tbody>
         </table>
     <?php else : ?>
-        <p>Tidak ada data yang sesuai dengan filter yang diberikan.</p>
+        <p>Tidak ada data.</p>
     <?php endif; ?>
 </body>
 

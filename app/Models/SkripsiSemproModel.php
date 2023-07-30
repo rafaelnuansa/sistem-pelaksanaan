@@ -29,10 +29,11 @@ class SkripsiSemproModel extends Model
 
     public function pending()
     {
-        return $this->select('mahasiswa.*, skripsi.*, skripsi_sempro.*, dospem.nama as dospem_nama, dospem.id as dospem_id')
+        return $this->select('mahasiswa.*, skripsi.*, skripsi_sempro.*, pembimbing_1.nama as nama_pembimbing_1, pembimbing_2.nama as nama_pembimbing_2, pembimbing_1.id as pembimbing_1_id,  pembimbing_2.id as pembimbing_2_id')
             ->join('mahasiswa', 'mahasiswa.id = skripsi_sempro.mahasiswa_id', 'left')
             ->join('skripsi', 'skripsi.mahasiswa_id = mahasiswa.id', 'left')
-            ->join('dosen as dospem', 'dospem.id = skripsi.dosen_id', 'left')
+            ->join('dosen as pembimbing_1', 'pembimbing_1.id = skripsi.pembimbing_1_id', 'left')
+            ->join('dosen as pembimbing_2', 'pembimbing_2.id = skripsi.pembimbing_2_id', 'left')
             ->where('skripsi_sempro.status', 'pending')
             ->findAll();
     }

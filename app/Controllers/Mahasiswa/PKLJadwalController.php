@@ -40,7 +40,7 @@ class PKLJadwalController extends BaseController
         ->join('pkl_anggota', 'pkl_anggota.mahasiswa_id = mahasiswa.id')
         ->join('pkl', 'pkl.id = pkl_anggota.pkl_id')
         ->join('dosen as dospem', 'dospem.id = pkl.dosen_id')
-        ->join('pkl_judul_laporan', 'pkl_judul_laporan.mahasiswa_id = mahasiswa.id')
+        ->join('pkl_judul_laporan', 'pkl_judul_laporan.mahasiswa_id = mahasiswa.id', 'left')
         ->join('tempat_sidang', 'tempat_sidang.id_tempat = pkl_jadwal_sidang.tempat_id')
         ->join('pkl_nilai_sidang', 'pkl_jadwal_sidang.id_pkl_jadwal_sidang = pkl_nilai_sidang.sidang_id', 'left') // Use left join instead of inner join
         ->where('pkl_jadwal_sidang.mahasiswa_id', $this->mahasiswaId)

@@ -15,11 +15,11 @@ class KKNJurnalMonitoringModel extends Model
     {
         $query = $this->select('kkn_jurnal_monitoring.*, mahasiswa.*, kkn.*')
             ->join('mahasiswa', 'mahasiswa.id = kkn_jurnal_monitoring.mahasiswa_id')
-            ->join('kkn', 'kkn.id = kkn_jurnal_monitoring.kkn_id')
+            ->join('kkn', 'kkn.id = kkn_jurnal_monitoring.kkn_id', 'left')
             ->orderBy('kkn_jurnal_monitoring.tanggal', 'asc')
-            ->where('mahasiswa_id', $id_mahasiswa)
+            ->where('kkn_jurnal_monitoring.mahasiswa_id', $id_mahasiswa)
             ->get();
- 
+  
         return $query->getResultArray();
     }
     // Mengambil data jurnal monitoring beserta data mahasiswa dan kkn terkait

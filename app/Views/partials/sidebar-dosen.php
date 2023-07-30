@@ -72,9 +72,15 @@
               <i class="fa fa-briefcase"></i> <span>Jurnal Bimbingan</span>
             </a>
           </li>
-          <li class="<?= (uri_string() == 'dosen/skripsi/jadwal') ? 'active' : '' ?>">
-            <a href="<?= base_url('dosen/skripsi/jadwal') ?>">
-              <i class="fa fa-calendar"></i> <span>Jadwal Sidang</span>
+          <li class="<?= (uri_string() == 'dosen/skripsi/sempro') ? 'active' : '' ?>">
+            <a href="<?= base_url('dosen/skripsi/sempro') ?>">
+              <i class="fa fa-calendar"></i> <span>Seminar Proposal</span>
+            </a>
+          </li>
+           
+          <li class="<?= (uri_string() == 'dosen/skripsi/semhas') ? 'active' : '' ?>">
+            <a href="<?= base_url('dosen/skripsi/semhas') ?>">
+              <i class="fa fa-calendar"></i> <span>Sidang Skripsi</span>
             </a>
           </li>
         </ul>

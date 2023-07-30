@@ -20,7 +20,7 @@ class SkripsiBimbinganController extends BaseController
 
     public function index()
     {
-        $mahasiswa = $this->mahasiswaModel->getMahasiswaHasPKL();
+        $mahasiswa = $this->mahasiswaModel->getMahasiswaHasSkripsi();
         $data = [
             'title' => 'Bimbingan Skripsi',
             'mahasiswa' => $mahasiswa
@@ -31,16 +31,18 @@ class SkripsiBimbinganController extends BaseController
 
     public function show($id)
     {
-        $jurnal = $this->SkripsiBimbinganModel->getJurnalBimbinganByIdMahasiswa($id);
+        $jurnal = $this->SkripsiBimbinganModel->getPembimbing1($id);
+        $jurnal2 = $this->SkripsiBimbinganModel->getPembimbing2($id);
         $mhs = $this->db->table('mahasiswa')->select('*')->where('id', $id)->get()->getRow();
         // dd($mhs);
         $data = [
             'title' => 'Jurnal Bimbingan',
             'mahasiswa' => $mhs,
-            'jurnals' => $jurnal
+            'jurnals' => $jurnal,
+            'jurnals2' => $jurnal2
         ];
      
-        return view('admin/pkl/jurnal/bimbingan/show', $data);
+        return view('admin/skripsi/jurnal/bimbingan/show', $data);
     }
     
 }

@@ -26,7 +26,6 @@
 
                     <p>Nama Kelompok: <b><?= $kelompok ?></b></p>
                     <p>Tahun Pelaksanaan: <b><?= $tgl_mulai ?> - <?= $tgl_selesai ?></b></p>
-                    <p>Program Studi: <b><?= $prodi ?></b></p>
                     <p>Dosen Pembimbing: <b><?= $dospem ?></b></p>
                 
                     <div class="table-resposive">
@@ -87,7 +86,6 @@
 
             </div>
             <div class="modal-body">
-
                 <form method="POST" action="<?= base_url('kkn/kelompok') ?>">
                     <table class="table table-hover" style="border: 1px solid #f0f0f0; margin-top: 10px;" id="mahasiswa">
                         <thead>
@@ -95,6 +93,7 @@
                                 <th>No</th>
                                 <th>NIM</th>
                                 <th>Nama Mahasiswa</th>
+                                <th>Prodi</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -102,12 +101,13 @@
                             <?php $nomor = 0; ?>
 
                             <?php foreach ($mahasiswa as $row) : ?>
-                                <tr>
+                                <tr> 
                                     <td><?= ++$nomor ?></td>
                                     <td><?= $row['nim'] ?></td>
                                     <td><?= $row['nama'] ?></td>
+                                    <td><?= $row['nama_prodi'] ?></td>
                                     <td class="text-center">
-                                        <a href="<?= base_url('admin/kkn/anggota/tambah?kkn=' . $id_kelompok . '&mahasiswa_id=' . $row['id']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i></a>
+                                        <a href="<?= base_url('admin/kkn/anggota/tambah?kkn=' . $id_kelompok . '&mahasiswa_id=' . $row['mhs_id']) ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus-circle"></i></a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

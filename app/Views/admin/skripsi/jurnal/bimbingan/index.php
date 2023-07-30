@@ -30,7 +30,8 @@
                     <th>No</th>
                     <th>NIM</th>
                     <th>Mahasiswa</th>
-                    <th>Pembimbing</th>
+                    <th>Pembimbing 1</th>
+                    <th>Pembimbing 2</th>
                     <th>Prodi</th>
                     <th>Aksi</th>
                 </tr>
@@ -41,7 +42,8 @@
                         <td><?= $no++ ?></td>
                         <td><?= $mhs['nim'] ?></td>
                         <td><?= $mhs['nama'] ?></td>
-                        <td><?= $mhs['dospem'] ?></td>
+                        <td><?= $mhs['nama_pembimbing_1'] ?></td>
+                        <td><?= $mhs['nama_pembimbing_2'] ?></td>
                         <td><?= $mhs['nama_prodi'] ?></td>
                         <td>
                             <a href="<?= route_to('admin.skripsi.bimbingan.show', $mhs['mhs_id']) ?>" class="btn btn-xs btn-primary"><i class="fa fa-eye"></i></a>
